@@ -47,6 +47,10 @@ export default {
 };
 </script>
 <style scoped>
+footer {
+  font-family: "Roboto";
+  margin-top: 70px;
+}
 svg {
   width: 30px;
   margin: 10px;
