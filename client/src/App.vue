@@ -9,8 +9,8 @@ import FooterLayout from "@/components/layouts/FooterLayout.vue";
 export default {
   components: {
     HeaderLayout,
-    FooterLayout,
-  },
+    FooterLayout
+  }
 };
 </script>
 <style>

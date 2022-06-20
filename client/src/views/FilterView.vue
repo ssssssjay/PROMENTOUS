@@ -8,13 +8,11 @@
         class="form-select"
         size="4"
         aria-label="size 4 select example"
-        style="overflow-y: hidden"
-      >
+        style="overflow-y: hidden">
         <option
           :value="part.partCode"
           v-for="part in stackList.filter((p) => p.stackCode === '001')"
-          :key="part.partCode"
-        >
+          :key="part.partCode">
           {{ part.partName }}
         </option>
       </select>
@@ -25,13 +23,11 @@
         class="form-select"
         size="10"
         aria-label="size 10 select example"
-        multiple="multiple"
-      >
+        multiple="multiple">
         <option
           :value="stack.stackName"
           :key="stack.stackCode"
-          v-for="stack in stackList.filter((s) => s.partCode === selectedPart)"
-        >
+          v-for="stack in stackList.filter((s) => s.partCode === selectedPart)">
           {{ stack.stackName }}
         </option>
       </select>
@@ -43,8 +39,7 @@
       :close-on-select="false"
       :searchable="true"
       :create-option="true"
-      :options="options"
-    />
+      :options="options" />
     <Multiselect
       v-model="value2"
       mode="tags"
@@ -52,8 +47,7 @@
       :searchable="true"
       :create-option="true"
       :groups="true"
-      :options="options2"
-    />
+      :options="options2" />
     <p>{{ value }}</p>
     <p>{{ value2 }}</p>
     <p>{{ finallyStackData }}</p>
@@ -65,7 +59,7 @@ import Multiselect from "@vueform/multiselect";
 
 export default {
   components: {
-    Multiselect,
+    Multiselect
   },
   computed: {
     finallyStackData() {
@@ -74,7 +68,7 @@ export default {
       } else {
         return this.value + " " + this.selectedStack;
       }
-    },
+    }
   },
   data() {
     return {
@@ -92,13 +86,13 @@ export default {
         "Kotlin",
         "AWS",
         "Kubernetes",
-        "Docker",
+        "Docker"
       ],
       options2: [
         { label: "프론트엔드", options: ["Javascript", "TypeScript", "React"] },
         { label: "백엔드", options: ["Java", "Spring", "Node.js"] },
         { label: "모바일", options: ["Flutter", "Swift", "Kotlin"] },
-        { label: "기타", options: ["AWS", "Kubernetes", "Docker"] },
+        { label: "기타", options: ["AWS", "Kubernetes", "Docker"] }
       ],
       selectedPart: "",
       selectedStack: [],
@@ -107,80 +101,80 @@ export default {
           partCode: "01",
           partName: "프론트엔드",
           stackCode: "001",
-          stackName: "Javascript",
+          stackName: "Javascript"
         },
         {
           partCode: "01",
           partName: "프론트엔드",
           stackCode: "002",
-          stackName: "TypeScript",
+          stackName: "TypeScript"
         },
         {
           partCode: "01",
           partName: "프론트엔드",
           stackCode: "003",
-          stackName: "React",
+          stackName: "React"
         },
 
         {
           partCode: "02",
           partName: "백엔드",
           stackCode: "001",
-          stackName: "Java",
+          stackName: "Java"
         },
         {
           partCode: "02",
           partName: "백엔드",
           stackCode: "002",
-          stackName: "Spring",
+          stackName: "Spring"
         },
         {
           partCode: "02",
           partName: "백엔드",
           stackCode: "003",
-          stackName: "Node.js",
+          stackName: "Node.js"
         },
 
         {
           partCode: "03",
           partName: "모바일",
           stackCode: "001",
-          stackName: "Flutter",
+          stackName: "Flutter"
         },
         {
           partCode: "03",
           partName: "모바일",
           stackCode: "002",
-          stackName: "Swift",
+          stackName: "Swift"
         },
         {
           partCode: "03",
           partName: "모바일",
           stackCode: "003",
-          stackName: "Kotlin",
+          stackName: "Kotlin"
         },
 
         {
           partCode: "04",
           partName: "기타",
           stackCode: "001",
-          stackName: "AWS",
+          stackName: "AWS"
         },
         {
           partCode: "04",
           partName: "기타",
           stackCode: "002",
-          stackName: "Kubernetes",
+          stackName: "Kubernetes"
         },
         {
           partCode: "04",
           partName: "기타",
           stackCode: "003",
-          stackName: "Docker",
-        },
-      ],
+          stackName: "Docker"
+        }
+      ]
     };
-  },
+  }
 };
 </script>
 <style scoped>
@@ -191,8 +185,25 @@ select {
 #inline {
   display: inline;
 }
-Multiselect {
-  width: 100px;
-}
 </style>
 <style src="@vueform/multiselect/themes/default.css"></style>
+<style>
+.multiselect {
+  width: 500px;
+}
+
+.multiselect.is-active {
+  box-shadow: 0 0 0 var(--ms-ring-width, 3px) var(--ms-ring-color, #0bc0eb);
+}
+.multiselect-tag {
+  background: var(--ms-tag-bg, #0bc0eb);
+}
+.multiselect-group-label.is-selected {
+  background: var(--ms-group-label-bg-selected, #0bc0eb);
+  color: var(--ms-group-label-color-selected, #fff);
+}
+.multiselect-group-label.is-selected.is-pointed {
+  background: var(--ms-group-label-bg-selected-pointed, #0bc0eb);
+  color: var(--ms-group-label-color-selected-pointed, #fff);
+}
+</style>
