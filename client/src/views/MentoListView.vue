@@ -43,8 +43,12 @@
               <p class="card-text">
                 {{ mento.comment }}
               </p>
-              <div class="mentoPart">
-                <p>{{ mento.part }}</p>
+              <div
+                class="mentoPart"
+                :key="part.code"
+                v-for="part in mentoList[mento.mentoCode].part"
+                style="display: inline">
+                <button>{{ part.name }}</button>
               </div>
             </div>
           </div>
@@ -53,6 +57,7 @@
               src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
               class="img-fluid rounded-start"
               alt="..." />
+            <button>멘토 상세보기</button>
           </div>
         </div>
       </div>
@@ -69,34 +74,58 @@ export default {
       searchData: "",
       mentoList: [
         {
-          mentoCode: "1",
+          mentoCode: "0",
           NickName: "가나다",
           score: 3.5,
           scoreCount: 12,
           title: "자바스크립트를 도와주는 멘토링",
           comment:
             "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: "자바스크립트"
+          part: [
+            { code: "1", name: "파이썬" },
+            { code: "2", name: "자바스크립트" }
+          ]
         },
         {
-          mentoCode: "2",
+          mentoCode: "1",
           NickName: "가나다라",
           score: 4,
           scoreCount: 12,
           title: "파이썬를 도와주는 멘토링",
           comment:
             "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: "파이썬"
+          part: [
+            { code: "1", name: "파이썬" },
+            { code: "2", name: "자바" }
+          ]
         },
         {
-          mentoCode: "3",
+          mentoCode: "2",
           NickName: "가나다라마바사",
           score: 4,
           scoreCount: 12,
           title: "파이썬를 도와주는 멘토링",
           comment:
             "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: "파이썬"
+          part: [
+            { code: "1", name: "파이썬" },
+            { code: "2", name: "타입스크립트" }
+          ]
+        },
+        {
+          mentoCode: "3",
+          NickName: "가나다라마",
+          score: 4,
+          scoreCount: 12,
+          title: "파이썬를 도와주는 멘토링",
+          comment:
+            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+          part: [
+            { code: "1", name: "파이썬" },
+            { code: "2", name: "자바스크립트" },
+            { code: "2", name: "자바스크립트" },
+            { code: "2", name: "자바스크립트" }
+          ]
         },
         {
           mentoCode: "4",
@@ -106,37 +135,36 @@ export default {
           title: "파이썬를 도와주는 멘토링",
           comment:
             "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: "파이썬"
+          part: [
+            { code: "1", name: "파이썬" },
+            { code: "2", name: "자바스크립트" }
+          ]
         },
         {
-          mentoCode: "4",
+          mentoCode: "5",
           NickName: "가나다라마",
           score: 4,
           scoreCount: 12,
           title: "파이썬를 도와주는 멘토링",
           comment:
             "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: "파이썬"
+          part: [
+            { code: "1", name: "파이썬" },
+            { code: "2", name: "자바스크립트" }
+          ]
         },
         {
-          mentoCode: "4",
+          mentoCode: "6",
           NickName: "가나다라마",
           score: 4,
           scoreCount: 12,
           title: "파이썬를 도와주는 멘토링",
           comment:
             "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: "파이썬"
-        },
-        {
-          mentoCode: "4",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: "파이썬"
+          part: [
+            { code: "1", name: "파이썬" },
+            { code: "2", name: "자바스크립트" }
+          ]
         }
       ]
     };
@@ -149,8 +177,15 @@ export default {
 };
 </script>
 <style scoped>
-.mentoPart > p {
+.mentoPart {
+  position: relative;
+  text-align: start;
+}
+.mentoPart > button {
   background-color: #8094be;
+  border-radius: 5px;
+  border-style: none;
+  color: white;
 }
 .mentoNickName {
   margin: 10px;

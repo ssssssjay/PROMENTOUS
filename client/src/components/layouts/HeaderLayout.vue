@@ -95,6 +95,9 @@ export default {
 };
 </script>
 <style>
+.active {
+  color: #0bc0eb;
+}
 span > a {
   text-decoration: none;
 }
