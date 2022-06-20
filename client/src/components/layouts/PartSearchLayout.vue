@@ -8,7 +8,7 @@
       :create-option="true"
       :groups="false"
       :options="options"
-      style="width: 200px" />
+      placeholder="멘토의 분야를 선택해보세요!" />
     <p>{{ value2 }}</p>
   </div>
 </template>
@@ -47,7 +47,7 @@ import PartSearch from "@vueform/multiselect";
 <style src="@vueform/multiselect/themes/default.css"></style>
 <style>
 .multiselect {
-  width: 500px;
+  width: 300px;
 }
 
 .multiselect.is-active {

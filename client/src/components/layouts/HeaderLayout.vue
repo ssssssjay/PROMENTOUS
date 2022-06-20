@@ -2,8 +2,7 @@
   <header>
     <nav
       class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm"
-      id="mainNav"
-    >
+      id="mainNav">
       <div class="container px-5">
         <div class="logo">
           <a
@@ -11,21 +10,19 @@
             href=""
             :class="{ active: $route.path == '/home' }"
             @click="goToMenu('/home')"
+            style="font-size: 30px"
             >PROMENTOUS</a
           >
         </div>
         <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
           <span class="dropdown">
             <a
-              class="btn btn-light"
               href="#"
               role="button"
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style="background-color: #0bc0eb"
-            >
-              <span style="color: white">프로젝트</span>
+              aria-expanded="false">
+              <span style="font-size: 20px">프로젝트</span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
               <li>
@@ -50,45 +47,35 @@
           </span>
           <span class="dropdown">
             <a
-              class="btn btn-light"
               href="#"
               role="button"
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              style="background-color: #0bc0eb"
-            >
-              <span style="color: white">멘토링</span>
+              :class="{ active: $route.path == '/mentolist' }"
+              @click="goToMenu('/mentolist')"
+              style="font-size: 20px">
+              <span>멘토링</span>
             </a>
           </span>
           <span class="dropdown">
             <a
-              class="btn btn-light"
               href="#"
               role="button"
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              style="background-color: #0bc0eb"
-            >
-              <span style="color: white">팀관리</span>
+              style="font-size: 20px">
+              <span>팀관리</span>
             </a>
           </span>
         </div>
         <div class="siglog">
-          <button
-            type="button"
-            class="btn btn-light"
-            style="background-color: #0bc0eb"
-          >
-            <span span style="color: white">회원가입</span>
+          <button class="btn btn-outline-dark" type="button">
+            <span>회원가입</span>
           </button>
-          <button
-            type="button"
-            class="btn btn-light"
-            style="background-color: #0bc0eb"
-          >
-            <span span style="color: white">로그인</span>
+          <button class="btn btn-outline-dark" type="button">
+            <span>로그인</span>
           </button>
         </div>
       </div>
@@ -103,11 +90,17 @@ export default {
   methods: {
     goToMenu(path) {
       this.$router.push({ path: path });
-    },
-  },
+    }
+  }
 };
 </script>
 <style>
+span > a {
+  text-decoration: none;
+}
+span > a:hover {
+  color: #0bc0eb;
+}
 header {
   font-family: "Roboto";
   margin-bottom: 70px;

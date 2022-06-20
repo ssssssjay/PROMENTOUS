@@ -22,30 +22,37 @@
         class="form-control"
         placeholder="제목,내용,작성자로 검색해보세요!"
         aria-label="Username"
-        aria-describedby="addon-wrapping" />
+        aria-describedby="addon-wrapping"
+        v-model="searchData" />
     </div>
 
-    <div class="cardList">
-      <div class="card mb-3" style="max-width: 540px">
+    <div class="row mt-n4">
+      <div
+        id="card1"
+        class="card mb-3"
+        style="max-width: 650px"
+        :key="mento.mentoCode"
+        v-for="mento in mentoList">
         <div class="row g-0">
-          <div class="col-md-4">
-            <img
-              src="https://w7.pngwing.com/pngs/282/256/png-transparent-user-profile-avatar-computer-icons-google-account-black-accounting-user-interface.png"
-              class="img-fluid rounded-start"
-              alt="..." />
-          </div>
           <div class="col-md-8">
             <div class="card-body">
-              <h5 class="card-title">Card title</h5>
+              <span class="mentoNickName">{{ mento.NickName }}</span>
+              <span class="mentoScore">{{ mento.score }}</span>
+              <span>({{ mento.scoreCount }})</span>
+              <h5 class="card-title">{{ mento.title }}</h5>
               <p class="card-text">
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
+                {{ mento.comment }}
               </p>
-              <p class="card-text">
-                <small class="text-muted">Last updated 3 mins ago</small>
-              </p>
+              <div class="mentoPart">
+                <p>{{ mento.part }}</p>
+              </div>
             </div>
+          </div>
+          <div class="col-md-4">
+            <img
+              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+              class="img-fluid rounded-start"
+              alt="..." />
           </div>
         </div>
       </div>
@@ -59,7 +66,79 @@ export default {
   components: { PartSearchLayout },
   data() {
     return {
-      sampleData: ""
+      searchData: "",
+      mentoList: [
+        {
+          mentoCode: "1",
+          NickName: "가나다",
+          score: 3.5,
+          scoreCount: 12,
+          title: "자바스크립트를 도와주는 멘토링",
+          comment:
+            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+          part: "자바스크립트"
+        },
+        {
+          mentoCode: "2",
+          NickName: "가나다라",
+          score: 4,
+          scoreCount: 12,
+          title: "파이썬를 도와주는 멘토링",
+          comment:
+            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+          part: "파이썬"
+        },
+        {
+          mentoCode: "3",
+          NickName: "가나다라마바사",
+          score: 4,
+          scoreCount: 12,
+          title: "파이썬를 도와주는 멘토링",
+          comment:
+            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+          part: "파이썬"
+        },
+        {
+          mentoCode: "4",
+          NickName: "가나다라마",
+          score: 4,
+          scoreCount: 12,
+          title: "파이썬를 도와주는 멘토링",
+          comment:
+            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+          part: "파이썬"
+        },
+        {
+          mentoCode: "4",
+          NickName: "가나다라마",
+          score: 4,
+          scoreCount: 12,
+          title: "파이썬를 도와주는 멘토링",
+          comment:
+            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+          part: "파이썬"
+        },
+        {
+          mentoCode: "4",
+          NickName: "가나다라마",
+          score: 4,
+          scoreCount: 12,
+          title: "파이썬를 도와주는 멘토링",
+          comment:
+            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+          part: "파이썬"
+        },
+        {
+          mentoCode: "4",
+          NickName: "가나다라마",
+          score: 4,
+          scoreCount: 12,
+          title: "파이썬를 도와주는 멘토링",
+          comment:
+            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+          part: "파이썬"
+        }
+      ]
     };
   },
   setup() {},
@@ -70,6 +149,15 @@ export default {
 };
 </script>
 <style scoped>
+.mentoPart > p {
+  background-color: #8094be;
+}
+.mentoNickName {
+  margin: 10px;
+}
+#card1 {
+  margin-right: 10px;
+}
 .banner {
   text-align: left;
   color: white;
@@ -101,5 +189,9 @@ h3 {
 .search {
   position: relative;
   left: 230px;
+}
+.partSearch {
+  position: relative;
+  right: 55px;
 }
 </style>
