@@ -1,10 +1,10 @@
 <template>
   <header>
-    <nav class="navbar navbar-expand-lg navbar-light shadow-sm" id="mainNav">
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
       <div class="container px-5">
         <div class="logo">
           <a
-            class="navbar-brand"
+            class="navbar-brand mainLogo"
             href=""
             :class="{ active: $route.path == '/home' }"
             @click="goToMenu('/home')"
@@ -35,7 +35,6 @@
               <li>
                 <a
                   class="dropdown-item"
-                  href="#"
                   :class="{ active: $route.path == '/about' }"
                   @click="goToMenu('/about')"
                   >리뷰</a
@@ -51,8 +50,7 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
               :class="{ active: $route.path == '/mentolist' }"
-              @click="goToMenu('/mentolist')"
-              style="font-size: 20px">
+              @click="goToMenu('/mentolist')">
               <span>멘토링</span>
             </a>
           </span>
@@ -62,16 +60,12 @@
               role="button"
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style="font-size: 20px">
+              aria-expanded="false">
               <span>팀관리</span>
             </a>
           </span>
         </div>
         <div class="siglog">
-          <button class="btn btn-outline-dark" type="button">
-            <span>회원가입</span>
-          </button>
           <button class="btn btn-outline-dark" type="button">
             <span>로그인</span>
           </button>
@@ -93,21 +87,28 @@ export default {
 };
 </script>
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap");
+.mainLogo {
+  font-family: "Merriweather", serif;
+}
 .active {
-  color: #0bc0eb;
+  color: #1379d2;
 }
 span > a {
   text-decoration: none;
 }
 span > a:hover {
-  color: #0bc0eb;
+  color: #1379d2;
 }
 header {
   font-family: "Roboto";
-  margin-bottom: 70px;
+  margin-bottom: 10px;
 }
 div > button {
   margin: 5px;
+}
+.dropdown > a {
+  font-size: 20px;
 }
 .logo > a {
   background: linear-gradient(to right, #0bc0eb, #8094be);
