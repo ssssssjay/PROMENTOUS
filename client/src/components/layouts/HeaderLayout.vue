@@ -64,6 +64,19 @@
               <span>팀관리</span>
             </a>
           </span>
+          <span class="dropdown">
+            <a
+              href="#"
+              role="button"
+              id="dropdownMenuLink"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              :class="{ active: $route.path == '/myPage' }"
+              @click="goToMenu('/teamManage')"
+              style="font-size: 20px">
+              <span>마이페이지</span>
+            </a>
+          </span>
         </div>
         <div class="siglog">
           <button class="btn btn-outline-dark" type="button">
