@@ -25,35 +25,50 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "mentolist" */ "../views/MentoListView.vue")
   },
-
   {
-    path: "/part",
-    name: "part",
+    path: "/mypage/post",
+    name: "myPostView",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(
-        /* webpackChunkName: "mentolist" */ "../components/layouts/PartSearchLayout.vue"
-      )
+      import(/* webpackChunkName: "mypage" */ "../views/myPage/myPostView.vue")
   },
   {
-    path: "/teamManage",
-    name: "teamManage",
+    path: "/mypage/apply",
+    name: "myApplyView",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "mentolist" */ "../views/TeamManage.vue")
+      import(/* webpackChunkName: "mypage" */ "../views/myPage/myApplyView.vue")
   },
   {
-    path: "/myPage",
-    name: "myPage",
+    path: "/mypage/pay",
+    name: "myPayView",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "mentolist" */ "../views/MyPageView.vue")
+      import(/* webpackChunkName: "mypage" */ "../views/myPage/myPayView.vue")
+  },
+  {
+    path: "/mypage/mento",
+    name: "myMentoView",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "mypage" */ "../views/myPage/myMentoView.vue")
+  },
+  {
+    path: "/mypage/info",
+    name: "myPageView",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "mypage" */ "../views/myPageView.vue")
   }
 ];
 
