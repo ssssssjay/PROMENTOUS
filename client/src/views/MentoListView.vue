@@ -5,9 +5,6 @@
         <p class="title">멘토링</p>
         <p class="des">보다 좋은 개발자가 되기 위한 또 하나의 단계</p>
       </div>
-      <!-- <div class="bgimg">
-        <img src="@/img/MentorLogo.svg" alt="" />
-      </div> -->
     </div>
     <div class="container">
       <div class="search">
@@ -217,26 +214,19 @@ export default {
   margin: 0;
   width: 100vw;
   height: 500px;
+  background-color: #1379d2;
 }
 .comment {
-  padding-top: 130px;
+  text-align: left;
+  padding-top: 50px;
   color: white;
-  background-color: #1379d2;
   font-weight: 900;
+  position: relative;
+  left: 550px;
 }
 .banner .title {
   font-size: 70px;
 }
-.banner .des {
-}
-/* .bgimg > img {
-  width: 500px;
-  height: 400px;
-  float: right;
-  position: relative;
-  right: 450px;
-  bottom: 150px;
-} */
 
 h1 {
   font-weight: 700;
