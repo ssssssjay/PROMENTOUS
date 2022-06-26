@@ -221,8 +221,6 @@ export default {
   padding-top: 50px;
   color: white;
   font-weight: 900;
-  position: relative;
-  left: 550px;
 }
 .banner .title {
   font-size: 70px;
