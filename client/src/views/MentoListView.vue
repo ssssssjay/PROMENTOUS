@@ -1,43 +1,37 @@
 <template>
   <div>
-    <div class="banner">
+    <section class="banner">
       <div class="comment container">
-        <p class="title">멘토링</p>
+        <h1 class="title">멘토링</h1>
         <p class="des">보다 좋은 개발자가 되기 위한 또 하나의 단계</p>
       </div>
-    </div>
-    <div class="container">
-      <div class="search">
-        <PartSearchLayout class="partSearch" />
-        <input
-          id="search"
-          type="text"
-          class="form-control"
-          placeholder="제목,내용,작성자로 검색해보세요!"
-          aria-label="Username"
-          aria-describedby="addon-wrapping"
-          v-model="searchData" />
+    </section>
+    <section class="container">
+      <div class="Regbtn">
+        <registerbtn-layout :btnText="btnText" />
       </div>
-      <div class="button" style="margin: 10px">
-        <button type="button" class="btn btn-secondary" id="appBtn">
-          멘토 등록 신청하기
-        </button>
+      <div
+        class="d-flex pt-5 mb-4 align-items-start justify-content-between section_second">
+        <RecruitSortLayout />
+        <div class="d-flex">
+          <PartSearchLayout />
+          <SearchAll />
+        </div>
       </div>
       <div class="row mt-n4">
         <div
-          id="card1"
-          class="card mb-3 mentoList"
+          class="d-flex justify-content-between align-items-center mb-2 mentoList"
           :key="mento.mentoCode"
           v-for="mento in mentoList">
           <div class="row g-0">
             <div class="col-md-8">
-              <div class="card-body" style="width: 450px">
+              <div class="card-body">
                 <span class="mentoNickName">{{ mento.NickName }}</span>
-                <i class="bi bi-star-fill" id="star"></i>
+                <i class="bi bi-star-fill star"></i>
                 <span class="mentoScore">{{ mento.score }}</span>
                 <span>({{ mento.scoreCount }})</span>
                 <p class="card-title">{{ mento.title }}</p>
-                <p class="card-text" style="height: 70px">
+                <p class="card-text">
                   {{ mento.comment }}
                 </p>
                 <div
@@ -52,21 +46,19 @@
                 >
               </div>
             </div>
-            <div class="men_title col-md-4" id="imgcard">
+            <div class="men_title col-md-4 imgCard">
               <img
                 v-if="mento.gender === 'female'"
                 src="@/img/femaleAvatar.svg"
-                class="img-fluid rounded-start"
-                alt="..."
-                id="pfimg" />
+                class="img-fluid rounded-start pfimg"
+                alt="..." />
               <img
                 v-if="mento.gender === 'male'"
                 src="@/img/maleAvatar.svg"
-                class="img-fluid rounded-start"
-                alt="..."
-                id="pfimg" />
+                class="img-fluid rounded-start pfimg"
+                alt="..." />
 
-              <button class="btn btn-outline-dark" id="mentoDetail">
+              <button class="btn btn-outline-dark mentoDetail">
                 멘토 상세보기
               </button>
             </div>
@@ -76,21 +68,27 @@
           <PaginationLayout />
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 <script>
-import PaginationLayout from "@/components/layouts/PaginationLayout.vue";
+// import PaginationLayout from "@/components/layouts/PaginationLayout.vue";
 import PartSearchLayout from "@/components/layouts/PartSearchLayout.vue";
-
+import SearchAll from "@/components/SearchAll.vue";
+import RecruitSortLayout from "@/components/layouts/RecruitSortLayout.vue";
+import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
+// PaginationLayout
 export default {
   components: {
     PartSearchLayout,
-    PaginationLayout
+    SearchAll,
+    RecruitSortLayout,
+    RegisterbtnLayout
   },
   data() {
     return {
       searchData: "",
+      btnText: "멘토 등록 하기",
       mentoList: [
         {
           mentoCode: "0",
@@ -204,57 +202,20 @@ export default {
 };
 </script>
 <style scoped>
-.title {
-  font-size: 40px;
-}
-.des {
-  font-size: 25px;
-}
 .banner {
-  margin: 0;
-  width: 100vw;
+  margin-bottom: 42px;
   height: 200px;
   background-color: #1379d2;
 }
 .comment {
-  text-align: left;
   padding-top: 50px;
   color: white;
   font-weight: 900;
 }
-.banner .title {
-  font-size: 70px;
+.Regbtn {
+  text-align: end;
 }
 
-h1 {
-  font-weight: 700;
-}
-h3 {
-  margin: 15px;
-  text-align: left;
-  font-weight: 700;
-}
-.button {
-  margin-top: 15px;
-  position: relative;
-  bottom: 50px;
-  left: 560px;
-}
-#search {
-  width: 300px;
-  position: relative;
-  left: 760px;
-  bottom: 55px;
-}
-.search {
-  position: relative;
-  left: 230px;
-  top: 100px;
-}
-.partSearch {
-  position: relative;
-  right: 55px;
-}
 .mentoPart {
   position: relative;
   text-align: start;
@@ -272,14 +233,12 @@ h3 {
   background-color: #1379d2;
   color: white;
 }
-#card1 {
-  margin-right: 10px;
-  text-align: start;
-  width: 650px;
-  height: 250px;
-}
 .mentoList {
+  border-radius: 15px;
+  border: 3px solid #dce8f3;
   transition: all 0.3s;
+  max-width: 650px;
+  margin: 5px;
 }
 .mentoList:hover {
   transform: translateY(-4px);
@@ -292,28 +251,25 @@ h3 {
 }
 .card-text {
   font-size: 13px;
+  height: 70px;
 }
-#imgcard {
+div.imgCard {
   position: relative;
   left: 60px;
   margin-top: 30px;
 }
-#pfimg {
+img.img-fluid.pfimg {
   width: 150px;
 }
 .pagination {
   position: relative;
   left: 550px;
 }
-#star {
+i.star {
   color: #1379d2;
   margin-right: 6px;
 }
-#mentoDetail,
-#appBtn {
-  border-color: black;
-}
-#mentoDetail {
+button.mentoDetail {
   margin: 15px 10px;
 }
 </style>

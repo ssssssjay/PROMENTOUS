@@ -13,9 +13,7 @@
           <RegionSortLayout />
           <RecruitStatus />
         </div>
-        <a href="#" class="btn btn-outline btn_write"
-          ><i class="bi bi-pencil me-1"></i>모집글 작성</a
-        >
+        <registerbtn-layout :btnText="btnText" />
       </div>
       <div
         class="d-flex pt-5 mb-4 align-items-start justify-content-between section_second">
@@ -36,6 +34,7 @@ import StackSearchLayout from "@/components/layouts/StackSearchLayout.vue";
 import SearchAll from "../components/SearchAll.vue";
 import RecruitStatus from "@/components/layouts/RecruitStatus.vue";
 import CardList from "@/components/CardList.vue";
+import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
 export default {
   components: {
     RecruitSortLayout,
@@ -43,10 +42,12 @@ export default {
     StackSearchLayout,
     SearchAll,
     RecruitStatus,
-    CardList
+    CardList,
+    RegisterbtnLayout
   },
   data() {
     return {
+      btnText: "모집글 작성",
       projects: [
         {
           title: "Vue-Todo",

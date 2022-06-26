@@ -107,6 +107,11 @@ export default {
 </script>
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap");
+
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
 .mainLogo {
   font-family: "Merriweather", serif;
 }
