@@ -5,7 +5,6 @@
         <div class="logo">
           <a
             class="navbar-brand mainLogo"
-            href=""
             :class="{ active: $route.path == '/home' }"
             @click="goToMenu('/home')"
             style="font-size: 30px"
@@ -15,28 +14,34 @@
         <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
           <span class="dropdown">
             <a
-              href="#"
               role="button"
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
               aria-expanded="false">
-              <span style="font-size: 20px">프로젝트</span>
+              <span
+                :class="{
+                  active:
+                    $route.path == '/project/recruit' ||
+                    $route.path == '/project/review'
+                }"
+                style="font-size: 20px"
+                >프로젝트</span
+              >
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
               <li>
                 <a
                   class="dropdown-item"
-                  href="#"
-                  :class="{ active: $route.path == '/' }"
-                  @click="goToMenu('/home')"
+                  :class="{ active: $route.path == '/project/recruit' }"
+                  @click="goToMenu('/project/recruit')"
                   >모집</a
                 >
               </li>
               <li>
                 <a
                   class="dropdown-item"
-                  :class="{ active: $route.path == '/about' }"
-                  @click="goToMenu('/about')"
+                  :class="{ active: $route.path == '/project/review' }"
+                  @click="goToMenu('/project/review')"
                   >리뷰</a
                 >
               </li>
@@ -44,7 +49,6 @@
           </span>
           <span class="dropdown">
             <a
-              href="#"
               role="button"
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
@@ -61,9 +65,8 @@
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              :class="{ active: $route.path == '/teamManage' }"
-              @click="goToMenu('/teamManage')"
-              style="font-size: 20px">
+              :class="{ active: $route.path == '/teammanage' }"
+              @click="goToMenu('/teammanage')">
               <span>팀관리</span>
             </a>
           </span>
