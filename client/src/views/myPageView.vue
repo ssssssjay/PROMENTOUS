@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="tap">
-      <h3><strong>My Page</strong></h3>
+      <h3><strong>My Page </strong></h3>
       <router-link to="/mypage/info" class="link-dark" id="link"
         >내 정보</router-link
       >
