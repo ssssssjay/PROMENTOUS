@@ -97,7 +97,7 @@ export default {
           gender: "male",
           NickName: "EVELO",
           score: 3.5,
-          scoreCount: 12,
+          scoreCount: 13,
           title: "10년차 웹개발자의 코드 리뷰 및 컨설팅",
           comment:
             "오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해.......",
