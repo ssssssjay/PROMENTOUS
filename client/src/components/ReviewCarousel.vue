@@ -29,29 +29,16 @@
           </div>
           <!-- Wrapper for carousel items -->
           <div class="carousel-inner">
-            <div class="carousel-item active" data-bs-interval="10000">
-              <p class="d-block">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu
-                sem tempor, varius quam at, luctus dui. Mauris magna metus,
-                dapibus nec turpis vel, semper malesuada ante. Idac bibendum
-                scelerisque non non purus. Suspendisse varius nibh non aliquet.
+            <div
+              class="carousel-item"
+              v-for="review in reviewList"
+              :key="review.id"
+              :class="{ active: review.id == '1' }">
+              <p class="d-block fs-4">
+                {{ review.title }}
               </p>
-            </div>
-            <div class="carousel-item">
               <p class="d-block">
-                Vestibulum quis quam ut magna consequat faucibus. Pellentesque
-                eget nisi a mi suscipit tincidunt. Utmtc tempus dictum risus.
-                Pellentesque viverra sagittis quam at mattis. Suspendisse
-                potenti. Aliquam sit amet gravida nibh, facilisis gravida odio.
-              </p>
-            </div>
-            <div class="carousel-item">
-              <p class="d-block">
-                Phasellus vitae suscipit justo. Mauris pharetra feugiat ante id
-                lacinia. Etiam faucibus mauris id tempor egestas. Duis luctus
-                turpis at accumsan tincidunt. Phasellus risus risus, volutpat
-                vel tellus ac, tincidunt fringilla massa. Etiam hendrerit dolor
-                eget rutrum.
+                {{ review.content }}
               </p>
             </div>
           </div>
@@ -80,15 +67,41 @@
 export default {
   components: {},
   data() {
-    return {};
+    return {
+      reviewList: [
+        {
+          id: 1,
+          title: "XX 프로젝트 참여 후기",
+          content:
+            "후기 내용111. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eusem tempor, varius quam at, luctus dui. Mauris magna metus,dapibus nec turpis vel, semper malesuada ante. Idac bibendumscelerisque non non purus. Suspendisse varius nibh non aliquet.",
+          insert_date: "2022/06/05 13:01",
+          writer: "떡볶이"
+        },
+        {
+          id: 2,
+          title: "OO 프로젝트 참여 후기",
+          content:
+            "후기 내용222. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eusem tempor, varius quam at, luctus dui. Mauris magna metus,dapibus nec turpis vel, semper malesuada ante. Idac bibendumscelerisque non non purus. Suspendisse varius nibh non aliquet.",
+          insert_date: "2022/06/05 13:01",
+          writer: "오뎅"
+        },
+        {
+          id: 3,
+          title: "ABCD 프로젝트 참여 후기",
+          content:
+            "후기 내용333. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eusem tempor, varius quam at, luctus dui. Mauris magna metus,dapibus nec turpis vel, semper malesuada ante. Idac bibendumscelerisque non non purus. Suspendisse varius nibh non aliquet.",
+          insert_date: "2022/06/05 13:01",
+          writer: "순대"
+        }
+      ]
+    };
   },
   setup() {},
   created() {},
   mounted() {
-    // $("#quote-carousel").carousel({
-    //   pause: true,
-    //   interval: 4000
-    // });
+    // 캐러셀 item 넘어가는 시간 간격 옵션 추가
+    let firstCarouselItem = document.querySelector(".carousel-item");
+    firstCarouselItem.setAttribute("data-bs-interval", 7000);
   },
   unmounted() {},
   methods: {}
@@ -113,7 +126,7 @@ h2::after {
   position: absolute;
   margin: 0 auto;
   height: 3px;
-  background: #8fbc54;
+  background: #49c0d0;
   left: 0;
   right: 0;
   bottom: -10px;

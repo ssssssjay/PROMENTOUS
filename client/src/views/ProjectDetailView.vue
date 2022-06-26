@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-5">
     <div class="row">
       <!-- 페이지 좌측 -->
       <div class="col-lg-9 pe-xl-1-9 mb-1-9 mb-lg-0">
@@ -7,7 +7,7 @@
           <!-- 글 제목 -->
           <div class="row text-start">
             <div class="col-2 pt-2">
-              <span class="badge bg-info fs-5"> 모집중 </span>
+              <span class="badge pro_badge_color fs-5"> 모집중 </span>
             </div>
             <span class="fs-1 col-8"> 프로젝트 이름 </span>
             <span class="text-end col-2 pt-4"> 2022/06/02 </span>
@@ -39,11 +39,15 @@
               <span class="text-muted col-2">언어/스택</span>
               <span class="px-4 col-10">
                 <!-- v-for로 변경 -->
-                <span class="badge bg-secondary rounded-pill me-1">VueJS</span>
-                <span class="badge bg-secondary rounded-pill me-1"
+                <span class="badge pro_badge_color rounded-pill me-1"
+                  >VueJS</span
+                >
+                <span class="badge pro_badge_color rounded-pill me-1"
                   >Node.js</span
                 >
-                <span class="badge bg-secondary rounded-pill me-1">MySQL</span>
+                <span class="badge pro_badge_color rounded-pill me-1"
+                  >MySQL</span
+                >
               </span>
             </p>
             <div>
@@ -85,9 +89,9 @@
                 </button>
               </span>
             </p>
-            <div>
+            <!-- <div>
               <span class="text-muted">후기 모아보기</span>
-            </div>
+            </div> -->
             <div class="py-5">
               <review-carousel />
             </div>
@@ -96,45 +100,7 @@
         <hr />
 
         <!-- 댓글 -->
-        <div class="row">
-          <div class="col-2">
-            <img
-              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-              alt="댓글 작성자 사진"
-              style="width: 80px" />
-          </div>
-          <div class="comment-form col-10">
-            <form>
-              <div class="row">
-                <div class="form-group">
-                  <textarea
-                    name="reply"
-                    rows="6"
-                    class="form-control h-100"
-                    placeholder="Your Reply"></textarea>
-                </div>
-              </div>
-            </form>
-            <div class="row">
-              <div class="form-check ps-5 text-start col">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault" />
-                <label class="form-check-label" for="flexCheckDefault">
-                  비밀글
-                </label>
-              </div>
-              <div class="text-end col">
-                <button type="button" class="btn btn-outline-dark btn-sm">
-                  등록
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <hr />
+        <write-comment-view />
         <comment-view />
         <!-- </div> -->
       </div>
@@ -178,7 +144,7 @@
               </div>
               <div class="col">
                 <p class="fs-4">닉네임</p>
-                <p><i class="bi bi-star-fill"></i> 4.5/5 (23)</p>
+                <p><i class="bi bi-star-fill pro_star_color"></i> 4.5/5 (23)</p>
               </div>
             </div>
             <div class="ps-1">
@@ -293,10 +259,11 @@
 <script>
 import CommentView from "@/components/CommentView.vue";
 import ReviewCarousel from "@/components/ReviewCarousel.vue";
+import WriteCommentView from "../components/WriteCommentView.vue";
 
 export default {
   name: "ProjectDetailView",
-  components: { CommentView, ReviewCarousel },
+  components: { CommentView, ReviewCarousel, WriteCommentView },
   data() {
     return {
       project: {
@@ -432,7 +399,7 @@ export default {
 }
 
 .pro_fixed {
-  position: sticky;
+  /* position: sticky; */
   top: 0;
   height: 400px;
   /* position: fixed; */
