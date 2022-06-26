@@ -17,6 +17,22 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue")
   },
   {
+    path: "/project/recruit",
+    name: "projectRecruit",
+    component: () =>
+      import(
+        /* webpackChunkName: "projectRecruit" */ "../views/ProjectRecruitView.vue"
+      )
+  },
+  {
+    path: "/project/review",
+    name: "projectReview",
+    component: () =>
+      import(
+        /* webpackChunkName: "projectReview" */ "../views/ProjectReviewView.vue"
+      )
+  },
+  {
     path: "/mentolist",
     name: "mentolist",
     // route level code-splitting
@@ -35,6 +51,12 @@ const routes = [
       import(
         /* webpackChunkName: "projectdetail" */ "../views/ProjectDetailView.vue"
       )
+  },
+  {
+    path: "/teammanage",
+    name: "teammanage",
+    component: () =>
+      import(/* webpackChunkName: "teamManage" */ "../views/TeamManage.vue")
   },
   {
     path: "/mypage/post",
@@ -79,7 +101,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "mypage" */ "../views/myPageView.vue")
+      import(/* webpackChunkName: "mypage" */ "../views/MyPageView.vue")
   }
 ];
 
