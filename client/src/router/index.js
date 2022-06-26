@@ -52,12 +52,7 @@ const routes = [
         /* webpackChunkName: "projectdetail" */ "../views/ProjectDetailView.vue"
       )
   },
-  {
-    path: "/teammanage",
-    name: "teammanage",
-    component: () =>
-      import(/* webpackChunkName: "teamManage" */ "../views/TeamManage.vue")
-  },
+
   {
     path: "/mypage/post",
     name: "myPostView",
