@@ -60,7 +60,10 @@
               role="button"
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
-              aria-expanded="false">
+              aria-expanded="false"
+              :class="{ active: $route.path == '/teamManage' }"
+              @click="goToMenu('/teamManage')"
+              style="font-size: 20px">
               <span>팀관리</span>
             </a>
           </span>
@@ -71,8 +74,8 @@
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              :class="{ active: $route.path == '/myPage' }"
-              @click="goToMenu('/teamManage')"
+              :class="{ active: $route.path == '/myPage/info' }"
+              @click="goToMenu('/myPage/info')"
               style="font-size: 20px">
               <span>마이페이지</span>
             </a>
