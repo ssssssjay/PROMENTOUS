@@ -18,7 +18,15 @@
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
               aria-expanded="false">
-              <span style="font-size: 20px">프로젝트</span>
+              <span
+                :class="{
+                  active:
+                    $route.path == '/project/recruit' ||
+                    $route.path == '/project/review'
+                }"
+                style="font-size: 20px"
+                >프로젝트</span
+              >
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
               <li>
