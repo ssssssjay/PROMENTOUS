@@ -5,9 +5,12 @@
     <div class="col-md-12">
       <div class="panel">
         <!-- v-for로 댓글 다 가져오는데, parent null에 따라 원댓글/대댓글 구분하기.  -->
-        <div class="panel-body">
-          <!-- 원댓글1 -->
-          <div class="media-block">
+        <div
+          class="panel-body"
+          v-for="comment in commentList"
+          :key="comment.id">
+          <!-- 원댓글 -->
+          <div class="media-block" v-if="comment.parent === null">
             <!-- 왼쪽 프사 -->
             <a class="media-left" href="#">
               <img
@@ -20,16 +23,13 @@
               <div class="mar-btm">
                 <a
                   href="#"
-                  class="btn-link text-semibold media-heading box-inline"
-                  >Lisa D.</a
+                  class="btn-link text-semibold media-heading box-inline a-black fs-5"
+                  >{{ comment.writer }}</a
                 >
-                <p class="text-muted text-sm">2022/01/09 13:12</p>
+                <p class="text-muted text-sm">{{ comment.insert_date }}</p>
               </div>
               <p>
-                consectetuer adipiscing elit, sed diam nonummy nibh euismod
-                tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi
-                enim ad minim veniam, quis nostrud exerci tation ullamcorper
-                suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+                {{ comment.content }}
               </p>
               <div class="pad-ver text-end pe-4">
                 <button type="button" class="btn btn-outline-secondary btn-sm">
@@ -37,11 +37,9 @@
                 </button>
               </div>
               <hr />
-
-              <!-- Comments -->
-              <div>
-                <!-- 대댓글 1 -->
-                <div class="media-block">
+              <!-- 대댓글 -->
+              <div v-for="recomment in commentList" :key="recomment.id">
+                <div class="media-block" v-if="recomment.parent == comment.id">
                   <a class="media-left" href="#"
                     ><img
                       class="img-circle img-sm"
@@ -53,61 +51,29 @@
                       <p class="row mb-0">
                         <a
                           href="#"
-                          class="btn-link text-semibold media-heading box-inline col-10"
-                          >Bobby Marz</a
+                          class="btn-link text-semibold media-heading box-inline col-10 a-black fs-5"
+                          >{{ recomment.writer }}</a
                         >
                         <span class="col-2">
                           <a
                             href="#"
-                            class="btn-link text-semibold media-heading box-inline"
+                            class="btn-link text-semibold media-heading box-inline a-black"
                             >수정</a
                           >
                           |
                           <a
                             href="#"
-                            class="btn-link text-semibold media-heading box-inline"
+                            class="btn-link text-semibold media-heading box-inline a-black"
                             >삭제</a
                           >
                         </span>
                       </p>
-                      <p class="text-muted text-sm">2022/01/13 09:56</p>
+                      <p class="text-muted text-sm">
+                        {{ recomment.insert_date }}
+                      </p>
                     </div>
                     <p>
-                      Sed diam nonummy nibh euismod tincidunt ut laoreet dolore
-                      magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
-                      quis nostrud exerci tation ullamcorper suscipit lobortis
-                      nisl ut aliquip ex ea commodo consequat.
-                    </p>
-                    <div class="pad-ver text-end pe-4">
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary btn-sm">
-                        답글
-                      </button>
-                    </div>
-                    <hr />
-                  </div>
-                </div>
-                <!-- 대댓글 2 -->
-                <div class="media-block">
-                  <a class="media-left" href="#"
-                    ><img
-                      class="img-circle img-sm"
-                      alt="Profile Picture"
-                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" />
-                  </a>
-                  <div class="media-body">
-                    <div class="mar-btm">
-                      <a
-                        href="#"
-                        class="btn-link text-semibold media-heading box-inline"
-                        >Lucy Moon</a
-                      >
-                      <p class="text-muted text-sm">2022/01/14 19:01</p>
-                    </div>
-                    <p>
-                      Duis autem vel eum iriure dolor in hendrerit in vulputate
-                      ?
+                      {{ recomment.content }}
                     </p>
                     <div class="pad-ver text-end pe-4">
                       <button
@@ -120,34 +86,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <!-- 원댓글2 -->
-          <div class="media-block pad-all">
-            <a class="media-left" href="#"
-              ><img
-                class="img-circle img-sm"
-                alt="Profile Picture"
-                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-            /></a>
-            <div class="media-body text-start ps-4">
-              <div class="mar-btm">
-                <a
-                  href="#"
-                  class="btn-link text-semibold media-heading box-inline"
-                  >John Doe</a
-                >
-                <p class="text-muted text-sm">2022/01/01 12:01</p>
-              </div>
-              <p>Lorem ipsum dolor sit amet.</p>
-              <div class="pad-ver text-end pe-4">
-                <button type="button" class="btn btn-outline-secondary btn-sm">
-                  답글
-                </button>
-              </div>
-
-              <hr />
             </div>
           </div>
         </div>
@@ -160,7 +98,7 @@ export default {
   components: {},
   data() {
     return {
-      comments: [
+      commentList: [
         {
           id: 1,
           is_secret: false,
@@ -229,7 +167,7 @@ body {
 }
 
 .panel-body {
-  padding: 25px 20px;
+  /* padding: 25px 20px; */
 }
 
 .media-block .media-left {
@@ -313,5 +251,10 @@ a.text-muted:focus {
 
 .mar-top {
   margin-top: 15px;
+}
+
+.a-black {
+  color: black;
+  text-decoration: none;
 }
 </style>
