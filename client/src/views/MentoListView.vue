@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="banner">
-      <div class="comment">
+      <div class="comment container">
         <p class="title">멘토링</p>
         <p class="des">보다 좋은 개발자가 되기 위한 또 하나의 단계</p>
       </div>
@@ -213,7 +213,7 @@ export default {
 .banner {
   margin: 0;
   width: 100vw;
-  height: 500px;
+  height: 200px;
   background-color: #1379d2;
 }
 .comment {
