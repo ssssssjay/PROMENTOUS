@@ -77,8 +77,8 @@
               id="dropdownMenuLink"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              :class="{ active: $route.path == '/myPage/info' }"
-              @click="goToMenu('/myPage/info')"
+              :class="{ active: $route.path == '/myPageinfo' }"
+              @click="goToMenu('/myPageinfo')"
               style="font-size: 20px">
               <span>마이페이지</span>
             </a>
