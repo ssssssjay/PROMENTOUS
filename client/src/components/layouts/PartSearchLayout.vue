@@ -47,21 +47,21 @@ import PartSearch from "@vueform/multiselect";
 <style src="@vueform/multiselect/themes/default.css"></style>
 <style>
 .multiselect {
-  width: 300px;
+  width: 400px;
 }
 
 .multiselect.is-active {
-  box-shadow: 0 0 0 var(--ms-ring-width, 3px) var(--ms-ring-color, #0bc0eb);
+  box-shadow: 0 0 0 var(--ms-ring-width, 3px) var(--ms-ring-color, #1379d2);
 }
 .multiselect-tag {
-  background: var(--ms-tag-bg, #0bc0eb);
+  background: var(--ms-tag-bg, #1379d2);
 }
 .multiselect-group-label.is-selected {
-  background: var(--ms-group-label-bg-selected, #0bc0eb);
+  background: var(--ms-group-label-bg-selected, #1379d2);
   color: var(--ms-group-label-color-selected, #fff);
 }
 .multiselect-group-label.is-selected.is-pointed {
-  background: var(--ms-group-label-bg-selected-pointed, #0bc0eb);
+  background: var(--ms-group-label-bg-selected-pointed, #1379d2);
   color: var(--ms-group-label-color-selected-pointed, #fff);
 }
 </style>

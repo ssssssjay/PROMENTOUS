@@ -43,7 +43,7 @@ export default {
 import StackSearch from "@vueform/multiselect";
 </script>
 <!-- <style src="@vueform/multiselect/themes/default.css"></style> -->
-<style>
+<style scoped>
 .stack_search {
   width: 500px;
 }
