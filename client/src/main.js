@@ -16,5 +16,6 @@ import "@vuepic/vue-datepicker/dist/main.css";
 createApp(App)
   .use(store)
   .use(router)
+  .mixin(mixins)
   .component("Datepicker", Datepicker)
   .mount("#app");
