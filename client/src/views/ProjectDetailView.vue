@@ -100,8 +100,12 @@
         <hr />
 
         <!-- 댓글 -->
-        <write-comment-view />
-        <comment-view />
+
+        <div>
+          <write-comment-view />
+          <comment-view />
+        </div>
+
         <!-- </div> -->
       </div>
 

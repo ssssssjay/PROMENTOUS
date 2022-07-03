@@ -33,6 +33,10 @@
             :key="i">
             {{ stack }}
           </div>
+          <span v-show="project.usingStack.length > 3">
+            + {{ project.usingStack.length - 3 }}
+          </span>
+
           <!-- <div class="stack-icon">+3</div> -->
         </section>
       </div>
