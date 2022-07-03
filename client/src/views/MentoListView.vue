@@ -1,11 +1,15 @@
 <template>
   <div>
+    <!-- 배너 -->
+    <!-- ---------------------------------------------------------------------------------------------- -->
     <section class="banner">
       <div class="comment container">
         <h1 class="title">멘토링</h1>
         <p class="des">보다 좋은 개발자가 되기 위한 또 하나의 단계</p>
       </div>
     </section>
+    <!-- 카드리스트 -->
+    <!-- ---------------------------------------------------------------------------------------------- -->
     <section class="container">
       <div class="Regbtn">
         <registerbtn-layout :btnText="btnText" />
