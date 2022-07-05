@@ -42,7 +42,7 @@ const routes = [
       import(/* webpackChunkName: "mentolist" */ "../views/MentoListView.vue")
   },
   {
-    path: "/projectdetail",
+    path: "/project/recruit/:projectId",
     name: "projectdetail",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

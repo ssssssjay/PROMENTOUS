@@ -2,7 +2,8 @@
   <div>
     <section class="project_list">
       <div class="card" v-for="(project, i) in projects" :key="i">
-        <section class="card-body">
+        <!-- TODO: 밑의 goToDetail안의 인자는 API 연결이후 project.project_id로 변경해야할 듯 -->
+        <section class="card-body" @click="goToDetail(1)">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-start text-muted"
               >시작예정일 : {{ project.expDate }}</span
@@ -135,7 +136,17 @@ export default {
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
+  methods: {
+    // 카드 클릭시 id를 파라미터로 전달하고 해당 상세글로 이동
+    goToDetail(id) {
+      const path = `/project/recruit/${id}`;
+      this.$router.push({
+        path: path,
+        name: "projectdetail",
+        params: { projectId: id }
+      });
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
