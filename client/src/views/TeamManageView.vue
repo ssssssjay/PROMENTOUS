@@ -15,12 +15,12 @@
           <div class="d-flex select">
             <Status
               class="StatusSelect"
-              v-model="SelectedStatus"
+              v-model="selectedStatus"
               style="width: 200px"
               :options="[
                 ...new Set(
                   projectList.map((data) => {
-                    return data.StatusName;
+                    return data.statusName;
                   })
                 )
               ]"
@@ -29,11 +29,11 @@
             <Project
               class="ProjectSelect"
               noOptionsText="상태를 먼저 선택하세요!"
-              v-model="SelectedProject"
+              v-model="selectedProject"
               style="width: 400px"
               :options="
                 projectList
-                  .filter((data) => data.StatusName === SelectedStatus)
+                  .filter((data) => data.statusName === selectedStatus)
                   .map((data) => {
                     return data.projectName;
                   })
@@ -45,7 +45,7 @@
     </section>
 
     <!-- 선택안했을때 보여줄 기본페이지 -->
-    <div class="row justify-content-md-center" v-if="SelectedProject === ''">
+    <div class="row justify-content-md-center" v-if="selectedProject === ''">
       <div class="col-md-auto">
         <i class="bi bi-exclamation-diamond">선택된 프로젝트가 없습니다.</i>
       </div>
@@ -57,7 +57,7 @@
       <div class="d-flex flex-column bd-highlight mb-3">
         <!-- 팀프로젝트 제목 + 수정버튼 -->
         <div class="d-flex justify-content-center title">
-          {{ SelectedProject }}
+          {{ selectedProject }}
         </div>
         <div class="d-flex justify-content-end register">
           <RegisterbtnLayout
@@ -73,7 +73,7 @@
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 팀 모임 url -->
         <div class="p-2 mb-5 bd-highlight teamUrl">
-          팀모임 URL
+          팀모임 링크
           <span class="url mx-4" v-show="correctionMode === false">
             <span>링크제목</span>
             <span>디스코드채널</span>
@@ -104,7 +104,7 @@
             class="mx-5 TeamStatusSelect"
             v-model="TeamStatus"
             placeholder="팀상태를 선택해주세요"
-            :options="options"
+            :options="TeamStatusList"
             v-show="correctionMode === true" />
           <button
             class="mx-5 btn btn-primary"
@@ -797,38 +797,85 @@ export default {
   },
   data() {
     return {
+      selectedProjectCode: "",
+      datetime: "2011-08-03tdst324324234234",
       correctionMode: true,
-      SelectedStatus: "",
-      SelectedProject: "",
-      SelectedProjectCode: "",
-      start: "",
-      end: "",
-      deposit: "",
-      btnText: "수정하기",
-      btnText2: "저장하기",
-      TeamStatus: "모집완료(진행 중)",
-      options: ["모집중", "모집완료(진행 중)", "추가 모집", "활동 종료"],
       projectList: [
         {
-          StatusCode: "01",
-          StatusName: "진행중",
+          // 팀장id="",
+          // 멘토여부=""
+          statusCode: "01",
+          statusName: "진행중",
           projectCode: "01",
           projectName: "파이썬으로 만드는 TODO LIST"
         },
+        //projectCode->projectId
         {
-          StatusCode: "02",
-          StatusName: "진행완료",
+          statusCode: "01",
+          statusName: "진행중",
+          projectCode: "02",
+          projectName: "파이썬으로 만드는 TODO LIST"
+        },
+        {
+          statusCode: "02",
+          statusName: "진행완료",
           projectCode: "02",
           projectName: "자바스크립트 따라잡기"
         }
       ],
+      selectedStatus: "",
+      selectedProject: "",
+      btnText: "수정하기",
+      btnText2: "저장하기",
+      // projectContents: {
+      //   projectid
+      //   urlName: "",
+      //   urlAddress: "",
+      //   teamStatus: "모집중",
+      //   teamStatusList: [
+      //     "모집중",
+      //     "진행 중",
+      //     "추가 모집",
+      //     "진행 완료"
+      //   ],
+      //   deposit: 0,
+      //   recruitingUrl: "",
+      //   applicants: [
+      //     {
+      //       applyAdminId: "",
+      //       applicantID: "",
+      //       applicantNickName: "",
+      //       likeStackCode: [],
+      //       applyDeptId: "",
+      //       applyStatus: "NEW",
+      //       insertDate: ""
+      //     }
+      //   ],
+      //   teamMember: [
+      //     {
+      //       memberId: "",
+      //       memberNickName: "",
+      //       memberEmail: "",
+      //       role: "",
+      //       likeStackCode: []
+      //     }
+      //   ],
+      //   mentoring: [
+      //     (mentoringId = ""),
+      //     (mentorInfoId = ""),
+      //     (MentoringStatus = "")
+      //   ]
+      // },
+      deposit: "",
+      TeamStatus: "모집중",
+      TeamStatusList: ["모집중", "모집완료(진행 중)", "추가 모집", "활동 종료"],
 
       firstMentoringStatus: 5,
       SecondMentoringStatus: 2,
       ThirdMentoringStatus: 3,
       FourthMentoringStatus: 5
       // ,
-      // projectContent: [
+      // projectContents: [
       //   {
       //     projectCode: "01" ,
       //     teamUrlCode:
