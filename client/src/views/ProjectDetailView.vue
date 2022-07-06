@@ -7,19 +7,26 @@
           <!-- 글 제목 -->
           <div class="row text-start">
             <div class="col-2 pt-2">
-              <span class="badge pro_badge_color fs-5"> 모집중 </span>
+              <span class="badge pro_badge_color fs-5">
+                {{ recruitStatus }}
+              </span>
             </div>
-            <span class="fs-1 col-8"> 프로젝트 이름 </span>
-            <span class="text-end col-2 pt-4"> 2022/06/02 </span>
+            <span class="fs-1 col-8"> {{ project.title }} </span>
+            <span class="text-end col-2 pt-4">
+              {{ formatDate(project.created_datetime) }}
+            </span>
             <hr />
           </div>
           <!-- 글 내용 -->
-          <div class="h4" style="text-align: left">
+          <div class="h4 pb-3 pt-3" style="text-align: left">
             <p class="row">
               <span class="text-muted col-2">시작예정일</span>
-              <span class="px-4 col-4">2022/07/01</span>
+              <span class="px-4 col-4">
+                <!-- {{ project.exp_start_date.substr(0, 10) }} -->
+                {{ formatDate(project.exp_start_date) }}
+              </span>
               <span class="text-muted col-2">진행기간</span>
-              <span class="px-4 col-4">3개월</span>
+              <span class="px-4 col-4">{{ project.exp_period }} 개월</span>
             </p>
             <p class="row">
               <span class="text-muted col-2">모집인원</span>
@@ -27,65 +34,42 @@
             </p>
             <p class="row">
               <span class="text-muted col-2">진행방식</span>
-              <span class="px-4 col-4">오프라인</span>
+              <span class="px-4 col-4">{{ progressMethod }}</span>
               <span class="text-muted col-2">보증금</span>
-              <span class="px-4 col-4">X</span>
+              <!-- TODO: warranty 없을때 X로 뜨도록 하는 함수 작성해야 함 -->
+              <span class="px-4 col-4">{{ project.warranty }} 원</span>
             </p>
             <p class="row">
               <span class="text-muted col-2">연락수단</span>
-              <span class="px-4 col-10">http:qwerty.com</span>
+              <span class="px-4 col-10">{{ project.project_contact }}</span>
             </p>
             <p class="row">
               <span class="text-muted col-2">언어/스택</span>
               <span class="px-4 col-10">
-                <!-- v-for로 변경 -->
-                <span class="badge pro_badge_color rounded-pill me-1"
-                  >VueJS</span
-                >
-                <span class="badge pro_badge_color rounded-pill me-1"
-                  >Node.js</span
-                >
-                <span class="badge pro_badge_color rounded-pill me-1"
-                  >MySQL</span
-                >
+                <span
+                  class="badge pro_badge_color rounded-pill me-1"
+                  v-for="stack in project.stack_code"
+                  :key="stack">
+                  {{ stack }}
+                </span>
               </span>
             </p>
             <div>
               <span class="text-muted">프로젝트 소개</span>
               <div class="widget-box fs-4 py-4 px-5">
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum. Excepteur sint
-                occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum. Excepteur sint occaecat cupidatat
-                non proident, sunt in culpa qui officia deserunt mollit anim id
-                est laborum. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum. Excepteur sint
-                occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum.
+                {{ project.project_desc }}
               </div>
             </div>
             <p class="row">
               <span class="text-muted col-2">참고링크</span>
               <span class="col-10">
-                <!-- v-for로 변경 -->
+                <!-- TODO: 버튼 누르면 url.url_address 새창으로 열어주기 -->
                 <button
                   type="button"
-                  class="btn btn-secondary btn-sm disabled me-2">
-                  링크 제목1
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-secondary btn-sm disabled me-2">
-                  링크 제목2
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm disabled">
-                  링크 제목3
+                  class="btn btn-secondary btn-sm me-2"
+                  v-for="url in refUrl"
+                  :key="url.ref_url_id">
+                  {{ url.url_title }}
                 </button>
               </span>
             </p>
@@ -147,7 +131,7 @@
                   alt="리더 정보 사진" />
               </div>
               <div class="col">
-                <p class="fs-4">닉네임</p>
+                <p class="fs-4">{{ projectLeader.user_nickname }}</p>
                 <p><i class="bi bi-star-fill pro_star_color"></i> 4.5/5 (23)</p>
               </div>
             </div>
@@ -270,11 +254,22 @@ export default {
   components: { CommentView, ReviewCarousel, WriteCommentView },
   data() {
     return {
+      projectId: null,
+      recruitStatus: "모집중",
+      progressMethod: "온라인",
       project: {
-        writer: "거북이",
-        projectId: 1,
-        projectName: "프로젝트 모집 플랫폼 개발",
-        expectedStartDate: "2022/07/01"
+        leader_user: "",
+        project_id: null,
+        title: "",
+        exp_start_date: "",
+        stack_code: [],
+        project_contact: "",
+        status_code: "",
+        warranty: null
+      },
+      refUrl: [],
+      projectLeader: {
+        user_nickname: ""
       },
       stackList: ["VueJS", "Node.js", "Typescript"],
       linkList: [
@@ -392,7 +387,67 @@ export default {
     };
   },
   created() {
-    // console.log("프로젝트 번호 출력: " + this.$route.params.projectId);
+    this.projectId = this.$route.params.projectId;
+    this.getProjectData();
+    this.getLeaderData();
+    this.getRefUrl();
+  },
+  methods: {
+    formatDate(datetime) {
+      // TODO: 예외처리 코드 보완 필요
+      console.log(datetime);
+      if (!datetime) {
+        console.log("datetime undefined error 처리 필요");
+        return "";
+      }
+      return datetime.substr(0, 10);
+    },
+
+    setStatusText(status_code) {
+      // const statusText = "";
+      if (status_code === "REC") {
+        return "모집중";
+      } else if (status_code === "FIN") {
+        return "모집완료";
+      }
+    },
+
+    setProgressMethodText(progress_method) {
+      if (progress_method === "ON") {
+        return "온라인";
+      } else if (progress_method === "OFF") {
+        return "오프라인";
+      }
+    },
+
+    async getProjectData() {
+      this.project = await this.$get(
+        // TODO: axios.defaults.baseURL로 변경
+        `http://localhost:3000/project/recruit/${this.projectId}`
+      );
+
+      this.project.stack_code = await this.project.stack_code
+        .split(",")
+        .map(String); // string to array
+      this.recruitStatus = await this.setStatusText(this.project.status_code);
+      this.progressMethod = await this.setProgressMethodText(
+        this.project.progress_method
+      );
+    },
+
+    async getLeaderData() {
+      this.projectLeader = await this.$get(
+        // TODO: axios.defaults.baseURL로 변경
+        `http://localhost:3000/project/recruit/${this.projectId}/leader`
+      );
+    },
+
+    async getRefUrl() {
+      this.refUrl = await this.$get(
+        // TODO: axios.defaults.baseURL로 변경
+        `http://localhost:3000/project/recruit/${this.projectId}/ref_url`
+      );
+    }
   }
 };
 </script>
