@@ -390,6 +390,9 @@ export default {
         }
       ]
     };
+  },
+  created() {
+    // console.log("프로젝트 번호 출력: " + this.$route.params.projectId);
   }
 };
 </script>
