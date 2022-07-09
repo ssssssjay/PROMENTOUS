@@ -22,10 +22,20 @@ export default {
     /** */
     /**************************/
     async $get(url) {
+      console.log("get url ");
       return (
         await axios.get(url).catch((e) => {
           console.log("get url ");
-          console.log(url);
+          console.log(e);
+        })
+      ).data;
+    },
+    async $getByParams(url, data) {
+      //const param = new URLSearchParams(data);
+      console.log("get url + params");
+      return (
+        await axios.get(url, data).catch((e) => {
+          console.log("get url + params");
           console.log(e);
         })
       ).data;
