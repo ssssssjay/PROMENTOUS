@@ -873,7 +873,13 @@ export default {
       firstMentoringStatus: 5,
       SecondMentoringStatus: 2,
       ThirdMentoringStatus: 3,
-      FourthMentoringStatus: 5
+      FourthMentoringStatus: 5,
+      /* 김인호  */
+      mentoring_page: 1, //현재 선택중인 멘토링페이지번호
+      resultData: [],
+      testParamObject: { c2: "zz", c3: "xx" },
+      testParamArray: ["zz", "xx"]
+
       // ,
       // projectContents: [
       //   {
