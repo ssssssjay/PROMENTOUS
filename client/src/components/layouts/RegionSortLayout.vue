@@ -1,7 +1,6 @@
 <template>
   <div>
     <section class="d-inline-block">
-      <label for="LrageRegionSort">지역</label>
       <div class="d-flex">
         <LargeRegionSort
           class="region lgRegion"
@@ -99,6 +98,8 @@ export default {
   }
 };
 </script>
+<style src="@vueform/multiselect/themes/default.css"></style>
+
 <style scoped>
 .regionSort {
   display: inline-block;
