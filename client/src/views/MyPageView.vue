@@ -135,7 +135,7 @@
                 </select>
               </span>
             </p>
-            <p class="row py-4 mb-5">
+            <p class="row py-4 mb-0">
               <span class="col-2 text-center"><strong>소셜정보</strong></span>
               <span class="col-10 text-start" v-show="infoStatus">
                 <a
@@ -174,6 +174,20 @@
                   +
                 </button>
               </span>
+            </p>
+            <p class="row">
+              <span class="col-2"></span>
+              <span class="col-8 text-left"
+                ><a
+                  class="text-start px-4"
+                  :href="Object.values(site)"
+                  v-for="(site, index) in siteList"
+                  :key="index"
+                  target="_blank"
+                  v-show="editStatus"
+                  >{{ Object.keys(site).join() }}</a
+                ></span
+              >
             </p>
             <hr />
             <p class="text-end">
