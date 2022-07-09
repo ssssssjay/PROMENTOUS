@@ -895,7 +895,7 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  async mounted() {},
   unmounted() {},
   methods: {
     selected() {
