@@ -1,6 +1,7 @@
 import axios from "axios";
 
 /*AXIOS base URL - vue파일에서 짧게치기위해! */
+/* eslint-disable */
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers["Content-Type"] = "application/json;charset=utf-8";
 axios.defaults.headers["Access-Control-Allow-Origin"] = "*";
@@ -11,10 +12,10 @@ export default {
   unmounted() {},
   methods: {
     functionA() {
-      console.log("AXIOS에서 호출함");
+      //     console.log("AXIOS에서 호출함");
     },
     functionAA(param) {
-      console.log("axiosparam");
+      //      console.log("axiosparam");
       console.log(param);
     },
     /**************************/
@@ -22,11 +23,11 @@ export default {
     /** */
     /**************************/
     async $get(url) {
+      //   console.log("get url ");
       return (
         await axios.get(url).catch((e) => {
-          console.log("get url ");
-          console.log(url);
-          console.log(e);
+          //      console.log("get url ");
+          //      console.log(e);
         })
       ).data;
     },
