@@ -10,12 +10,36 @@
     <!-- 상태선택박스 -->
 
     <section class="container">
+      <!-- <div>//지원자정보 (배열)>> 팀선택시변경되어야</div>
+      <div>{{ this.applicants }}</div> -->
+      <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div>
+      <div>{{ this.teamMembers }}</div>
+      <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
+      <div>{{ this.mentoring }}</div> -->
+      <!-- <div>팀상태</div>
+      <div>{{ this.teamStatusList }}</div> -->
+      <!-- <div><br /></div>
+      <div><br /></div>
+      <div><br /></div>
+      <div>프로젝트리스트</div>
+      <div>{{ this.projectList }}</div>
+      <div>{{ typeof this.projectList }}</div>
+      <div>{{ this.projectList[0] }}</div>
+      <div><br /></div>
+      <div><br /></div>
+      <div>프로젝트리스트2</div>
+      <div>{{ this.projectList2 }}</div>
+      <div>{{ typeof this.projectList2 }}</div>
+      <div>{{ this.projectList2[0] }}</div>
+      <div>{{ this.teamTotalInfo.data }}</div> -->
+
       <div class="row">
         <div class="col select d-inline-block">
           <div class="d-flex select">
             <Status
               class="StatusSelect"
               v-model="selectedStatus"
+              :selected="selectedStatus"
               style="width: 200px"
               :options="[
                 ...new Set(
@@ -24,7 +48,8 @@
                   })
                 )
               ]"
-              @clear="deselected" />
+              @clear="deselected"
+              :key="componentKey" />
 
             <!-- <Project
               class="ProjectSelect"
@@ -35,7 +60,7 @@
                 projectList
                   .filter((data) => data.statusName === selectedStatus)
                   .map((data) => {
-                    return data.projectName;
+                    return data.title;
                   })
               ]"
               @select="selected" /> -->
@@ -43,7 +68,9 @@
               name=""
               id=""
               v-model="selectedProjectId"
-              class="ProjectSelect">
+              :selected="selectedProjectId"
+              class="ProjectSelect"
+              @change="projectIdSelect()">
               <option
                 :value="project.projectId"
                 :key="project.projectName"
@@ -165,7 +192,7 @@
         </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 관련링크  -->
-        <div class="p-2 mb-5 bd-highlight">관련 링크</div>
+        <!-- <div class="p-2 mb-5 bd-highlight">관련 링크</div> -->
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 모집글 링크 -->
         <div class="p-2 mb-5 bd-highlight">
@@ -197,13 +224,15 @@
                   <li class="list-group-item">
                     이메일 {{ app.applicantAccount }}
                   </li>
-                  <li class="list-group-item">신청일시 {{ app.insertDate }}</li>
                   <li class="list-group-item">
+                    신청일시 {{ app.insertDate.substr(0, 10) }}
+                  </li>
+                  <!-- <li class="list-group-item">
                     신청분야
                     <button class="btn btn-primary">
                       {{ app.applyDeptId }}
                     </button>
-                  </li>
+                  </li> -->
                   <li class="row list-group-item">
                     관심스택
                     <br />
@@ -275,9 +304,9 @@
               </div>
             </div>
             <div class="card-body">
-              <button class="btn m-1 btn-primary" @click="handleClick">
+              <!-- <button class="btn m-1 btn-primary" @click="handleClick">
                 팀원평가
-              </button>
+              </button> -->
               <TeamRatingModal
                 ref="modal"
                 :item="mem"
@@ -306,56 +335,56 @@
                 </button>
                 <button
                   class="btn btn-primary"
-                  v-show="men.MentoringStatus > 1">
+                  v-show="men.mentoringStatus > 1">
                   <i class="bi bi-check-circle-fill"></i>
                 </button>
                 <button
                   class="btn btn-primary"
-                  v-show="men.MentoringStatus === -1">
+                  v-show="men.mentoringStatus === -1">
                   <i class="bi bi-file-excel-fill"></i>
                 </button>
                 <button
                   class="btn btn-primary"
-                  v-show="men.MentoringStatus > 2">
+                  v-show="men.mentoringStatus > 2">
                   <i class="bi bi-check-circle-fill"></i>
                 </button>
                 <button
                   class="btn btn-primary"
-                  v-show="men.MentoringStatus >= 4">
+                  v-show="men.mentoringStatus >= 4">
                   <i class="bi bi-check-circle-fill"></i>
                 </button>
                 <button
                   class="btn btn-primary"
-                  v-show="men.MentoringStatus == 5">
+                  v-show="men.mentoringStatus == 5">
                   <i class="bi bi-check-circle-fill"></i></button
                 ><button
                   class="btn btn-primary"
-                  v-show="men.MentoringStatus != -1 && men.MentoringStatus < 5">
+                  v-show="men.mentoringStatus != -1 && men.mentoringStatus < 5">
                   <i class="bi bi-circle"></i>
                 </button>
                 <div class="mentoringStatus">
                   <span>신청중 </span>
-                  <span v-show="men.MentoringStatus >= 1">승인됨 </span>
-                  <span v-show="men.MentoringStatus === -1">반려됨 </span>
-                  <span v-show="men.MentoringStatus >= 2">결제진행 </span>
-                  <span v-show="men.MentoringStatus >= 3">멘토링중 </span>
-                  <span v-show="men.MentoringStatus >= 4">완료 </span>
+                  <span v-show="men.mentoringStatus >= 1">승인됨 </span>
+                  <span v-show="men.mentoringStatus === -1">반려됨 </span>
+                  <span v-show="men.mentoringStatus >= 2">결제진행 </span>
+                  <span v-show="men.mentoringStatus >= 3">멘토링중 </span>
+                  <span v-show="men.mentoringStatus >= 4">완료 </span>
                 </div>
                 <div class="mentoringBtn">
                   <button
                     class="btn btn-outline-secondary"
-                    v-show="men.MentoringStatus == 4">
+                    v-show="men.mentoringStatus == 4">
                     멘토링종료
                   </button>
                   <button
                     class="btn btn-outline-secondary"
-                    v-show="men.MentoringStatus > 4"
+                    v-show="men.mentoringStatus > 4"
                     disabled>
                     멘토링종료
                   </button>
                   <button
                     class="btn btn-outline-secondary"
-                    v-show="men.MentoringStatus == 5"
+                    v-show="men.mentoringStatus == 5"
                     @click="handleClick2">
                     멘토평가
                     <MentorRatingModal
@@ -414,26 +443,27 @@ export default {
       selectedProjectId: "",
       datetime: "2011-08-03tdst324324234234",
       correctionMode: true,
+      projectList2: [],
       projectList: [
         {
           // 팀장id="",
           // 멘토여부=""
-          statusCode: "01",
+          statusCode: "FIN",
           statusName: "진행중",
-          projectId: "01",
-          projectName: "파이썬으로 만드는 TODO LIST"
+          projectId: "1",
+          projectName: "#################파이썬으로 만드는 TODO LIST"
         },
         {
-          statusCode: "01",
+          statusCode: "FIN",
           statusName: "진행중",
-          projectId: "02",
-          projectName: "웹게임만들기"
+          projectId: "2",
+          projectName: "#################웹게임만들기"
         },
         {
-          statusCode: "02",
+          statusCode: "FIN",
           statusName: "진행완료",
-          projectId: "03",
-          projectName: "자바스크립트 따라잡기"
+          projectId: "3",
+          projectName: "####################자바스크립트 따라잡기"
         }
       ],
 
@@ -446,48 +476,8 @@ export default {
       recruitingUrl: "",
       applicants: [
         {
-          applyAdminId: "",
-          applicantID: "",
-          applicantNickName: "",
-          applicantAccount: "evelo0702@gmail.com",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          applyDeptId: "백엔드",
-          applyStatus: "NEW",
-          insertDate: "2022.07.02"
-        },
-        {
-          applyAdminId: "",
-          applicantID: "",
-          applicantNickName: "",
-          applicantAccount: "evelo0702@gmail.com",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          applyDeptId: "백엔드",
-          applyStatus: "NEW",
-          insertDate: "2022.07.02"
-        },
-        {
-          applyAdminId: "",
-          applicantID: "",
-          applicantNickName: "",
-          applicantAccount: "evelo0702@gmail.com",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          applyDeptId: "백엔드",
-          applyStatus: "NEW",
-          insertDate: "2022.07.02"
-        },
-        {
-          applyAdminId: "",
-          applicantID: "",
-          applicantNickName: "",
-          applicantAccount: "evelo0702@gmail.com",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          applyDeptId: "백엔드",
-          applyStatus: "NEW",
-          insertDate: "2022.07.02"
-        },
-        {
-          applyAdminId: "",
-          applicantID: "",
+          applyAdminId: "", // 무얼 위한 변수인지??
+          applicantId: "",
           applicantNickName: "",
           applicantAccount: "evelo0702@gmail.com",
           likeStackCode: ["Javascript", "Java", "Python", "Node"],
@@ -497,101 +487,6 @@ export default {
         }
       ],
       teamMembers: [
-        {
-          memberId: "",
-          memberNickName: "",
-          memberEmail: "evelo0702@gmail.com",
-          userSocialUrl: [
-            {
-              title: "기술블로그",
-              address: "주소"
-            },
-            {
-              title: "깃허브",
-              address: "주소"
-            }
-          ],
-          role: "백엔드",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          ratingComment: "",
-          ratingScore: 0
-        },
-        {
-          memberId: "",
-          memberNickName: "",
-          memberEmail: "evelo0702@gmail.com",
-          userSocialUrl: [
-            {
-              title: "기술블로그",
-              address: "주소"
-            },
-            {
-              title: "깃허브",
-              address: "주소"
-            }
-          ],
-          role: "백엔드",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          ratingComment: "",
-          ratingScore: 0
-        },
-        {
-          memberId: "",
-          memberNickName: "",
-          memberEmail: "evelo0702@gmail.com",
-          userSocialUrl: [
-            {
-              title: "기술블로그",
-              address: "주소"
-            },
-            {
-              title: "깃허브",
-              address: "주소"
-            }
-          ],
-          role: "백엔드",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          ratingComment: "",
-          ratingScore: 0
-        },
-        {
-          memberId: "",
-          memberNickName: "",
-          memberEmail: "evelo0702@gmail.com",
-          userSocialUrl: [
-            {
-              title: "기술블로그",
-              address: "주소"
-            },
-            {
-              title: "깃허브",
-              address: "주소"
-            }
-          ],
-          role: "백엔드",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          ratingComment: "",
-          ratingScore: 0
-        },
-        {
-          memberId: "",
-          memberNickName: "",
-          memberEmail: "evelo0702@gmail.com",
-          userSocialUrl: [
-            {
-              title: "기술블로그",
-              address: "주소"
-            },
-            {
-              title: "깃허브",
-              address: "주소"
-            }
-          ],
-          role: "백엔드",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          ratingComment: "",
-          ratingScore: 0
-        },
         {
           memberId: "",
           memberNickName: "",
@@ -645,7 +540,25 @@ export default {
           mentorRatingComment: "",
           mentorRatingScore: ""
         }
-      ]
+      ],
+      //김인호 test
+      paramsForTest: {
+        c2: "zz",
+        c3: "xx",
+        progress_method: "OFF",
+        status_code: "FIN",
+        main_area_code: "M08",
+        sub_area_code: "S125",
+        stack_code: "J02,R01"
+      },
+      projectInfoParams: {
+        project_id: "3",
+        mentoring_page: "1"
+      },
+      teamTotalInfo: {},
+      sessionUserId: "3",
+      initUrl: "",
+      componentKey: 0
 
       //
     };
@@ -683,7 +596,20 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  async mounted() {
+    // 팀STATUS 필드 셀렉박스용
+    this.teamStatusList = await this.$get(
+      `/common/getTeamStatusListForTeamManage`
+    );
+    // 내 SESSIONID기준으로  팀 리스트끌고오기
+    this.initUrl = `/manage/getTeamListForManage/`;
+    this.initUrl += this.sessionUserId;
+    this.projectList = await this.$get(this.initUrl, this.projectInfoParams);
+    // 가져온 리스트 첫번째 값으로 팀정보 다끌고오기
+    this.selectedProjectId = this.projectList[0].projectId;
+    this.selectedStatus = this.projectList[0].statusName;
+    this.projectIdSelect();
+  },
   unmounted() {},
   methods: {
     selected() {
@@ -710,6 +636,48 @@ export default {
     },
     getMentorRating: function (rating) {
       this.MentorRatingScore = rating;
+    },
+    forceRerender() {
+      this.componentKey += 1;
+    },
+    stringToArray(string) {
+      return string.split(",");
+    },
+    // 선택 하는 순간에 해당 project 정보 teamTotalInfo 끌어옴
+    async projectIdSelect() {
+      this.projectInfoParams.project_id = this.selectedProjectId;
+      // teamTotalInfo .
+      this.teamTotalInfo = await this.$post(
+        // TODO: axios.defaults.baseURL로 변경
+        `/manage/getProjectInfo`,
+        this.projectInfoParams
+      );
+      // 팀모임 URL
+      this.urlTitle = this.teamTotalInfo.data.basicInfo.meetingUrl;
+      this.urlAddress = this.teamTotalInfo.data.basicInfo.meetingUrl;
+      //보증금
+      this.deposit = this.teamTotalInfo.data.basicInfo.warranty;
+
+      //지원자정보 (배열)
+      this.applicants = this.teamTotalInfo.data.applicants;
+      for (let q = 0; q < this.applicants.length; q++) {
+        let str = this.applicants[q].likeStackCode.slice(
+          0,
+          this.applicants[q].likeStackCode.length - 1
+        );
+        this.applicants[q].likeStackCode = str.split(",");
+      }
+      //멤버정보 (배열)
+      this.teamMembers = this.teamTotalInfo.data.members;
+      for (let q = 0; q < this.teamMembers.length; q++) {
+        let str = this.teamMembers[q].likeStackCode.slice(
+          0,
+          this.teamMembers[q].likeStackCode.length - 1
+        );
+        this.teamMembers[q].likeStackCode = str.split(",");
+      }
+      //멘토정보 (배열)
+      this.mentoring = this.teamTotalInfo.data.mentorings;
     }
   }
 };

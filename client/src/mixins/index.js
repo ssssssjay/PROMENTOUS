@@ -11,22 +11,22 @@ export default {
   unmounted() {},
   methods: {
     functionA() {
-      console.log("AXIOS에서 호출함");
+ //     console.log("AXIOS에서 호출함");
     },
     functionAA(param) {
-      console.log("axiosparam");
-      console.log(param);
+//      console.log("axiosparam");
+//      console.log(param);
     },
     /**************************/
     /**AXIOS 용 **/
     /** */
     /**************************/
     async $get(url) {
+   //   console.log("get url ");
       return (
         await axios.get(url).catch((e) => {
-          console.log("get url ");
-          console.log(url);
-          console.log(e);
+    //      console.log("get url ");
+    //      console.log(e);
         })
       ).data;
     },
