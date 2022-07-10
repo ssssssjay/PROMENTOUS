@@ -42,13 +42,17 @@
               >|
               <span class="col-2 text-center"><strong>팀원평판</strong></span>
               <span class="col-2 text-start">
-                <i class="bi bi-star-fill pro_star_color"></i
-                >{{ user.score }}/({{ user.scoreCount }}) </span
+                <button id="bt" class="btn btn-outline-primary">
+                  <i class="bi bi-star-fill pro_star_color"></i
+                  >{{ user.score }}/({{ user.scoreCount }})
+                </button></span
               >|
               <span class="col-2 text-center"><strong>멘토평판</strong></span>
               <span class="col-2 text-start"
-                ><i class="bi bi-star-fill pro_star_color"></i
-                >{{ user.mentoScore }}/({{ user.mentoScoreCount }})</span
+                ><button id="bt" class="btn btn-outline-primary">
+                  <i class="bi bi-star-fill pro_star_color"></i>
+                  {{ user.mentoScore }}/({{ user.mentoScoreCount }})
+                </button></span
               >
             </p>
             <hr />
@@ -65,7 +69,7 @@
             </p>
             <p class="row py-4 mb-4">
               <span class="col-2 text-center"><strong>관심분야</strong></span>
-              <span class="col-10 px-3"
+              <span class="col-2 px-3"
                 ><button
                   type="button"
                   class="btn btn-primary m-1 mt-0"
@@ -74,7 +78,7 @@
                   v-show="infoStatus">
                   {{ selectedOptionList[index] }}
                 </button>
-                <select
+                <!-- <select
                   v-model="selectedOptionList"
                   class="form-select"
                   aria-label="options"
@@ -86,7 +90,8 @@
                     :key="option.optionCode">
                     {{ option.name }}
                   </option>
-                </select>
+                </select> -->
+                <PartSearchLayout v-show="editStatus"></PartSearchLayout>
               </span>
             </p>
             <p class="row py-4 mb-4">
@@ -214,8 +219,9 @@
 </template>
 
 <script>
+import PartSearchLayout from "@/components/layouts/PartSearchLayout.vue";
 export default {
-  components: {},
+  components: { PartSearchLayout },
   data() {
     return {
       user: {
@@ -291,6 +297,7 @@ export default {
       selectedPart: "",
       selectedStackList: [],
       stackList: [],
+      value: [],
 
       site: { name: "", link: "" }, // site: {name:'GitHub', link:'www.github.com'}
       siteList: [], // [{GitHub:'www.github.com'}, {Naver:'www.naver.com'}, ...]
@@ -333,5 +340,9 @@ export default {
 <style scoped>
 #link {
   text-decoration-line: none;
+}
+
+#bt {
+  margin-bottom: 50%;
 }
 </style>
