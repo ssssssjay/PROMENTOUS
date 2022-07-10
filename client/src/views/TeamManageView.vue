@@ -275,14 +275,12 @@
               </div>
             </div>
             <div class="card-body">
-              <button
-                class="btn m-1 btn-primary"
-                @click="handleClick"
-                v-show="this.result != 'ok'">
+              <button class="btn m-1 btn-primary" @click="handleClick">
                 팀원평가
               </button>
               <TeamRatingModal
                 ref="modal"
+                :item="mem"
                 :content="modalContent"
                 v-on:childTxt="getTxt"
                 v-on:childRating="getRating"
@@ -370,14 +368,7 @@
                 </div>
               </div>
             </div>
-            <button
-              class="btn btn-outline-secondary"
-              @click="handleClick2"
-              v-show="(datetime = 0)">
-              멘토평가 ref="modal2" :content="modalContent"
-              v-on:MentorTxt="getMentorTxt" v-on:MentorRating="getMentorRating"
-              :colors="mentorRatingColor" />
-            </button>
+
             <nav aria-label="...">
               <ul class="pagination pagination-sm justify-content-center">
                 <li class="page-item active" aria-current="page">
@@ -626,33 +617,33 @@ export default {
           mentoringId: "",
           mentorUserId: "evelo",
           mentoringTitle: "자바스크립트 가이드",
-          MentoringStatus: "5",
-          MentorRatingComment: "",
-          MentorRatingScore: ""
+          mentoringStatus: "5",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
         },
         {
           mentoringId: "",
           mentorUserId: "evelo",
           mentoringTitle: "자바스크립트 가이드",
-          MentoringStatus: "3",
-          MentorRatingComment: "",
-          MentorRatingScore: ""
+          mentoringStatus: "3",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
         },
         {
           mentoringId: "",
           mentorUserId: "evelo",
           mentoringTitle: "자바스크립트 가이드",
-          MentoringStatus: "2",
-          MentorRatingComment: "",
-          MentorRatingScore: ""
+          mentoringStatus: "2",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
         },
         {
           mentoringId: "",
           mentorUserId: "evelo",
           mentoringTitle: "자바스크립트 가이드",
-          MentoringStatus: "1",
-          MentorRatingComment: "",
-          MentorRatingScore: ""
+          mentoringStatus: "1",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
         }
       ]
 
@@ -843,7 +834,7 @@ div.applicantList {
 .mentoringStatus {
   position: absolute;
   top: 100px;
-  left: 52px;
+  left: 63px;
   font-size: 12px;
 }
 .mentoringStatus > span {

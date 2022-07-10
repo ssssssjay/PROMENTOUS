@@ -21,6 +21,7 @@
     "vue": "^3.2.37",
     "vue-router": "^4.0.3",
     "vue-star-rating": "^2.1.0",
+    "vue3-editor": "^0.1.1",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
