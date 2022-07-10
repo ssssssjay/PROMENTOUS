@@ -418,7 +418,7 @@ export default {
         {
           // 팀장id="",
           // 멘토여부=""
-          status_Code: "01",
+          statusCode: "01",
           statusName: "진행중",
           projectId: "01",
           projectName: "파이썬으로 만드는 TODO LIST"
@@ -617,33 +617,33 @@ export default {
           mentoringId: "",
           mentorUserId: "evelo",
           mentoringTitle: "자바스크립트 가이드",
-          MentoringStatus: "5",
-          MentorRatingComment: "",
-          MentorRatingScore: ""
+          mentoringStatus: "5",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
         },
         {
           mentoringId: "",
           mentorUserId: "evelo",
           mentoringTitle: "자바스크립트 가이드",
-          MentoringStatus: "3",
-          MentorRatingComment: "",
-          MentorRatingScore: ""
+          mentoringStatus: "3",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
         },
         {
           mentoringId: "",
           mentorUserId: "evelo",
           mentoringTitle: "자바스크립트 가이드",
-          MentoringStatus: "2",
-          MentorRatingComment: "",
-          MentorRatingScore: ""
+          mentoringStatus: "2",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
         },
         {
           mentoringId: "",
           mentorUserId: "evelo",
           mentoringTitle: "자바스크립트 가이드",
-          MentoringStatus: "1",
-          MentorRatingComment: "",
-          MentorRatingScore: ""
+          mentoringStatus: "1",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
         }
       ]
 
