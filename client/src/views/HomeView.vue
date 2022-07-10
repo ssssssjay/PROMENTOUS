@@ -55,7 +55,8 @@
       <!-- 패러셀 -->
 
       <!-- 상단 : 프로젝트 리스트 -->
-      <div class="project-list">
+      <CardList class="mt-3"></CardList>
+      <!-- <div class="project-list">
         <div class="row" style="vertical-align: middle">
           <div
             id="card"
@@ -96,7 +97,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- 하단 : 멘토리스트 -->
       <div style="margin-top: 120px"></div>
@@ -151,85 +152,167 @@
 </template>
 
 <script>
+import CardList from "@/components/CardList.vue";
 // @ is an alias to /src
 
 export default {
   name: "HomeView",
-  components: {},
+  components: { CardList },
   data() {
     return {
+      // projects: [
+      //   {
+      //     expDate: "2022/07/24",
+      //     title: "프로젝트 멘토링 서비스",
+      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      //     viewCount: "201",
+      //     bookmarkCount: "14",
+      //     writter: "joansdev",
+      //     stacks: ["JS", "TS", "React"]
+      //   },
+      //   {
+      //     expDate: "2022/11/13",
+      //     title: "찰리와 초콜릿 기계 설계해보기",
+      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      //     viewCount: "20198",
+      //     bookmarkCount: "281",
+      //     writter: "찰리",
+      //     stacks: ["JS", "TS"]
+      //   },
+      //   {
+      //     expDate: "2023/03/03",
+      //     title: "맛집 추천 프로그램",
+      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      //     viewCount: "9",
+      //     bookmarkCount: "2",
+      //     writter: "김준현",
+      //     stacks: ["JS", "TS", "React", "Spring", "AWS"]
+      //   },
+      //   {
+      //     expDate: "2022/05/01",
+      //     title: "동물 건강진료 서비스",
+      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      //     viewCount: "521",
+      //     bookmarkCount: "21",
+      //     writter: "강형욱",
+      //     stacks: ["JS", "TS", "React", "Kotlin"]
+      //   },
+      //   {
+      //     expDate: "2022/02/09",
+      //     title: "음악 선곡 프로그램",
+      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      //     viewCount: "21",
+      //     bookmarkCount: "4",
+      //     writter: "김범수",
+      //     stacks: ["JS", "TS", "React"]
+      //   },
+      //   {
+      //     expDate: "2023/12/24",
+      //     title: "크리스마스 데이팅 어플",
+      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      //     viewCount: "22106",
+      //     bookmarkCount: "6892",
+      //     writter: "Santa Claus",
+      //     stacks: ["JS", "TS", "React", "Node.js", "Kotlin"]
+      //   },
+      //   {
+      //     expDate: "2022/04/20",
+      //     title: "엑셀 자동화 프로그램",
+      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      //     viewCount: "1",
+      //     bookmarkCount: "0",
+      //     writter: "김대리",
+      //     stacks: ["JS", "TS", "React"]
+      //   },
+      //   {
+      //     expDate: "2021/02/28",
+      //     title: "집 지키는 로봇 설계",
+      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      //     viewCount: "31202",
+      //     bookmarkCount: "560",
+      //     writter: "케빈",
+      //     stacks: ["JS", "React"]
+      //   }
+      // ],
       projects: [
         {
-          expDate: "2022/07/24",
-          title: "프로젝트 멘토링 서비스",
-          info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-          viewCount: "201",
-          bookmarkCount: "14",
-          writter: "joansdev",
-          stacks: ["JS", "TS", "React"]
+          title: "Vue-Todo",
+          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
+          user: "devprogramming4",
+          expDate: "2022-08-09",
+          usingStack: ["nodeJS", "vue", "mysql"],
+          bookmarkCount: 3,
+          viewCount: 5,
+          status: "진행중"
         },
         {
-          expDate: "2022/11/13",
-          title: "찰리와 초콜릿 기계 설계해보기",
-          info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-          viewCount: "20198",
-          bookmarkCount: "281",
-          writter: "찰리",
-          stacks: ["JS", "TS"]
+          title: "React-Todo",
+          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
+          user: "sungjae",
+          expDate: "2022-08-08",
+          usingStack: ["JS", "nodeJS"],
+          bookmarkCount: 2,
+          viewCount: 4,
+          status: "진행중"
         },
         {
-          expDate: "2023/03/03",
-          title: "맛집 추천 프로그램",
-          info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-          viewCount: "9",
-          bookmarkCount: "2",
-          writter: "김준현",
-          stacks: ["JS", "TS", "React", "Spring", "AWS"]
+          title: "뷰로 인생 끝장내버리기",
+          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
+          user: "뷰쳐돌이",
+          expDate: "2022-06-20",
+          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
+          bookmarkCount: 100,
+          viewCount: 1000,
+          status: "진행중"
         },
         {
-          expDate: "2022/05/01",
-          title: "동물 건강진료 서비스",
-          info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-          viewCount: "521",
-          bookmarkCount: "21",
-          writter: "강형욱",
-          stacks: ["JS", "TS", "React", "Kotlin"]
+          title: "뷰로 인생 끝장내버리기",
+          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
+          user: "뷰쳐돌이",
+          expDate: "2022-06-20",
+          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
+          bookmarkCount: 100,
+          viewCount: 1000,
+          status: "진행중"
         },
         {
-          expDate: "2022/02/09",
-          title: "음악 선곡 프로그램",
-          info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-          viewCount: "21",
-          bookmarkCount: "4",
-          writter: "김범수",
-          stacks: ["JS", "TS", "React"]
+          title: "뷰로 인생 끝장내버리기",
+          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
+          user: "뷰쳐돌이",
+          expDate: "2022-06-20",
+          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
+          bookmarkCount: 100,
+          viewCount: 1000,
+          status: "진행중"
         },
         {
-          expDate: "2023/12/24",
-          title: "크리스마스 데이팅 어플",
-          info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-          viewCount: "22106",
-          bookmarkCount: "6892",
-          writter: "Santa Claus",
-          stacks: ["JS", "TS", "React", "Node.js", "Kotlin"]
+          title: "뷰로 인생 끝장내버리기",
+          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
+          user: "뷰쳐돌이",
+          expDate: "2022-06-20",
+          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
+          bookmarkCount: 100,
+          viewCount: 1000,
+          status: "진행중"
         },
         {
-          expDate: "2022/04/20",
-          title: "엑셀 자동화 프로그램",
-          info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-          viewCount: "1",
-          bookmarkCount: "0",
-          writter: "김대리",
-          stacks: ["JS", "TS", "React"]
-        },
-        {
-          expDate: "2021/02/28",
-          title: "집 지키는 로봇 설계",
-          info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-          viewCount: "31202",
-          bookmarkCount: "560",
-          writter: "케빈",
-          stacks: ["JS", "React"]
+          title: "뷰로 인생 끝장내버리기",
+          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
+          user: "뷰쳐돌이",
+          expDate: "2022-06-20",
+          usingStack: [
+            "Vue",
+            "nodeJS",
+            "mySQL",
+            "AWS",
+            "mySQL",
+            "AWS",
+            "mySQL",
+            "AWS"
+          ],
+          bookmarkCount: 100,
+          viewCount: 1000,
+          status: "진행중"
         }
       ],
 
