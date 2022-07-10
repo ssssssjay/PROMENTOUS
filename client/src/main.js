@@ -12,10 +12,12 @@ import "@/styles/ih_kim.css";
 import "@/styles/yuri.css";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
+import StarRating from "vue-star-rating";
 
 createApp(App)
   .use(store)
   .use(router)
   .mixin(mixins)
   .component("Datepicker", Datepicker)
+  .component("StarRating", StarRating)
   .mount("#app");

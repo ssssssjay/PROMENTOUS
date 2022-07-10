@@ -15,37 +15,50 @@
           <div class="d-flex select">
             <Status
               class="StatusSelect"
-              v-model="SelectedStatus"
+              v-model="selectedStatus"
               style="width: 200px"
               :options="[
                 ...new Set(
                   projectList.map((data) => {
-                    return data.StatusName;
+                    return data.statusName;
                   })
                 )
               ]"
               @clear="deselected" />
 
-            <Project
+            <!-- <Project
               class="ProjectSelect"
               noOptionsText="상태를 먼저 선택하세요!"
-              v-model="SelectedProject"
+              v-model="selectedProjectId"
               style="width: 400px"
-              :options="
+              :options="[
                 projectList
-                  .filter((data) => data.StatusName === SelectedStatus)
+                  .filter((data) => data.statusName === selectedStatus)
                   .map((data) => {
                     return data.projectName;
                   })
-              "
-              @select="selected" />
+              ]"
+              @select="selected" /> -->
+            <select
+              name=""
+              id=""
+              v-model="selectedProjectId"
+              class="ProjectSelect">
+              <option
+                :value="project.projectId"
+                :key="project.projectName"
+                v-for="project in projectList.filter(
+                  (p) => p.statusName === selectedStatus
+                )">
+                {{ project.projectName }}
+              </option>
+            </select>
           </div>
         </div>
       </div>
     </section>
-
     <!-- 선택안했을때 보여줄 기본페이지 -->
-    <div class="row justify-content-md-center" v-if="SelectedProject === ''">
+    <div class="row justify-content-md-center" v-if="selectedProject === ''">
       <div class="col-md-auto">
         <i class="bi bi-exclamation-diamond">선택된 프로젝트가 없습니다.</i>
       </div>
@@ -55,10 +68,8 @@
       <!-- 선택해서 불러온 프로젝트 내용 -->
 
       <div class="d-flex flex-column bd-highlight mb-3">
-        <!-- 팀프로젝트 제목 + 수정버튼 -->
-        <div class="d-flex justify-content-center title">
-          {{ SelectedProject }}
-        </div>
+        <!--수정버튼 -->
+        <div class="d-flex justify-content-center title"></div>
         <div class="d-flex justify-content-end register">
           <RegisterbtnLayout
             :btnText="btnText"
@@ -73,25 +84,33 @@
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 팀 모임 url -->
         <div class="p-2 mb-5 bd-highlight teamUrl">
-          팀모임 URL
+          팀모임 링크
           <span class="url mx-4" v-show="correctionMode === false">
             <span>링크제목</span>
-            <span>디스코드채널</span>
+            <span>{{ urlTitle }}</span>
           </span>
           <span class="url mx-4" v-show="correctionMode">
             <div class="input-group">
               <span class="input-group-text">링크제목</span>
-              <input type="text" aria-label="First name" class="form-control" />
+              <input
+                type="text"
+                aria-label="First name"
+                class="form-control"
+                v-model="urlTitle" />
             </div>
           </span>
           <span class="url mx-4" v-show="correctionMode === false">
             <span>URL</span>
-            <span>https://www.naver.com</span>
+            <span>{{ urlAddress }}</span>
           </span>
           <span class="url mx-4" v-show="correctionMode">
             <div class="input-group">
               <span class="input-group-text">URL</span>
-              <input type="text" aria-label="First name" class="form-control" />
+              <input
+                type="text"
+                aria-label="First name"
+                class="form-control"
+                v-model="urlAddress" />
             </div>
           </span>
         </div>
@@ -102,31 +121,35 @@
           팀 STATUS
           <TeamStatus
             class="mx-5 TeamStatusSelect"
-            v-model="TeamStatus"
+            v-model="teamStatus"
             placeholder="팀상태를 선택해주세요"
-            :options="options"
+            :options="teamStatusList"
             v-show="correctionMode === true" />
           <button
             class="mx-5 btn btn-primary"
             v-show="correctionMode === false">
-            {{ TeamStatus }}
+            {{ teamStatus }}
           </button>
         </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 진행기간 -->
-        <div class="p-2 d-inline-flex mb-5 bd-highlight">
-          진행 기간
-          <!-- <Datepicker
+        <!-- <div class="p-2 d-inline-flex mb-5 bd-highlight">
+          종료 예정일 -->
+        <!-- <Datepicker
             v-model="date"
             locale="kst"
             range
             class="mx-5 datepicker"
             v-show="correctionMode === true" /> -->
-          <Datepicker v-model="date" locale="kst" class="mx-5 datepicker" />
+        <!-- <Datepicker
+            v-model="endDate"
+            locale="kst"
+            class="mx-5 datepicker"
+            v-show="correctionMode === true" />
           <p class="mx-5" v-show="correctionMode === false">
-            {{ date }}
+            {{ endDate }}
           </p>
-        </div>
+        </div> -->
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 보증금 -->
         <div class="p-2 mb-5 d-inline-flex bd-highlight">
@@ -148,7 +171,7 @@
         <div class="p-2 mb-5 bd-highlight">
           모집글 링크
           <span class="url mx-4 text-center">
-            <a href="">모집글 링크로 </a>
+            <a href="{{recrutingUrl}}">모집글 링크로 </a>
           </span>
         </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
@@ -158,39 +181,38 @@
 
           <div class="row mx-5">
             <div class="row applicantList">
-              <div class="applicant text-center card" style="width: 25%">
+              <div
+                class="applicant text-center card"
+                style="width: 240px"
+                :key="index"
+                v-for="(app, index) in applicants">
                 <img
                   src="@/img/maleAvatar.svg"
                   class="card-img-top"
                   alt="..." />
 
-                <h5 class="card-title">닉네임</h5>
+                <h5 class="card-title">{{ app.applicantNickName }}</h5>
 
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">
-                    이메일 evelo0702@gmail.com{{}}
+                    이메일 {{ app.applicantAccount }}
                   </li>
-                  <li class="list-group-item">신청일시 2022.07.02{{}}</li>
+                  <li class="list-group-item">신청일시 {{ app.insertDate }}</li>
                   <li class="list-group-item">
-                    신청분야 <button class="btn btn-primary">백엔드{{}}</button>
+                    신청분야
+                    <button class="btn btn-primary">
+                      {{ app.applyDeptId }}
+                    </button>
                   </li>
                   <li class="row list-group-item">
                     관심스택
                     <br />
-                    <div class="col">
-                      <button class="btn m-1 btn-primary Stack">
-                        Javascript{{}}
-                      </button>
-                      <button class="btn m-1 btn-primary Stack">
-                        Javascript{{}}
-                      </button>
-                    </div>
-                    <div class="col">
-                      <button class="btn m-1 btn-primary Stack">
-                        Javascript{{}}
-                      </button>
-                      <button class="btn m-1 btn-primary Stack">
-                        Javascript{{}}
+                    <div>
+                      <button
+                        class="btn m-1 btn-primary Stack"
+                        :key="i"
+                        v-for="(stack, i) in applicants[index].likeStackCode">
+                        {{ stack }}
                       </button>
                     </div>
                   </li>
@@ -198,94 +220,6 @@
                 <div class="card-body">
                   <button class="btn m-1 btn-primary">승인</button>
                   <button class="btn m-1 btn-primary">거절</button>
-                </div>
-              </div>
-              <div class="applicant text-center card" style="width: 25%">
-                <img
-                  src="@/img/maleAvatar.svg"
-                  class="card-img-top"
-                  alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">An item</li>
-                  <li class="list-group-item">A second item</li>
-                  <li class="list-group-item">A third item</li>
-                </ul>
-                <div class="card-body">
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
-                </div>
-              </div>
-              <div class="applicant text-center card" style="width: 25%">
-                <img
-                  src="@/img/maleAvatar.svg"
-                  class="card-img-top"
-                  alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">An item</li>
-                  <li class="list-group-item">A second item</li>
-                  <li class="list-group-item">A third item</li>
-                </ul>
-                <div class="card-body">
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
-                </div>
-              </div>
-              <div class="applicant text-center card" style="width: 25%">
-                <img
-                  src="@/img/maleAvatar.svg"
-                  class="card-img-top"
-                  alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">An item</li>
-                  <li class="list-group-item">A second item</li>
-                  <li class="list-group-item">A third item</li>
-                </ul>
-                <div class="card-body">
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
-                </div>
-              </div>
-              <div class="applicant text-center card" style="width: 25%">
-                <img
-                  src="@/img/maleAvatar.svg"
-                  class="card-img-top"
-                  alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">An item</li>
-                  <li class="list-group-item">A second item</li>
-                  <li class="list-group-item">A third item</li>
-                </ul>
-                <div class="card-body">
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
                 </div>
               </div>
             </div>
@@ -298,141 +232,59 @@
 
           <div class="row mx-5">
             <div class="row applicantList">
-              <div class="applicant text-center card" style="width: 25%">
+              <div
+                class="applicant text-center card"
+                style="width: 240px"
+                :key="index"
+                v-for="(mem, index) in teamMembers">
                 <img
                   src="@/img/maleAvatar.svg"
                   class="card-img-top"
                   alt="..." />
 
-                <h5 class="card-title">닉네임</h5>
+                <h5 class="card-title">{{ mem.memberNickName }}</h5>
 
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item">
-                    이메일 evelo0702@gmail.com{{}}
-                  </li>
+                  <li class="list-group-item">이메일 {{ mem.memberEmail }}</li>
                   <li class="list-group-item">
                     소셜링크
                     <br />
-                    <a href="">기술블로그</a>{{}}
-                    <br />
-                    <a href="">기술블로그</a>{{}}
+                    <a
+                      href="{{url.address}}"
+                      :key="index0"
+                      v-for="(url, index0) in teamMembers[index].userSocialUrl"
+                      >{{ url.title }}<br
+                    /></a>
                   </li>
                   <li class="list-group-item">
-                    역할 <button class="btn btn-primary">백엔드{{}}</button>
+                    역할 <button class="btn btn-primary">{{ mem.role }}</button>
                   </li>
                   <li class="row list-group-item">
                     관심스택
                     <br />
                     <div class="col">
-                      <button class="btn m-1 btn-primary Stack">
-                        Javascript{{}}
-                      </button>
-                      <button class="btn m-1 btn-primary Stack">
-                        Javascript{{}}
-                      </button>
-                    </div>
-                    <div class="col">
-                      <button class="btn m-1 btn-primary Stack">
-                        Javascript{{}}
-                      </button>
-                      <button class="btn m-1 btn-primary Stack">
-                        Javascript{{}}
+                      <button
+                        class="btn m-1 btn-primary Stack"
+                        :key="i"
+                        v-for="(stack, i) in teamMembers[index].likeStackCode">
+                        {{ stack }}
                       </button>
                     </div>
                   </li>
                 </ul>
-                <div class="card-body">
-                  <button class="btn m-1 btn-primary" disabled>팀원평가</button>
-                </div>
               </div>
-              <div class="applicant card" style="width: 25%">
-                <img
-                  src="@/img/maleAvatar.svg"
-                  class="card-img-top"
-                  alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">An item</li>
-                  <li class="list-group-item">A second item</li>
-                  <li class="list-group-item">A third item</li>
-                </ul>
-                <div class="card-body">
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
-                </div>
-              </div>
-              <div class="applicant card" style="width: 25%">
-                <img
-                  src="@/img/maleAvatar.svg"
-                  class="card-img-top"
-                  alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">An item</li>
-                  <li class="list-group-item">A second item</li>
-                  <li class="list-group-item">A third item</li>
-                </ul>
-                <div class="card-body">
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
-                </div>
-              </div>
-              <div class="applicant card" style="width: 25%">
-                <img
-                  src="@/img/maleAvatar.svg"
-                  class="card-img-top"
-                  alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">An item</li>
-                  <li class="list-group-item">A second item</li>
-                  <li class="list-group-item">A third item</li>
-                </ul>
-                <div class="card-body">
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
-                </div>
-              </div>
-              <div class="applicant card" style="width: 25%">
-                <img
-                  src="@/img/maleAvatar.svg"
-                  class="card-img-top"
-                  alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">An item</li>
-                  <li class="list-group-item">A second item</li>
-                  <li class="list-group-item">A third item</li>
-                </ul>
-                <div class="card-body">
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
-                </div>
-              </div>
+            </div>
+            <div class="card-body">
+              <button class="btn m-1 btn-primary" @click="handleClick">
+                팀원평가
+              </button>
+              <TeamRatingModal
+                ref="modal"
+                :item="mem"
+                :content="modalContent"
+                v-on:childTxt="getTxt"
+                v-on:childRating="getRating"
+                :colors="teamRatingColor" />
             </div>
           </div>
         </div>
@@ -442,330 +294,81 @@
           멘토링
           <div class="mx-5 List">
             <div class="row">
-              <div class="col mentoring">
-                <p class="mentoringName">{{}}멘토님의 {{}}멘토링 제목</p>
+              <div
+                class="col mentoring"
+                :key="index2"
+                v-for="(men, index2) in mentoring">
+                <p class="mentoringName">
+                  {{ men.mentorUserId }}멘토님의 {{ men.mentoringTitle }}
+                </p>
                 <button class="btn btn-primary">
                   <i class="bi bi-check-circle-fill"></i>
                 </button>
                 <button
                   class="btn btn-primary"
-                  v-show="this.firstMentoringStatus > 1">
+                  v-show="men.MentoringStatus > 1">
                   <i class="bi bi-check-circle-fill"></i>
                 </button>
                 <button
                   class="btn btn-primary"
-                  v-show="firstMentoringStatus === -1">
+                  v-show="men.MentoringStatus === -1">
                   <i class="bi bi-file-excel-fill"></i>
                 </button>
                 <button
                   class="btn btn-primary"
-                  v-show="this.firstMentoringStatus > 2">
+                  v-show="men.MentoringStatus > 2">
                   <i class="bi bi-check-circle-fill"></i>
                 </button>
                 <button
                   class="btn btn-primary"
-                  v-show="this.firstMentoringStatus >= 4">
+                  v-show="men.MentoringStatus >= 4">
                   <i class="bi bi-check-circle-fill"></i>
                 </button>
                 <button
                   class="btn btn-primary"
-                  v-show="this.firstMentoringStatus === 5">
+                  v-show="men.MentoringStatus == 5">
                   <i class="bi bi-check-circle-fill"></i></button
                 ><button
                   class="btn btn-primary"
-                  v-show="
-                    this.firstMentoringStatus != -1 &&
-                    this.firstMentoringStatus < 5
-                  ">
+                  v-show="men.MentoringStatus != -1 && men.MentoringStatus < 5">
                   <i class="bi bi-circle"></i>
                 </button>
                 <div class="mentoringStatus">
                   <span>신청중 </span>
-                  <span v-show="this.firstMentoringStatus >= 1">승인됨 </span>
-                  <span v-show="this.firstMentoringStatus === -1">반려됨 </span>
-                  <span v-show="this.firstMentoringStatus >= 2">결제진행 </span>
-                  <span v-show="this.firstMentoringStatus >= 3">멘토링중 </span>
-                  <span v-show="this.firstMentoringStatus >= 4">완료 </span>
-                </div>
-                <div class="mentoringBtn">
-                  <button
-                    class="btn btn-primary"
-                    v-show="this.firstMentoringStatus === 2">
-                    결제
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.firstMentoringStatus > 2"
-                    disabled>
-                    결제
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.firstMentoringStatus === 4">
-                    멘토링종료
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.firstMentoringStatus > 4"
-                    disabled>
-                    멘토링종료
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.firstMentoringStatus === 5">
-                    멘토평가
-                  </button>
-                </div>
-              </div>
-              <!-- 두번째 멘토링 -->
-              <div class="col mentoring">
-                <p class="mentoringName">{{}}멘토님의 {{}}멘토링 제목</p>
-                <button class="btn btn-primary">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
-
-                <button
-                  class="btn btn-primary"
-                  v-show="this.SecondMentoringStatus > 1">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
-                <button
-                  class="btn btn-primary"
-                  v-show="SecondMentoringStatus === -1">
-                  <i class="bi bi-file-excel-fill"></i>
-                </button>
-
-                <button
-                  class="btn btn-primary"
-                  v-show="this.SecondMentoringStatus > 2">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
-                <button
-                  class="btn btn-primary"
-                  v-show="this.SecondMentoringStatus >= 4">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
-                <button
-                  class="btn btn-primary"
-                  v-show="this.SecondMentoringStatus === 5">
-                  <i class="bi bi-check-circle-fill"></i></button
-                ><button
-                  class="btn btn-primary"
-                  v-show="
-                    this.SecondMentoringStatus != -1 &&
-                    this.SecondMentoringStatus < 5
-                  ">
-                  <i class="bi bi-circle"></i>
-                </button>
-                <div class="mentoringStatus">
-                  <span>신청중 </span>
-                  <span v-show="this.SecondMentoringStatus > 1">승인됨 </span>
-                  <span v-show="this.SecondMentoringStatus === -1"
-                    >반려됨
-                  </span>
-                  <span v-show="this.SecondMentoringStatus >= 2"
-                    >결제진행
-                  </span>
-                  <span v-show="this.SecondMentoringStatus >= 4"
-                    >멘토링중
-                  </span>
-                  <span v-show="this.SecondMentoringStatus === 5">완료 </span>
+                  <span v-show="men.MentoringStatus >= 1">승인됨 </span>
+                  <span v-show="men.MentoringStatus === -1">반려됨 </span>
+                  <span v-show="men.MentoringStatus >= 2">결제진행 </span>
+                  <span v-show="men.MentoringStatus >= 3">멘토링중 </span>
+                  <span v-show="men.MentoringStatus >= 4">완료 </span>
                 </div>
                 <div class="mentoringBtn">
                   <button
                     class="btn btn-outline-secondary"
-                    v-show="this.SecondMentoringStatus === 2">
-                    결제
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.SecondMentoringStatus > 2"
-                    disabled>
-                    결제
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.SecondMentoringStatus === 4">
+                    v-show="men.MentoringStatus == 4">
                     멘토링종료
                   </button>
                   <button
                     class="btn btn-outline-secondary"
-                    v-show="this.SecondMentoringStatus > 4"
+                    v-show="men.MentoringStatus > 4"
                     disabled>
                     멘토링종료
                   </button>
                   <button
                     class="btn btn-outline-secondary"
-                    v-show="this.SecondMentoringStatus === 5">
+                    v-show="men.MentoringStatus == 5"
+                    @click="handleClick2">
                     멘토평가
+                    <MentorRatingModal
+                      ref="modal2"
+                      :content="modalContent"
+                      v-on:MentorTxt="getMentorTxt"
+                      v-on:MentorRating="getMentorRating"
+                      :colors="mentorRatingColor" />
                   </button>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <!-- 세번째 멘토링 -->
-              <div class="col mentoring">
-                <p class="mentoringName">{{}}멘토님의 {{}}멘토링 제목</p>
-                <button class="btn btn-primary">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
 
-                <button
-                  class="btn btn-primary"
-                  v-show="this.ThirdMentoringStatus > 1">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
-                <button
-                  class="btn btn-primary"
-                  v-show="ThirdMentoringStatus === -1">
-                  <i class="bi bi-file-excel-fill"></i>
-                </button>
-
-                <button
-                  class="btn btn-primary"
-                  v-show="this.ThirdMentoringStatus > 2">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
-                <button
-                  class="btn btn-primary"
-                  v-show="this.ThirdMentoringStatus >= 4">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
-                <button
-                  class="btn btn-primary"
-                  v-show="this.ThirdMentoringStatus === 5">
-                  <i class="bi bi-check-circle-fill"></i></button
-                ><button
-                  class="btn btn-primary"
-                  v-show="
-                    this.ThirdMentoringStatus != -1 &&
-                    this.ThirdMentoringStatus < 5
-                  ">
-                  <i class="bi bi-circle"></i>
-                </button>
-                <div class="mentoringStatus">
-                  <span>신청중 </span>
-                  <span v-show="this.ThirdMentoringStatus > 1">승인됨 </span>
-                  <span v-show="this.ThirdMentoringStatus === -1">반려됨 </span>
-                  <span v-show="this.ThirdMentoringStatus >= 2">결제진행 </span>
-                  <span v-show="this.ThirdMentoringStatus >= 3">멘토링중 </span>
-                  <span v-show="this.ThirdMentoringStatus >= 4">완료 </span>
-                </div>
-                <div class="mentoringBtn">
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.ThirdMentoringStatus === 2">
-                    결제
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.ThirdMentoringStatus > 2"
-                    disabled>
-                    결제
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.ThirdMentoringStatus === 4">
-                    멘토링종료
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.ThirdMentoringStatus > 4"
-                    disabled>
-                    멘토링종료
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.ThirdMentoringStatus === 5">
-                    멘토평가
-                  </button>
-                </div>
-              </div>
-              <!-- 네번째 멘토링 -->
-              <div class="col mentoring">
-                <p class="mentoringName">{{}}멘토님의 {{}}멘토링 제목</p>
-                <button class="btn btn-primary">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
-
-                <button
-                  class="btn btn-primary"
-                  v-show="this.FourthMentoringStatus > 1">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
-                <button
-                  class="btn btn-primary"
-                  v-show="FourthMentoringStatus === -1">
-                  <i class="bi bi-file-excel-fill"></i>
-                </button>
-
-                <button
-                  class="btn btn-primary"
-                  v-show="this.FourthMentoringStatus > 2">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
-                <button
-                  class="btn btn-primary"
-                  v-show="this.FourthMentoringStatus >= 4">
-                  <i class="bi bi-check-circle-fill"></i>
-                </button>
-                <button
-                  class="btn btn-primary"
-                  v-show="this.FourthMentoringStatus === 5">
-                  <i class="bi bi-check-circle-fill"></i></button
-                ><button
-                  class="btn btn-primary"
-                  v-show="
-                    this.FourthMentoringStatus != -1 &&
-                    this.FourthMentoringStatus < 5
-                  ">
-                  <i class="bi bi-circle"></i>
-                </button>
-                <div class="mentoringStatus">
-                  <span>신청중 </span>
-                  <span v-show="this.FourthMentoringStatus > 1">승인됨 </span>
-                  <span v-show="this.FourthMentoringStatus === -1"
-                    >반려됨
-                  </span>
-                  <span v-show="this.FourthMentoringStatus >= 2"
-                    >결제진행
-                  </span>
-                  <span v-show="this.FourthMentoringStatus >= 4"
-                    >멘토링중
-                  </span>
-                  <span v-show="this.FourthMentoringStatus >= 4">완료 </span>
-                </div>
-                <div class="mentoringBtn">
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.FourthMentoringStatus === 2">
-                    결제
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.FourthMentoringStatus > 2"
-                    disabled>
-                    결제
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.FourthMentoringStatus === 4">
-                    멘토링종료
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.FourthMentoringStatus > 4"
-                    disabled>
-                    멘토링종료
-                  </button>
-                  <button
-                    class="btn btn-outline-secondary"
-                    v-show="this.FourthMentoringStatus === 5">
-                    멘토평가
-                  </button>
-                </div>
-              </div>
-            </div>
             <nav aria-label="...">
               <ul class="pagination pagination-sm justify-content-center">
                 <li class="page-item active" aria-current="page">
@@ -783,68 +386,300 @@
 </template>
 <script>
 import Status from "@vueform/multiselect";
-import Project from "@vueform/multiselect";
+// import Project from "@vueform/multiselect";
 import TeamStatus from "@vueform/multiselect";
 import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
+import TeamRatingModal from "@/components/TeamRatingModal.vue";
+import MentorRatingModal from "@/components/MentorRatingModal.vue";
 
 export default {
+  name: "App",
   components: {
     Status,
-    Project,
+    // Project,
     TeamStatus,
-    RegisterbtnLayout
+    RegisterbtnLayout,
+    TeamRatingModal,
+    MentorRatingModal
   },
   data() {
     return {
-      correctionMode: true,
-      SelectedStatus: "",
-      SelectedProject: "",
-      SelectedProjectCode: "",
-      start: "",
-      end: "",
-      deposit: "",
+      teamRatingColor: "#ddee4d",
+      mentorRatingColor: "#1379d2",
+      endDate: "",
       btnText: "수정하기",
       btnText2: "저장하기",
-      TeamStatus: "모집완료(진행 중)",
-      options: ["모집중", "모집완료(진행 중)", "추가 모집", "활동 종료"],
+      selectedStatus: "",
+      selectedProjectId: "",
+      datetime: "2011-08-03tdst324324234234",
+      correctionMode: true,
       projectList: [
         {
-          StatusCode: "01",
-          StatusName: "진행중",
-          projectCode: "01",
+          // 팀장id="",
+          // 멘토여부=""
+          statusCode: "01",
+          statusName: "진행중",
+          projectId: "01",
           projectName: "파이썬으로 만드는 TODO LIST"
         },
         {
-          StatusCode: "02",
-          StatusName: "진행완료",
-          projectCode: "02",
+          statusCode: "01",
+          statusName: "진행중",
+          projectId: "02",
+          projectName: "웹게임만들기"
+        },
+        {
+          statusCode: "02",
+          statusName: "진행완료",
+          projectId: "03",
           projectName: "자바스크립트 따라잡기"
         }
       ],
 
-      firstMentoringStatus: 5,
-      SecondMentoringStatus: 2,
-      ThirdMentoringStatus: 3,
-      FourthMentoringStatus: 5
-      // ,
-      // projectContent: [
-      //   {
-      //     projectCode: "01" ,
-      //     teamUrlCode:
-      // }]
+      projectid: "",
+      urlAddress: "",
+      urlTitle: "",
+      teamStatus: "모집중",
+      teamStatusList: ["모집중", "진행 중", "추가 모집", "진행 완료"],
+      deposit: 0,
+      recruitingUrl: "",
+      applicants: [
+        {
+          applyAdminId: "",
+          applicantID: "",
+          applicantNickName: "",
+          applicantAccount: "evelo0702@gmail.com",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          applyDeptId: "백엔드",
+          applyStatus: "NEW",
+          insertDate: "2022.07.02"
+        },
+        {
+          applyAdminId: "",
+          applicantID: "",
+          applicantNickName: "",
+          applicantAccount: "evelo0702@gmail.com",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          applyDeptId: "백엔드",
+          applyStatus: "NEW",
+          insertDate: "2022.07.02"
+        },
+        {
+          applyAdminId: "",
+          applicantID: "",
+          applicantNickName: "",
+          applicantAccount: "evelo0702@gmail.com",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          applyDeptId: "백엔드",
+          applyStatus: "NEW",
+          insertDate: "2022.07.02"
+        },
+        {
+          applyAdminId: "",
+          applicantID: "",
+          applicantNickName: "",
+          applicantAccount: "evelo0702@gmail.com",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          applyDeptId: "백엔드",
+          applyStatus: "NEW",
+          insertDate: "2022.07.02"
+        },
+        {
+          applyAdminId: "",
+          applicantID: "",
+          applicantNickName: "",
+          applicantAccount: "evelo0702@gmail.com",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          applyDeptId: "백엔드",
+          applyStatus: "NEW",
+          insertDate: "2022.07.02"
+        }
+      ],
+      teamMembers: [
+        {
+          memberId: "",
+          memberNickName: "",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          ratingComment: "",
+          ratingScore: 0
+        },
+        {
+          memberId: "",
+          memberNickName: "",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          ratingComment: "",
+          ratingScore: 0
+        },
+        {
+          memberId: "",
+          memberNickName: "",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          ratingComment: "",
+          ratingScore: 0
+        },
+        {
+          memberId: "",
+          memberNickName: "",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          ratingComment: "",
+          ratingScore: 0
+        },
+        {
+          memberId: "",
+          memberNickName: "",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          ratingComment: "",
+          ratingScore: 0
+        },
+        {
+          memberId: "",
+          memberNickName: "",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          ratingComment: "",
+          ratingScore: 0
+        }
+      ],
+      mentoring: [
+        {
+          mentoringId: "",
+          mentorUserId: "evelo",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: "5",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
+        },
+        {
+          mentoringId: "",
+          mentorUserId: "evelo",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: "3",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
+        },
+        {
+          mentoringId: "",
+          mentorUserId: "evelo",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: "2",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
+        },
+        {
+          mentoringId: "",
+          mentorUserId: "evelo",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: "1",
+          mentorRatingComment: "",
+          mentorRatingScore: ""
+        }
+      ]
+
+      //
     };
   },
   setup() {
-    const date = ref();
-
-    onMounted(() => {
-      let startDate = new Date();
-      let endDate = new Date();
-      date.value = [startDate, endDate];
-    });
+    const modal = ref(null);
+    const modal2 = ref(null);
+    const modalContent = ref(["코멘트와 평점을 입력해주세요"]);
+    const result = ref("");
+    const result2 = ref("");
+    const handleClick = async () => {
+      const ok = await modal.value.show();
+      if (ok) {
+        result.value = "ok";
+      } else {
+        result.value = "cancel";
+      }
+    };
+    const handleClick2 = async () => {
+      const ok = await modal2.value.show();
+      if (ok) {
+        result2.value = "ok";
+      } else {
+        result2.value = "cancel";
+      }
+    };
     return {
-      date
+      modal,
+      modal2,
+      modalContent,
+      result,
+      result2,
+      handleClick,
+      handleClick2
     };
   },
   created() {},
@@ -863,12 +698,36 @@ export default {
     },
     watch() {
       this.correctionMode = false;
+    },
+    getTxt: function (txt0) {
+      this.ratingComment = txt0;
+    },
+    getRating: function (rating0) {
+      this.ratingScore = rating0;
+    },
+    getMentorTxt: function (txt) {
+      this.MentorRatingComment = txt;
+    },
+    getMentorRating: function (rating) {
+      this.MentorRatingScore = rating;
     }
   }
 };
 </script>
 <style src="@vueform/multiselect/themes/default.css"></style>
 <style scoped>
+.ProjectSelect {
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  width: 400px;
+}
+
+.ProjectSelect:focus {
+  box-shadow: 0 0 0 var(--ms-ring-width, 3px)
+    var(--ms-ring-color, rgba(16, 185, 129, 0.188));
+  border: 0px;
+}
+
 .banner {
   margin-bottom: 42px;
   height: 200px;
@@ -941,7 +800,7 @@ div.applicantList {
   flex-wrap: nowrap;
 }
 .Stack {
-  font-size: 20%;
+  font-size: 12px;
 }
 .List {
   width: 1000px;
@@ -975,7 +834,7 @@ div.applicantList {
 .mentoringStatus {
   position: absolute;
   top: 100px;
-  left: 52px;
+  left: 63px;
   font-size: 12px;
 }
 .mentoringStatus > span {
@@ -984,7 +843,7 @@ div.applicantList {
 .mentoringBtn {
   position: absolute;
   top: 120px;
-  left: 205px;
+  left: 275px;
   font-size: 12px;
 }
 .mentoringBtn > button {

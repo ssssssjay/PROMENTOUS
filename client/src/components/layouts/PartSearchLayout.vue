@@ -9,7 +9,6 @@
       :groups="false"
       :options="options"
       placeholder="멘토의 분야를 선택해보세요!" />
-    <p>{{ value2 }}</p>
   </div>
 </template>
 <script>
