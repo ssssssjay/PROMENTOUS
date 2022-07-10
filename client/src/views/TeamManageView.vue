@@ -275,14 +275,12 @@
               </div>
             </div>
             <div class="card-body">
-              <button
-                class="btn m-1 btn-primary"
-                @click="handleClick"
-                v-show="this.result != 'ok'">
+              <button class="btn m-1 btn-primary" @click="handleClick">
                 팀원평가
               </button>
               <TeamRatingModal
                 ref="modal"
+                :item="mem"
                 :content="modalContent"
                 v-on:childTxt="getTxt"
                 v-on:childRating="getRating"
@@ -370,14 +368,7 @@
                 </div>
               </div>
             </div>
-            <button
-              class="btn btn-outline-secondary"
-              @click="handleClick2"
-              v-show="(datetime = 0)">
-              멘토평가 ref="modal2" :content="modalContent"
-              v-on:MentorTxt="getMentorTxt" v-on:MentorRating="getMentorRating"
-              :colors="mentorRatingColor" />
-            </button>
+
             <nav aria-label="...">
               <ul class="pagination pagination-sm justify-content-center">
                 <li class="page-item active" aria-current="page">
@@ -427,7 +418,7 @@ export default {
         {
           // 팀장id="",
           // 멘토여부=""
-          statusCode: "01",
+          status_Code: "01",
           statusName: "진행중",
           projectId: "01",
           projectName: "파이썬으로 만드는 TODO LIST"
@@ -843,7 +834,7 @@ div.applicantList {
 .mentoringStatus {
   position: absolute;
   top: 100px;
-  left: 52px;
+  left: 63px;
   font-size: 12px;
 }
 .mentoringStatus > span {

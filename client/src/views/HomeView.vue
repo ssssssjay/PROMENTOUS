@@ -2,7 +2,7 @@
   <div>
     <div
       id="carouselExampleControls"
-      class="carousel slide mt-5"
+      class="carousel slide"
       data-bs-ride="carousel">
       <div id="user-wrap" class="carousel-inner">
         <div id="user-image" class="carousel-item active">

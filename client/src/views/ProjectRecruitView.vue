@@ -13,7 +13,7 @@
           <RegionSortLayout />
           <RecruitStatus />
         </div>
-        <registerbtn-layout :btnText="btnText" />
+        <registerbtn-layout :btnText="btnText" @click="goToMenu('../write')" />
       </div>
       <div
         class="d-flex pt-5 mb-4 align-items-start justify-content-between section_second">
@@ -135,7 +135,11 @@ export default {
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
+  methods: {
+    goToMenu(path) {
+      this.$router.push({ path: path });
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
