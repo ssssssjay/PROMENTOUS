@@ -13,6 +13,7 @@ import "@/styles/yuri.css";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import StarRating from "vue-star-rating";
+
 createApp(App)
   .use(store)
   .use(router)
