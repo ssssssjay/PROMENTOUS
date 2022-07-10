@@ -48,13 +48,22 @@ export default {
   components: {},
   data() {
     return {
-      sampleData: ""
+      link: { name: "", href: "" },
+      linkList: []
     };
   },
   setup() {},
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
+  methods: {
+    addLink() {
+      let obj = {
+        [this.link.name]: this.link.href
+      };
+      this.linkList.push(obj);
+      alert("링크 정보가 추가되었습니다.");
+    }
+  }
 };
 </script>

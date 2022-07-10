@@ -3,7 +3,7 @@
     <div class="container mt-5">
       <form class="row g-3">
         <div class="row mb-5">
-          <div class="col-sm-10">프로젝트 생성</div>
+          <div class="title col-sm-10">프로젝트 생성</div>
         </div>
         <div class="row mb-3">
           <label for="projectName" class="col-sm-2 col-form-label"
@@ -104,12 +104,21 @@
               입력해주세요.
             </p></label
           >
+          <input type="text" class="form-control" />
         </div>
-
-        <div class="row mb-5"></div>
-
-        <div class="row mb-5"></div>
+        <div class="row mb-5">
+          <label class="col-sm-10 col-form-label"
+            >참고 링크<br />
+            <p>
+              * 프로젝트와 관련해 참고할 수 있는 사이트를 입력해주세요.
+            </p></label
+          >
+        </div>
+        <div class="row mb-5">
+          <text-editor :contents="contents" />
+        </div>
       </form>
+      <registerbtn-layout class="regBtn" :btnText="btnText" />
     </div>
   </div>
 </template>
@@ -118,11 +127,23 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import RegionSortLayout from "@/components/layouts/RegionSortLayout.vue";
 import StackSearchLayout from "@/components/layouts/StackSearchLayout.vue";
+import TextEditor from "@/components/TextEditor.vue";
+import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
 export default {
-  components: { Datepicker, RegionSortLayout, StackSearchLayout },
+  name: "app",
+  components: {
+    Datepicker,
+    RegionSortLayout,
+    StackSearchLayout,
+    TextEditor,
+    RegisterbtnLayout
+  },
   data() {
     return {
-      date: null
+      btnText: "작성 완료",
+      contents:
+        "<h1>1. 프로젝트 주제</h1> <h3>    -프로젝트 내용, 시작 동기 등에 관해 적어주세요!</h3><br><br><h1>2. 모임 방식/ 진행 방법</h1> <h3>    -모임을 1주일에 몇 번 정도 진행할 지 적어주세요!</h3><br><h3>    -모임 진행을 희망하는 요일을 적어주세요!</h3><br><h3>    -모임 진행 방식에 대해 상세히 적어주세요!</h3><br><br><h1>3. 그 외 자유 작성 사항</h1>"
+      //  "1. 프로젝트 주제  2. 모임 방식/ 진행 방법 3.그 외 자유 작성 사항"
     };
   },
   setup() {},
@@ -132,3 +153,12 @@ export default {
   methods: {}
 };
 </script>
+<style scoped>
+.regBtn {
+  float: right;
+}
+.title {
+  font-size: 40px;
+  font-weight: bold;
+}
+</style>
