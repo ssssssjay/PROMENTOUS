@@ -10,7 +10,10 @@
       <div
         class="d-flex pb-5 align-items-start justify-content-between section_first">
         <div class="d-flex">
-          <RegionSortLayout />
+          <RegionSortLayout
+            @send-LargeCity="SendLargeCity"
+            @send-RestCity="SendRestCity" />
+
           <RecruitStatus />
         </div>
         <registerbtn-layout :btnText="btnText" @click="goToMenu('../write')" />
@@ -19,7 +22,8 @@
         class="d-flex pt-5 mb-4 align-items-start justify-content-between section_second">
         <RecruitSortLayout />
         <div class="d-flex">
-          <StackSearchLayout />
+          <StackSearchLayout @send-value="sendValue" />
+
           <SearchAll />
         </div>
       </div>
@@ -47,6 +51,9 @@ export default {
   },
   data() {
     return {
+      MAIN_AREA_CODE: "",
+      SUB_AREA_CODE: "",
+      stacks: "",
       btnText: "모집글 작성",
       projects: [
         {
@@ -138,6 +145,16 @@ export default {
   methods: {
     goToMenu(path) {
       this.$router.push({ path: path });
+    },
+    sendValue(data) {
+      this.stacks = data;
+    },
+
+    SendLargeCity(data) {
+      this.MAIN_AREA_CODE = data;
+    },
+    SendRestCity(data) {
+      this.SUB_AREA_CODE = data;
     }
   }
 };

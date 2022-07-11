@@ -9,9 +9,8 @@
       :close-on-select="false"
       :searchable="true"
       :create-option="true"
-      :groups="true"
       :options="options"
-      @select="ha" />
+      @click="transValue" />
   </div>
 </template>
 <script>
@@ -19,14 +18,23 @@ export default {
   components: {
     StackSearch
   },
+
   data() {
     return {
       value: [],
       options: [
-        { label: "프론트엔드", options: ["Javascript", "TypeScript", "React"] },
-        { label: "백엔드", options: ["Java", "Spring", "Node.js"] },
-        { label: "모바일", options: ["Flutter", "Swift", "Kotlin"] },
-        { label: "기타", options: ["AWS", "Kubernetes", "Docker"] }
+        "Javascript",
+        "TypeScript",
+        "React",
+        "Java",
+        "Spring",
+        "Node.js",
+        "Flutter",
+        "Swift",
+        "Kotlin",
+        "AWS",
+        "Kubernetes",
+        "Docker"
       ]
     };
   },
@@ -35,8 +43,8 @@ export default {
   mounted() {},
   unmounted() {},
   methods: {
-    ha() {
-      console.log(this.value);
+    transValue() {
+      this.$emit("send-value", this.value);
     }
   }
 };
