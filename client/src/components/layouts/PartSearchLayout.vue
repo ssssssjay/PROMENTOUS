@@ -8,6 +8,7 @@
       :create-option="true"
       :groups="false"
       :options="options"
+      @click="transValue"
       placeholder="멘토의 분야를 선택해보세요!" />
   </div>
 </template>
@@ -16,6 +17,8 @@ export default {
   components: {
     PartSearch
   },
+  props: {},
+
   data() {
     return {
       value: [],
@@ -39,7 +42,11 @@ export default {
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
+  methods: {
+    transValue() {
+      this.$emit("send-value", this.value);
+    }
+  }
 };
 import PartSearch from "@vueform/multiselect";
 </script>
