@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a href="#" class="btn btn-outline btn_write"
+    <a class="btn btn-outline btn_write"
       ><i class="bi bi-pencil me-1"></i>{{ btnText }}</a
     >
   </div>

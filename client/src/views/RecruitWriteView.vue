@@ -5,12 +5,16 @@
         <div class="row mb-5">
           <div class="title col-sm-10">프로젝트 생성</div>
         </div>
-        <div class="row mb-3">
+        <div class="row mb-5">
           <label for="projectName" class="col-sm-2 col-form-label"
             >프로젝트명</label
           >
           <div class="col-sm-3">
-            <input type="text" class="form-control" id="projectName" />
+            <input
+              type="text"
+              class="form-control"
+              id="projectName"
+              v-model="PROJECT_TITLE" />
           </div>
         </div>
         <div class="row mb-5">
@@ -19,19 +23,22 @@
           >
           <div class="col-sm-3">
             <Datepicker
-              v-model="date"
+              v-model="EXP_START_DATE"
               locale="kst"
-              range
               class="datepicker"
               id="inputStartDate" />
+            {{ EXP_START_DATE }}
           </div>
 
           <label for="onoff" class="col-sm-2 col-form-label">진행기간</label>
           <div class="col-sm-3">
-            <select id="onoff" class="form-select">
-              <option></option>
-              <option>온라인</option>
-              <option>오프라인</option>
+            <select id="onoff" class="form-select" v-model="EXP_PERIOD">
+              <option value="1">1개월</option>
+              <option value="2">2개월</option>
+              <option value="3">3개월</option>
+              <option value="4">4개월</option>
+              <option value="5">5개월</option>
+              <option value="6">6개월 이상</option>
             </select>
           </div>
         </div>
@@ -54,10 +61,9 @@
         <div class="row mb-5">
           <label for="onoff" class="col-sm-2 col-form-label">진행방식</label>
           <div class="col-sm-3">
-            <select id="onoff" class="form-select">
-              <option></option>
-              <option>온라인</option>
-              <option>오프라인</option>
+            <select id="onoff" class="form-select" v-model="PROGRESS_METHOD">
+              <option value="on">온라인</option>
+              <option value="off">오프라인</option>
             </select>
           </div>
           <label for="region" class="col-sm-2 col-form-label">진행 지역</label>
@@ -66,25 +72,30 @@
         </div>
         <div class="row mb-5">
           <label class="col-sm-2 col-form-label">보증금 여부</label>
-          <div class="col-sm-3 form-check">
+          <div class="col-sm-7 form-check">
             <div>
-              <div>
-                <input
-                  type="radio"
-                  id="O"
-                  name="contact"
-                  value="O"
-                  class="me-2" />
-                <label for="O" class="me-5">O</label>
-
-                <input
-                  type="radio"
-                  id="X"
-                  name="contact"
-                  value="phone"
-                  class="me-2" />
-                <label for="X" class="me-5">X</label>
-              </div>
+              <input
+                type="radio"
+                id="O"
+                name="contact"
+                value="O"
+                v-model="WARRANTY_CHECK"
+                class="me-2" />
+              <label for="O" class="me-3">O</label>
+              <input
+                class="me-3 form-select warranty"
+                type="number"
+                v-model="WARRANTY"
+                v-show="WARRANTY_CHECK === 'O'" />
+              <input
+                type="radio"
+                id="X"
+                name="contact"
+                value="X"
+                v-model="WARRANTY_CHECK"
+                class="me-2" />
+              <label for="X" class="me-3">X</label>
+              {{ WARRANTY }}
             </div>
           </div>
         </div>
@@ -93,8 +104,12 @@
             >사용 기술/언어 <br />
             <p class="ms-2">(최대 10개)</p></label
           >
-          <StackSearchLayout class="col-sm-3" id="stack" />
+          <StackSearchLayout
+            class="col-sm-3"
+            id="stack"
+            @send-value="sendValue" />
         </div>
+        {{ stacks }}
 
         <div class="row mb-5">
           <label class="col-sm-10 col-form-label"
@@ -104,7 +119,7 @@
               입력해주세요.
             </p></label
           >
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" v-model="MEETING_URL" />
         </div>
         <div class="row mb-5">
           <label class="col-sm-10 col-form-label"
@@ -140,6 +155,16 @@ export default {
   },
   data() {
     return {
+      PROJECT_ID: "",
+      PROJECT_TITLE: "",
+      EXP_START_DATE: "",
+      EXP_PERIOD: "",
+      PROGRESS_METHOD: "",
+      WARRANTY_CHECK: "",
+      WARRANTY: "",
+      MEETING_URL: "",
+      date: "",
+      stacks: "",
       btnText: "작성 완료",
       contents:
         "<h1>1. 프로젝트 주제</h1> <h3>    -프로젝트 내용, 시작 동기 등에 관해 적어주세요!</h3><br><br><h1>2. 모임 방식/ 진행 방법</h1> <h3>    -모임을 1주일에 몇 번 정도 진행할 지 적어주세요!</h3><br><h3>    -모임 진행을 희망하는 요일을 적어주세요!</h3><br><h3>    -모임 진행 방식에 대해 상세히 적어주세요!</h3><br><br><h1>3. 그 외 자유 작성 사항</h1>"
@@ -150,7 +175,11 @@ export default {
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
+  methods: {
+    sendValue(data) {
+      this.stacks = data;
+    }
+  }
 };
 </script>
 <style scoped>
@@ -160,5 +189,9 @@ export default {
 .title {
   font-size: 40px;
   font-weight: bold;
+}
+.warranty {
+  width: 150px;
+  display: inline;
 }
 </style>
