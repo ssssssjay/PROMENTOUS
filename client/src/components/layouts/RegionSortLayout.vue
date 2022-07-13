@@ -6,6 +6,7 @@
           class="region lgRegion"
           placeholder="지역선택"
           v-model="selectedLargeCity"
+          @click="transLargeCity"
           :options="[
             ...new Set(
               dongList.map((data) => {
@@ -19,6 +20,7 @@
           placeholder="지역선택"
           noOptionsText="대도시를 선택하세요!"
           v-model="selectedRestCity"
+          @click="transRestCity"
           :options="
             dongList
               .filter((data) => data.cityTitle === selectedLargeCity)
@@ -94,6 +96,12 @@ export default {
     },
     deselected() {
       this.selectedRestCity = "";
+    },
+    transLargeCity() {
+      this.$emit("send-LargeCity", this.selectedLargeCity);
+    },
+    transRestCity() {
+      this.$emit("send-RestCity", this.selectedRestCity);
     }
   }
 };
