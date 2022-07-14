@@ -103,12 +103,6 @@
               <!-- 버튼 UI 추후 수정 예정 -->
               <button
                 type="button"
-                class="btn btn-outline-dark btn-sm mx-1 pro-circle">
-                <i class="bi bi-bookmark"></i>
-                <i class="bi bi-bookmark-fill"></i>
-              </button>
-              <button
-                type="button"
                 class="btn btn-outline-dark btn-sm pro-circle">
                 <i class="bi bi-link-45deg pro-circle-icon"></i>
               </button>
@@ -287,7 +281,6 @@ export default {
   methods: {
     formatDate(datetime) {
       // TODO: 예외처리 코드 보완 필요
-      console.log(datetime);
       if (!datetime) {
         console.log("datetime undefined error 처리 필요");
         return "";

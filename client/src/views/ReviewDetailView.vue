@@ -25,12 +25,6 @@
                 <button
                   type="button"
                   class="btn btn-outline-dark btn-sm mx-1 pro-circle">
-                  <i class="bi bi-bookmark"></i>
-                  <i class="bi bi-bookmark-fill"></i>
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-dark btn-sm mx-1 pro-circle">
                   <i class="bi bi-heart"></i>
                 </button>
                 <button
