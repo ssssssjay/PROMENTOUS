@@ -15,6 +15,8 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import StarRating from "vue-star-rating";
 import vue3GoogleLogin from "vue3-google-login";
 import { VueClipboard } from "@soerenmartius/vue3-clipboard";
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 createApp(App)
   .use(store)
@@ -27,4 +29,5 @@ createApp(App)
       "442992845305-oe3tmcff9s3qpj559h36doutbqhk06su.apps.googleusercontent.com"
   })
   .use(VueClipboard)
+  .use(VueSweetalert2)
   .mount("#app");

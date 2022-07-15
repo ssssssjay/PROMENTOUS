@@ -7,7 +7,8 @@
       class="btn btn-outline-dark btn-sm pro-circle"
       v-clipboard:copy="value"
       v-clipboard:success="onSuccess"
-      v-clipboard:error="onError">
+      v-clipboard:error="onError"
+      @click="showAlert">
       <i class="bi bi-link-45deg pro-circle-icon"></i>
     </button>
   </span>
@@ -35,6 +36,16 @@ export default {
 
     return { value, onSuccess, onError };
   },
-  methods: {}
+  methods: {
+    showAlert() {
+      this.$swal({
+        position: "center",
+        icon: "success",
+        title: "클립보드에 복사되었습니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+  }
 };
 </script>
