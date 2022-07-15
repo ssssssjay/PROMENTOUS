@@ -100,12 +100,8 @@
         <div class="side-bar">
           <div class="text-start">
             <p class="ps-4">
-              <!-- 버튼 UI 추후 수정 예정 -->
-              <button
-                type="button"
-                class="btn btn-outline-dark btn-sm pro-circle">
-                <i class="bi bi-link-45deg pro-circle-icon"></i>
-              </button>
+              <!-- 클립보드 복사 -->
+              <copy-to-clipboard :pageUrl="pageUrl" />
               <button type="button" class="btn btn-outline-dark btn-sm mx-1">
                 수정
               </button>
@@ -244,10 +240,16 @@
 import CommentView from "@/components/CommentView.vue";
 import ReviewCarousel from "@/components/ReviewCarousel.vue";
 import WriteCommentView from "../components/WriteCommentView.vue";
+import CopyToClipboard from "../components/CopyToClipboard.vue";
 
 export default {
   name: "ProjectDetailView",
-  components: { CommentView, ReviewCarousel, WriteCommentView },
+  components: {
+    CommentView,
+    ReviewCarousel,
+    WriteCommentView,
+    CopyToClipboard
+  },
   data() {
     return {
       projectId: null,
@@ -272,6 +274,7 @@ export default {
     };
   },
   created() {
+    this.pageUrl = window.document.location.href;
     this.projectId = this.$route.params.projectId;
     this.getProjectData();
     this.getLeaderData();

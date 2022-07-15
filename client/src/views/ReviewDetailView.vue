@@ -30,11 +30,8 @@
                   class="btn btn-outline-dark btn-sm mx-1 pro-circle">
                   <i class="bi bi-heart"></i>
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-dark btn-sm pro-circle">
-                  <i class="bi bi-link-45deg pro-circle-icon"></i>
-                </button>
+                <!-- 클립보드 복사 -->
+                <copy-to-clipboard :pageUrl="pageUrl" />
               </p>
             </span>
             <hr />
@@ -105,10 +102,11 @@
 <script>
 import CommentView from "@/components/CommentView.vue";
 import WriteCommentView from "../components/WriteCommentView.vue";
+import CopyToClipboard from "../components/CopyToClipboard.vue";
 
 export default {
   name: "ReviewDetailView",
-  components: { CommentView, WriteCommentView },
+  components: { CommentView, WriteCommentView, CopyToClipboard },
   data() {
     return {
       project: {},
@@ -116,8 +114,8 @@ export default {
     };
   },
   beforeMount() {
-    // TODO: 추후 변경: this.reviewId = this.$route.params.projectId;
-    this.reviewId = 1;
+    this.pageUrl = window.document.location.href;
+    this.reviewId = 1; // TODO: 추후 변경: this.reviewId = this.$route.params.projectId;
     this.getReviewData();
   },
   mounted() {},

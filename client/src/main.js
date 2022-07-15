@@ -14,6 +14,7 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import StarRating from "vue-star-rating";
 import vue3GoogleLogin from "vue3-google-login";
+import { VueClipboard } from "@soerenmartius/vue3-clipboard";
 
 createApp(App)
   .use(store)
@@ -25,4 +26,5 @@ createApp(App)
     clientId:
       "442992845305-oe3tmcff9s3qpj559h36doutbqhk06su.apps.googleusercontent.com"
   })
+  .use(VueClipboard)
   .mount("#app");
