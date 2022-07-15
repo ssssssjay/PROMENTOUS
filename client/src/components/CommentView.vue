@@ -64,17 +64,27 @@
                           >{{ recomment.writer }}</a
                         >
                         <span class="col-2">
-                          <a
+                          <!-- 수정 여부에 따라 텍스트 필드  -->
+                          <!-- <a
                             href="#"
                             class="btn-link text-semibold media-heading box-inline a-black"
                             >수정</a
-                          >
+                          > -->
+                          <button
+                            type="button"
+                            class="btn btn-link com_link_blue"
+                            @click="
+                              recomment.isRecomment = !recomment.isRecomment
+                            ">
+                            {{ recomment.isRecomment ? "수정완료" : "  수정" }}
+                          </button>
                           |
-                          <a
-                            href="#"
-                            class="btn-link text-semibold media-heading box-inline a-black"
-                            >삭제</a
-                          >
+                          <button
+                            type="button"
+                            class="btn btn-link com_link_red"
+                            @click="deleteComment">
+                            삭제
+                          </button>
                         </span>
                       </p>
                       <p class="text-muted text-sm">
@@ -159,7 +169,34 @@ export default {
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
+  methods: {
+    deleteCheckAlert() {
+      this.$swal({
+        title: "정말 삭제하시겠습니까?",
+        text: "삭제한 댓글은 되돌릴 수 없습니다.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "삭제",
+        cancelButtonText: "취소"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.$swal({
+            title: "삭제 완료",
+            text: "댓글이 삭제되었습니다.",
+            icon: "success"
+          });
+        }
+      });
+    },
+
+    deleteComment() {
+      this.deleteCheckAlert();
+      // 여기서 댓글 삭제 구현
+      // 삭제를 누른 댓글의 Id를 가져오기.
+    }
+  }
 };
 </script>
 <style scoped>

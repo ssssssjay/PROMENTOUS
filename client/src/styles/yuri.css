@@ -27,3 +27,25 @@
 .rev_router_link_color {
   color: #636363;
 }
+
+.com_link_blue {
+  color: black;
+  text-decoration-line: none;
+}
+.com_link_red {
+  color: red;
+  text-decoration-line: none;
+}
+
+.com_link_blue:hover {
+  color: #1379d2;
+}
+
+.com_link_red:hover {
+  color: red;
+}
+
+.com_link_blue:focus,
+.com_link_red:focus {
+  box-shadow: none;
+}
