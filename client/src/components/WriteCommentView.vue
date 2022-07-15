@@ -1,11 +1,12 @@
 <template>
-  <!-- 댓글 작성 영역 -->
+  <!-- 댓글 작성 영역(대댓글 아닌 기본 댓글 필드) -->
   <div class="row">
     <div class="col-12">
       <form>
         <div class="row">
           <div class="form-group mb-3 px-2">
             <textarea
+              id="txtarea"
               class="form-control"
               rows="5"
               v-model="commentText"></textarea>
@@ -64,15 +65,13 @@ export default {
   unmounted() {},
   methods: {
     async registerComment() {
-      let data = this.commentData;
       // 댓글 등록 시 넘겨줄 정보들
+      let data = this.commentData;
       data.pageType = "projectRecruit";
-      data.projectId = this.projectId;
-      data.writerId = 1; // TODO: 이건 세션에서 가져와서 넣어줘야됨
+      data.writerId = 1; // TODO: 추후 store에서 가져와서 넣어줄 예정
       data.commentText = this.commentText;
-
-      data.targetId = null; // 얘가 parent의 역할,, (같은 그룹을 짓는건데 부모 댓글의 id로.. )
-      data.targetSeq = 1; // 여기는 그 그룹 안에서 순서(1, 2, 3, 4...)
+      data.sequence = 1; // 댓글 그룹 내 순서
+      // 대댓글이 아닌 원댓글 작성 필드이므로 targetId, parentId는 null
 
       // 댓글 입력 없이 등록 버튼 누르는 경우 예외처리
       if (data.commentText === "" || !data.commentText) {
@@ -83,11 +82,12 @@ export default {
 
       const r = await this.$post(
         // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/comment/register`,
+        `http://localhost:3000/comment/register/${this.projectId}`,
         data
       );
       // TODO: 정상 등록 -> 댓글 부분 화면 갱신 필요
       if (r.status === 200) {
+        document.getElementById("txtarea").value = "";
         console.log("댓글 등록 성공");
       }
     }
