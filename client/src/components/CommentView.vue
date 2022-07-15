@@ -60,16 +60,11 @@
                       <p class="row mb-0">
                         <a
                           href="#"
-                          class="btn-link text-semibold media-heading box-inline col-10 a-black fs-5"
+                          class="btn-link text-semibold media-heading box-inline col-9 a-black fs-5"
                           >{{ recomment.writer }}</a
                         >
-                        <span class="col-2">
+                        <span class="col-3 text-end">
                           <!-- 수정 여부에 따라 텍스트 필드  -->
-                          <!-- <a
-                            href="#"
-                            class="btn-link text-semibold media-heading box-inline a-black"
-                            >수정</a
-                          > -->
                           <button
                             type="button"
                             class="btn btn-link com_link_blue"
