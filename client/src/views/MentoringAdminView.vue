@@ -37,76 +37,76 @@ export default {
         }
       ],
       mentoring: [
-        // {
-        //   PROJECT_TITLE: "자바스크립트로 웹페이지 만들기",
-        //   REQ_USER: "evelo0702",
-        //   mentoringId: "1",
-        //   mentoringTitle: "자바스크립트 가이드",
-        //   mentoringStatus: ""
-        // },
-        // {
-        //   PROJECT_TITLE: "파이썬으로 만든 TODOLIST",
-        //   REQ_USER: "evelo0702",
-        //   mentoringId: "2",
-        //   mentoringTitle: "자바스크립트 가이드",
-        //   mentoringStatus: ""
-        // },
-        // {
-        //   PROJECT_TITLE: "Node.js 프로젝트 투입 일주일 전",
-        //   REQ_USER: "evelo0702",
-        //   mentoringId: "3",
-        //   mentoringTitle: "자바스크립트 가이드",
-        //   mentoringStatus: ""
-        // },
-        // {
-        //   PROJECT_TITLE: "react 익히기",
-        //   REQ_USER: "evelo0702",
-        //   mentoringId: "4",
-        //   mentoringTitle: "자바스크립트 가이드",
-        //   mentoringStatus: ""
-        // },
-        // {
-        //   PROJECT_TITLE: "vue로 만드는 웹페이지",
-        //   REQ_USER: "evelo0702",
-        //   mentoringId: "5",
-        //   mentoringTitle: "자바스크립트 가이드",
-        //   mentoringStatus: ""
-        // },
-        // {
-        //   PROJECT_TITLE: "자바스크립트로 웹페이지 만들기",
-        //   REQ_USER: "evelo0702",
-        //   mentoringId: "1",
-        //   mentoringTitle: "자바스크립트 가이드",
-        //   mentoringStatus: ""
-        // },
-        // {
-        //   PROJECT_TITLE: "파이썬으로 만든 TODOLIST",
-        //   REQ_USER: "evelo0702",
-        //   mentoringId: "2",
-        //   mentoringTitle: "자바스크립트 가이드",
-        //   mentoringStatus: ""
-        // },
-        // {
-        //   PROJECT_TITLE: "Node.js 프로젝트 투입 일주일 전",
-        //   REQ_USER: "evelo0702",
-        //   mentoringId: "3",
-        //   mentoringTitle: "자바스크립트 가이드",
-        //   mentoringStatus: ""
-        // },
-        // {
-        //   PROJECT_TITLE: "react 익히기",
-        //   REQ_USER: "evelo0702",
-        //   mentoringId: "4",
-        //   mentoringTitle: "자바스크립트 가이드",
-        //   mentoringStatus: ""
-        // },
-        // {
-        //   PROJECT_TITLE: "vue로 만드는 웹페이지",
-        //   REQ_USER: "evelo0702",
-        //   mentoringId: "5",
-        //   mentoringTitle: "자바스크립트 가이드",
-        //   mentoringStatus: ""
-        // }
+        {
+          PROJECT_TITLE: "자바스크립트로 웹페이지 만들기",
+          REQ_USER: "evelo0702",
+          mentoringId: "1",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: ""
+        },
+        {
+          PROJECT_TITLE: "파이썬으로 만든 TODOLIST",
+          REQ_USER: "evelo0702",
+          mentoringId: "2",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: ""
+        },
+        {
+          PROJECT_TITLE: "Node.js 프로젝트 투입 일주일 전",
+          REQ_USER: "evelo0702",
+          mentoringId: "3",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: ""
+        },
+        {
+          PROJECT_TITLE: "react 익히기",
+          REQ_USER: "evelo0702",
+          mentoringId: "4",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: ""
+        },
+        {
+          PROJECT_TITLE: "vue로 만드는 웹페이지",
+          REQ_USER: "evelo0702",
+          mentoringId: "5",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: ""
+        },
+        {
+          PROJECT_TITLE: "자바스크립트로 웹페이지 만들기",
+          REQ_USER: "evelo0702",
+          mentoringId: "1",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: ""
+        },
+        {
+          PROJECT_TITLE: "파이썬으로 만든 TODOLIST",
+          REQ_USER: "evelo0702",
+          mentoringId: "2",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: ""
+        },
+        {
+          PROJECT_TITLE: "Node.js 프로젝트 투입 일주일 전",
+          REQ_USER: "evelo0702",
+          mentoringId: "3",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: ""
+        },
+        {
+          PROJECT_TITLE: "react 익히기",
+          REQ_USER: "evelo0702",
+          mentoringId: "4",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: ""
+        },
+        {
+          PROJECT_TITLE: "vue로 만드는 웹페이지",
+          REQ_USER: "evelo0702",
+          mentoringId: "5",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: ""
+        }
       ]
     };
   },
