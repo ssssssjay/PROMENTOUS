@@ -1,21 +1,25 @@
 <template>
   <Modal ref="baseModal" class="modal">
-    <div class="content-container">
-      <p v-for="text in content" :key="text">
-        {{ text }}
+    <div class="content-container" :key="i" v-for="(member, i) in teammember">
+      <p>
+        <br />
+
+        <br />
       </p>
       <input
         type="text"
         name=""
         id=""
         size="60"
-        v-model="txt0"
+        v-model="membermodaldata[i].rating.comment"
         maxlength="1000"
         class="txt input-group-text" />
+      {{ txt0 }}
       <star-rating
-        v-model:rating="rating0"
+        v-model:rating="membermodaldata[i].rating.score"
         @click="transRating"
         :active-color="colors"></star-rating>
+      {{ rating0 }}
     </div>
     <div class="buttons-container">
       <button class="btn confirm" @click="[transTxt(), confirm()]">확인</button>
@@ -38,22 +42,15 @@ export default {
     colors: {
       type: String,
       default: "yellow"
-    }
+    },
+    teammember: Array
   },
   data() {
     return {
-      txt0: "",
-      rating0: 0
+      membermodaldata: this.teammember
     };
   },
-  methods: {
-    transTxt() {
-      this.$emit("childTxt", this.txt0);
-    },
-    transRating() {
-      this.$emit("childRating", this.rating0);
-    }
-  },
+  methods: {},
   setup() {
     const baseModal = ref(null);
     const resolvePromise = ref(null);

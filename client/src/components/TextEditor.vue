@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <VueEditor v-model="abc" :placeholder="contents"></VueEditor>
+    <VueEditor v-model="EDITOR_CONTENTS" @blur="transEditerData"></VueEditor>
+
     <p></p>
   </div>
 </template>
@@ -21,8 +22,16 @@ export default {
 
   data() {
     return {
-      abc: this.contents
+      EDITOR_CONTENTS: this.contents
     };
+  },
+  methods: {
+    hi() {
+      console.log("hi");
+    },
+    transEditerData() {
+      this.$emit("send-EditorData", this.EDITOR_CONTENTS);
+    }
   }
 };
 </script>

@@ -7,11 +7,12 @@
             class="navbar-brand mainLogo"
             :class="{ active: $route.path == '/home' }"
             to="/home"
-            style="font-size: 30px"
             >PROMENTOUS</router-link
           >
         </div>
-        <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
+        <div class="col text-end me-5">
+          <!-- <div class="col-lg-6 h-100 text-center text-lg-start my-auto"> -->
+
           <span class="dropdown">
             <a
               role="button"
@@ -42,7 +43,7 @@
                   class="dropdown-item"
                   :class="{ active: $route.path == '/project/review' }"
                   to="/project/review"
-                  >리뷰</router-link
+                  >후기</router-link
                 >
               </li>
             </ul>
@@ -69,7 +70,7 @@
               <span>팀관리</span>
             </a>
           </span>
-          <span class="dropdown">
+          <!-- <span class="dropdown">
             <a
               role="button"
               id="dropdownMenuLink"
@@ -80,8 +81,9 @@
               style="font-size: 20px">
               <span>마이페이지</span>
             </a>
-          </span>
+          </span> -->
         </div>
+
         <div class="siglog">
           <button
             v-if="user.email == undefined"
@@ -90,13 +92,54 @@
             @click="onClickOpen">
             <span>로그인</span>
           </button>
-          <button
+          <!-- <button
             v-else
             class="btn btn-outline-dark"
             type="button"
             @click="onClickLogout">
             <span>로그아웃</span>
-          </button>
+          </button> -->
+
+          <div class="loginDropdown" v-else>
+            <img
+              src="@/img/user2.jpg"
+              class="dropProfile bi bi-person-workspace"
+              @click="viewProfile" />
+            <transition name="slide-up">
+              <div class="login dropdown-menu show mt-2" v-if="clickProfile">
+                <img
+                  src="@/img/user2.jpg"
+                  class="dropProfile bi bi-person-workspace" />
+                <button
+                  type="button"
+                  class="closeBtn btn-close"
+                  @click="closeProfile"></button>
+                <br />
+                <div class="user">
+                  <span class="nickname">EVELO</span>
+                  <div class="email">evelo0702@gmail.com</div>
+                </div>
+                <div class="userMenu">
+                  <a
+                    class="myPage"
+                    :class="{ active: $route.path == '/myPageinfo' }"
+                    @click="goToMenu('/myPageinfo')"
+                    ><i class="bi bi-gear me-2 mb-2"></i>마이페이지</a
+                  >
+                  <a
+                    class="notice"
+                    :class="{ active: $route.path == '/MentoringAdmin' }"
+                    @click="goToMenu('/MentoringAdmin')"
+                    ><i class="bi bi-bell me-2 mb-2"></i>멘토링 알림
+                  </a>
+                  <a @click="onClickLogout" class="logout">
+                    <i class="bi bi-box-arrow-right me-2"></i>
+                    로그아웃
+                  </a>
+                </div>
+              </div>
+            </transition>
+          </div>
         </div>
       </div>
     </nav>
@@ -119,7 +162,8 @@ export default {
   components: { GoogleLogin },
   data() {
     return {
-      modalShow: false
+      modalShow: false,
+      clickProfile: false
     };
   },
   computed: {
@@ -150,6 +194,12 @@ export default {
     },
     onClickLogout() {
       this.$store.commit("user", {});
+    },
+    viewProfile() {
+      this.clickProfile = !this.clickProfile;
+    },
+    closeProfile() {
+      this.clickProfile = false;
     }
   }
 };
@@ -159,7 +209,10 @@ nav a {
   font-weight: bold;
   color: #2c3e50;
 }
-.mainLogo {
+
+.logo > .mainLogo {
+  font-size: 30px;
+  font-weight: bold;
 }
 .active {
   color: #1379d2;
@@ -180,15 +233,72 @@ div > button {
 .dropdown > a {
   font-size: 20px;
 }
-.logo > a {
-  background: linear-gradient(to right, #0bc0eb, #8094be);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 25px;
-}
+// .logo > a {
+//   background: linear-gradient(to right, #1379d2, #49c0d0);
+//   -webkit-background-clip: text;
+//   -webkit-text-fill-color: transparent;
+//   font-size: 25px;
+// }
 .dropdown {
   margin: 10px;
 }
+.dropProfile {
+  width: 50px;
+  height: 50px;
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s linear;
+}
+
+.fade-leave-to {
+  opacity: 0;
+}
+.slide-up-enter-from {
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-up-leave-to {
+  transform: translateY(10px);
+  opacity: 0;
+}
+div.dropdown-menu {
+  width: 220px;
+  border-radius: 6px;
+}
+.user {
+  position: absolute;
+  bottom: 100px;
+  left: 55px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.userMenu > a {
+  display: flex;
+  text-decoration: none;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+div.email {
+  font-size: 8px;
+}
+button.closeBtn {
+  position: absolute;
+  left: 180px;
+  top: 13px;
+}
+
 /* 로그인 모달 영역 */
 .modal-container {
   position: fixed;

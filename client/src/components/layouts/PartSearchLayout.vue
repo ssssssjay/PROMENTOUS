@@ -51,11 +51,12 @@ export default {
 import PartSearch from "@vueform/multiselect";
 </script>
 <style src="@vueform/multiselect/themes/default.css"></style>
-<style>
+<style scoped>
 .multiselect {
   width: 400px;
 }
-
+</style>
+<style>
 .multiselect.is-active {
   box-shadow: 0 0 0 var(--ms-ring-width, 3px) var(--ms-ring-color, #1379d2);
 }

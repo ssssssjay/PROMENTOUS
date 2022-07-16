@@ -1,19 +1,23 @@
 <template>
   <Modal ref="baseModal" class="modal">
-    <div class="content-container">
-      <p v-for="text in content" :key="text">
-        {{ text }}
+    <div class="content-container" :key="i" v-for="(mt, i) in mentoring">
+      <p>
+        <br />
+        {{ mentoringdata[i].rating }}
+        <br />
+        {{ mt.mentorUserId }}
+        {{ content }}
       </p>
       <input
         type="text"
         name=""
         id=""
         size="60"
-        v-model="txt"
+        v-model="mentoringdata[i].mentorRating.comment"
         maxlength="1000"
         class="txt input-group-text" />
       <star-rating
-        v-model:rating="rating"
+        v-model:rating="mentoringdata[i].mentorRating.score"
         @click="transRating"
         :active-color="colors"></star-rating>
     </div>
@@ -38,10 +42,12 @@ export default {
     colors: {
       type: String,
       default: "blue"
-    }
+    },
+    mentoring: Array
   },
   data() {
     return {
+      mentoringdata: this.mentoring,
       txt: "",
       rating: 0
     };
