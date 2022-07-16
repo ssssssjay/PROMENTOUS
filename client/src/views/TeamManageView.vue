@@ -32,7 +32,6 @@
       <div>{{ typeof this.projectList2 }}</div>
       <div>{{ this.projectList2[0] }}</div>
       <div>{{ this.teamTotalInfo.data }}</div> -->
-
       <div class="row">
         <div class="col select d-inline-block">
           <div class="d-flex select">
@@ -51,19 +50,6 @@
               @clear="deselected"
               :key="componentKey" />
 
-            <!-- <Project
-              class="ProjectSelect"
-              noOptionsText="상태를 먼저 선택하세요!"
-              v-model="selectedProjectId"
-              style="width: 400px"
-              :options="[
-                projectList
-                  .filter((data) => data.statusName === selectedStatus)
-                  .map((data) => {
-                    return data.title;
-                  })
-              ]"
-              @select="selected" /> -->
             <select
               name=""
               id=""
@@ -85,12 +71,13 @@
       </div>
     </section>
     <!-- 선택안했을때 보여줄 기본페이지 -->
-    <div class="row justify-content-md-center" v-if="selectedProject === ''">
-      <div class="col-md-auto">
-        <i class="bi bi-exclamation-diamond">선택된 프로젝트가 없습니다.</i>
+    <div class="row justify-content-md-center" v-if="selectedProjectId === ''">
+      <div class="col-md-auto emptyProject">
+        <img class="" src="@/img/emptyProject.jpg" alt="" />
+        <p>진행중인 프로젝트가 없습니다</p>
       </div>
     </div>
-    <section class="container">
+    <section class="container" v-if="selectedProjectId !== ''">
       <!-- v-if="SelectedProject" -->
       <!-- 선택해서 불러온 프로젝트 내용 -->
 
@@ -160,23 +147,23 @@
         </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 진행기간 -->
-        <!-- <div class="p-2 d-inline-flex mb-5 bd-highlight">
-          종료 예정일 -->
-        <!-- <Datepicker
+        <div class="p-2 d-inline-flex mb-5 bd-highlight">
+          시작일
+          <Datepicker
             v-model="date"
             locale="kst"
             range
             class="mx-5 datepicker"
-            v-show="correctionMode === true" /> -->
-        <!-- <Datepicker
+            v-show="correctionMode === true" />
+          <!-- <Datepicker
             v-model="endDate"
             locale="kst"
             class="mx-5 datepicker"
             v-show="correctionMode === true" />
           <p class="mx-5" v-show="correctionMode === false">
             {{ endDate }}
-          </p>
-        </div> -->
+          </p> -->
+        </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 보증금 -->
         <div class="p-2 mb-5 d-inline-flex bd-highlight">
@@ -270,7 +257,7 @@
                   src="@/img/maleAvatar.svg"
                   class="card-img-top"
                   alt="..." />
-
+                <p>{{ mem.rating }}</p>
                 <h5 class="card-title">{{ mem.memberNickName }}</h5>
 
                 <ul class="list-group list-group-flush">
@@ -282,8 +269,8 @@
                       href="{{url.address}}"
                       :key="index0"
                       v-for="(url, index0) in teamMembers[index].userSocialUrl"
-                      >{{ url.title }}<br
-                    /></a>
+                      >{{ url.title }}<br />
+                    </a>
                   </li>
                   <li class="list-group-item">
                     역할 <button class="btn btn-primary">{{ mem.role }}</button>
@@ -304,15 +291,13 @@
               </div>
             </div>
             <div class="card-body">
-              <!-- <button class="btn m-1 btn-primary" @click="handleClick">
+              <button class="btn m-1 btn-primary" @click="handleClick">
                 팀원평가
-              </button> -->
+              </button>
               <TeamRatingModal
                 ref="modal"
-                :item="mem"
                 :content="modalContent"
-                v-on:childTxt="getTxt"
-                v-on:childRating="getRating"
+                :teammember="teamMembers"
                 :colors="teamRatingColor" />
             </div>
           </div>
@@ -340,7 +325,7 @@
                 </button>
                 <button
                   class="btn btn-primary"
-                  v-show="men.mentoringStatus === -1">
+                  v-show="men.mentoringStatus == -1">
                   <i class="bi bi-file-excel-fill"></i>
                 </button>
                 <button
@@ -364,8 +349,8 @@
                 </button>
                 <div class="mentoringStatus">
                   <span>신청중 </span>
-                  <span v-show="men.mentoringStatus >= 1">승인됨 </span>
-                  <span v-show="men.mentoringStatus === -1">반려됨 </span>
+                  <span v-show="men.mentoringStatus >= 1">승인됨</span>
+                  <span v-show="men.mentoringStatus == -1">반려됨 </span>
                   <span v-show="men.mentoringStatus >= 2">결제진행 </span>
                   <span v-show="men.mentoringStatus >= 3">멘토링중 </span>
                   <span v-show="men.mentoringStatus >= 4">완료 </span>
@@ -383,21 +368,23 @@
                     멘토링종료
                   </button>
                   <button
-                    class="btn btn-outline-secondary"
-                    v-show="men.mentoringStatus == 5"
-                    @click="handleClick2">
-                    멘토평가
-                    <MentorRatingModal
-                      ref="modal2"
-                      :content="modalContent"
-                      v-on:MentorTxt="getMentorTxt"
-                      v-on:MentorRating="getMentorRating"
-                      :colors="mentorRatingColor" />
+                    class="ms-1 btn btn-outline-secondary"
+                    v-show="men.mentorRating.rated == 'yes'"
+                    disabled>
+                    평가완료
                   </button>
                 </div>
               </div>
+              <button class="btn btn-outline-secondary" @click="handleClick2">
+                멘토평가
+                <MentorRatingModal
+                  ref="modal2"
+                  :content="modalContent"
+                  :mentoring="FinishMentoring"
+                  :colors="mentorRatingColor" />
+              </button>
             </div>
-
+            <!-- <button @click="filterFMentoring">zzzzzz</button> -->
             <nav aria-label="...">
               <ul class="pagination pagination-sm justify-content-center">
                 <li class="page-item active" aria-current="page">
@@ -434,6 +421,7 @@ export default {
   },
   data() {
     return {
+      FinishMentoring: [],
       teamRatingColor: "#ddee4d",
       mentorRatingColor: "#1379d2",
       endDate: "",
@@ -489,7 +477,7 @@ export default {
       teamMembers: [
         {
           memberId: "",
-          memberNickName: "",
+          memberNickName: "aa",
           memberEmail: "evelo0702@gmail.com",
           userSocialUrl: [
             {
@@ -503,8 +491,115 @@ export default {
           ],
           role: "백엔드",
           likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          ratingComment: "",
-          ratingScore: 0
+          rating: { comment: "a", score: 1 }
+        },
+        {
+          memberId: "",
+          memberNickName: "bb",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          rating: { comment: "b", score: 2 }
+        },
+        {
+          memberId: "",
+          memberNickName: "cc",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          rating: { comment: "c", score: 3 }
+        },
+        {
+          memberId: "",
+          memberNickName: "cc",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          rating: { comment: "c", score: 3 }
+        },
+        {
+          memberId: "",
+          memberNickName: "cc",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          rating: { comment: "c", score: 3 }
+        },
+        {
+          memberId: "",
+          memberNickName: "cc",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          rating: { comment: "c", score: 3 }
+        },
+        {
+          memberId: "",
+          memberNickName: "cc",
+          memberEmail: "evelo0702@gmail.com",
+          userSocialUrl: [
+            {
+              title: "기술블로그",
+              address: "주소"
+            },
+            {
+              title: "깃허브",
+              address: "주소"
+            }
+          ],
+          role: "백엔드",
+          likeStackCode: ["Javascript", "Java", "Python", "Node"],
+          rating: { comment: "c", score: 3 }
         }
       ],
       mentoring: [
@@ -513,32 +608,30 @@ export default {
           mentorUserId: "evelo",
           mentoringTitle: "자바스크립트 가이드",
           mentoringStatus: "5",
-          mentorRatingComment: "",
-          mentorRatingScore: ""
+          mentorRating: { comment: "a", score: 1, rated: "yes" }
         },
         {
           mentoringId: "",
-          mentorUserId: "evelo",
+          mentorUserId: "evelo2",
+          mentoringTitle: "자바스크립트 가이드",
+          mentoringStatus: "5",
+
+          mentorRating: { comment: "b", score: 2, rated: "no" }
+        },
+        {
+          mentoringId: "",
+          mentorUserId: "evelo3",
           mentoringTitle: "자바스크립트 가이드",
           mentoringStatus: "3",
-          mentorRatingComment: "",
-          mentorRatingScore: ""
+
+          mentorRating: { comment: "c", score: 3 }
         },
         {
           mentoringId: "",
-          mentorUserId: "evelo",
+          mentorUserId: "evelo4",
           mentoringTitle: "자바스크립트 가이드",
-          mentoringStatus: "2",
-          mentorRatingComment: "",
-          mentorRatingScore: ""
-        },
-        {
-          mentoringId: "",
-          mentorUserId: "evelo",
-          mentoringTitle: "자바스크립트 가이드",
-          mentoringStatus: "1",
-          mentorRatingComment: "",
-          mentorRatingScore: ""
+          mentoringStatus: "5",
+          mentorRating: { comment: "d", score: 4, rated: "no" }
         }
       ],
       //김인호 test
@@ -595,7 +688,9 @@ export default {
       handleClick2
     };
   },
-  created() {},
+  created() {
+    this.filterFinishMentoring();
+  },
   async mounted() {
     // 팀STATUS 필드 셀렉박스용
     this.teamStatusList = await this.$get(
@@ -612,6 +707,16 @@ export default {
   },
   unmounted() {},
   methods: {
+    filterFinishMentoring() {
+      for (let i = 0; i < this.mentoring.length; i++) {
+        if (
+          this.mentoring[i].mentoringStatus == "5" &&
+          this.mentoring[i].mentorRating.rated == "no"
+        ) {
+          this.FinishMentoring.push(this.mentoring[i]);
+        }
+      }
+    },
     selected() {
       console.log("SelectedStatus : ", this.SelectedStatus);
       console.log("SelectedProject : ", this.SelectedProject);
@@ -625,12 +730,7 @@ export default {
     watch() {
       this.correctionMode = false;
     },
-    getTxt: function (txt0) {
-      this.ratingComment = txt0;
-    },
-    getRating: function (rating0) {
-      this.ratingScore = rating0;
-    },
+
     getMentorTxt: function (txt) {
       this.MentorRatingComment = txt;
     },
@@ -699,7 +799,7 @@ export default {
 .banner {
   margin-bottom: 42px;
   height: 200px;
-  background-color: #a984db;
+  background-color: #1379d2;
 }
 .comment {
   padding-top: 50px;
@@ -776,6 +876,7 @@ div.applicantList {
   background-color: gainsboro;
 }
 .mentoring {
+  max-width: 460px;
   height: 160px;
   display: flex;
   background: white;
@@ -802,12 +903,22 @@ div.applicantList {
 .mentoringStatus {
   position: absolute;
   top: 100px;
-  left: 63px;
+  left: 55px;
   font-size: 12px;
 }
 .mentoringStatus > span {
-  margin-right: 38px;
+  margin-right: 45px;
 }
+.mentoringStatus > span:nth-child(2) {
+  margin-right: 45px;
+}
+.mentoringStatus > span:nth-child(4) {
+  margin-right: 40px;
+}
+.mentoringStatus > span:nth-child(5) {
+  margin-right: 45px;
+}
+
 .mentoringBtn {
   position: absolute;
   top: 120px;
@@ -825,5 +936,20 @@ div.applicantList {
 button.btn.btn-primary {
   background-color: #49c0d0;
   border-color: #49c0d0;
+}
+.emptyProject {
+  min-width: 1400;
+  min-height: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.emptyProject > img {
+  width: 400px;
+  height: 400px;
+}
+.emptyProject > p {
+  font-size: 24px;
+  font-weight: bold;
 }
 </style>

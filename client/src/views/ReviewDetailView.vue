@@ -7,8 +7,11 @@
           <!-- 글 제목 -->
           <div class="row text-start">
             <span class="col-10">
-              <p class="fs-1 m-0">후기 제목</p>
-              <p class="pt-1 ps-1">작성자 | 2022/06/02</p>
+              <p class="fs-1 m-0">{{ review.title }}</p>
+              <p class="pt-1 ps-1">
+                {{ review.user_nickname }} |
+                {{ formatDate(review.created_datetime) }}
+              </p>
             </span>
 
             <span class="ps-4 col-2">
@@ -25,19 +28,10 @@
                 <button
                   type="button"
                   class="btn btn-outline-dark btn-sm mx-1 pro-circle">
-                  <i class="bi bi-bookmark"></i>
-                  <i class="bi bi-bookmark-fill"></i>
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-dark btn-sm mx-1 pro-circle">
                   <i class="bi bi-heart"></i>
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-dark btn-sm pro-circle">
-                  <i class="bi bi-link-45deg pro-circle-icon"></i>
-                </button>
+                <!-- 클립보드 복사 -->
+                <copy-to-clipboard :pageUrl="pageUrl" />
               </p>
             </span>
             <hr />
@@ -46,70 +40,49 @@
           <div class="h4 pb-3 pt-3" style="text-align: left">
             <p class="row">
               <span class="text-muted col-2">프로젝트 진행 기간</span>
+              <!-- TODO: 시작일, 종료일 DB 확인 필요.. 지금은 필드가 없다. -->
               <span class="px-4 col-2">2022/07/01</span>
               <span class="px-4 col-1">~</span>
               <span class="px-4 col-2">2022/07/01</span>
             </p>
             <p class="row">
               <span class="text-muted col-2">진행한 프로젝트</span>
-              <span class="px-4 col-9">XXX 페이지 개발</span>
+              <span class="px-4 col-9">
+                <router-link
+                  :to="`/project/recruit/${project.project_id}`"
+                  target="_blank"
+                  class="rev_router_link_color">
+                  {{ project.title }}
+                </router-link>
+              </span>
             </p>
             <p class="row">
               <span class="text-muted col-2">결과물 링크</span>
               <span class="px-4 col-9">
-                <button
-                  type="button"
-                  class="btn btn-secondary btn-sm disabled me-2">
-                  링크 제목1
-                </button>
+                <a
+                  :href="`${review.url_address}`"
+                  target="_blank"
+                  class="rev_router_link_color">
+                  <button type="button" class="btn btn-sm me-2 pro_button">
+                    {{ review.url_title }}
+                  </button>
+                </a>
               </span>
             </p>
             <p class="row">
               <span class="text-muted col-2">사용 언어/스택</span>
-              <span class="px-4 col-9">
-                <!-- v-for로 변경 -->
-                <span class="badge pro_badge_color rounded-pill me-1"
-                  >VueJS</span
-                >
-                <span class="badge pro_badge_color rounded-pill me-1"
-                  >Node.js</span
-                >
-                <span class="badge pro_badge_color rounded-pill me-1"
-                  >MySQL</span
-                >
+              <span class="px-4 col-10">
+                <span
+                  class="badge pro_badge_color rounded-pill me-1"
+                  v-for="stack in project.stack_code"
+                  :key="stack">
+                  {{ stack }}
+                </span>
               </span>
             </p>
             <div>
               <div class="widget-box fs-4 py-4 px-5">
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum. Excepteur sint
-                occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum. Excepteur sint occaecat cupidatat
-                non proident, sunt in culpa qui officia deserunt mollit anim id
-                est laborum. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum. Excepteur sint
-                occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum. Excepteur sint occaecat cupidatat
-                non proident, sunt in culpa qui officia deserunt mollit anim id
-                est laborum. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum. Excepteur sint
-                occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum. Excepteur sint occaecat cupidatat
-                non proident, sunt in culpa qui officia deserunt mollit anim id
-                est laborum. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum.
+                {{ review.desc }}
               </div>
             </div>
           </div>
@@ -129,132 +102,50 @@
 <script>
 import CommentView from "@/components/CommentView.vue";
 import WriteCommentView from "../components/WriteCommentView.vue";
+import CopyToClipboard from "../components/CopyToClipboard.vue";
 
 export default {
-  name: "ProjectDetailView",
-  components: { CommentView, WriteCommentView },
+  name: "ReviewDetailView",
+  components: { CommentView, WriteCommentView, CopyToClipboard },
   data() {
     return {
-      project: {
-        writer: "거북이",
-        projectId: 1,
-        projectName: "프로젝트 모집 플랫폼 개발",
-        expectedStartDate: "2022/07/01"
-      },
-      stackList: ["VueJS", "Node.js", "Typescript"],
-      linkList: [
-        {
-          linkName: "링크제목1",
-          linkAddress: "http://localhost:8080/abc",
-          linkId: 1
-        },
-        {
-          linkName: "링크제목2",
-          linkAddress: "http://localhost:8080/def",
-          linkId: 2
-        },
-        {
-          linkName: "링크제목3",
-          linkAddress: "http://localhost:8080/ghi",
-          linkId: 3
-        }
-      ],
-      mentoList: [
-        {
-          mentoCode: "0",
-          NickName: "가나다",
-          score: 3.5,
-          scoreCount: 12,
-          title: "자바스크립트를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" }
-          ]
-        },
-        {
-          mentoCode: "1",
-          NickName: "가나다라",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바" }
-          ]
-        },
-        {
-          mentoCode: "2",
-          NickName: "가나다라마바사",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "타입스크립트" }
-          ]
-        },
-        {
-          mentoCode: "3",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" },
-            { code: "2", name: "자바스크립트" },
-            { code: "2", name: "자바스크립트" }
-          ]
-        },
-        {
-          mentoCode: "4",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" }
-          ]
-        },
-        {
-          mentoCode: "5",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" }
-          ]
-        },
-        {
-          mentoCode: "6",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" }
-          ]
-        }
-      ]
+      project: {},
+      review: {}
     };
+  },
+  beforeMount() {
+    this.pageUrl = window.document.location.href;
+    this.reviewId = 1; // TODO: 추후 변경: this.reviewId = this.$route.params.projectId;
+    this.getReviewData();
+  },
+  mounted() {},
+  methods: {
+    formatDate(datetime) {
+      // TODO: 예외처리 코드 보완 필요
+      if (!datetime) {
+        console.log("datetime undefined error 처리 필요");
+        return "";
+      }
+      return datetime.substr(0, 10);
+    },
+    async getReviewData() {
+      this.review = await this.$get(
+        // TODO: axios.defaults.baseURL로 변경
+        `http://localhost:3000/project/review/${this.reviewId}`
+      );
+
+      this.project = await this.$get(
+        // TODO: axios.defaults.baseURL로 변경
+        `http://localhost:3000/project/recruit/${this.review.project_id}`
+      );
+
+      this.project.stack_code = await this.project.stack_code
+        .split(",")
+        .map(String);
+
+      // console.log(this.review);
+      // console.log(this.project);
+    }
   }
 };
 </script>

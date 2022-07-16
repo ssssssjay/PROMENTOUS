@@ -8,9 +8,9 @@
     </section>
     <section class="container">
       <div class="d-flex pt-4 pb-4 justify-content-end section_first">
-        <a href="#" class="btn btn-outline btn_write"
-          ><i class="bi bi-pencil me-1"></i>프로젝트 후기 작성</a
-        >
+        <registerbtn-layout
+          :btnText="btnText"
+          @click="goToMenu('../Reviewwrite')" />
       </div>
       <div class="d-flex pt-4 mb-4 align-items-start justify-content-between">
         <RecruitSortLayout />
@@ -71,14 +71,18 @@
 import RecruitSortLayout from "@/components/layouts/RecruitSortLayout.vue";
 import StackSearchLayout from "@/components/layouts/StackSearchLayout.vue";
 import SearchAll from "@/components/SearchAll.vue";
+import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
+
 export default {
   components: {
     RecruitSortLayout,
     StackSearchLayout,
-    SearchAll
+    SearchAll,
+    RegisterbtnLayout
   },
   data() {
     return {
+      btnText: "프로젝트 후기 작성하기",
       reviews: [
         {
           title: "mood-indigo",
@@ -155,6 +159,9 @@ export default {
     b(e) {
       console.log("b");
       console.log(e);
+    },
+    goToMenu(path) {
+      this.$router.push({ path: path });
     }
   }
 };

@@ -48,7 +48,7 @@ export default {
 }
 .searchAllInput:focus {
   border: 1px solid #fff;
-  outline: 3px solid #49c0d0;
+  outline: 3px solid #1379d2;
 }
 .form-control-sm {
   padding-left: 1.5rem;

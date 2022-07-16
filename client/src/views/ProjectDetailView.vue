@@ -30,7 +30,7 @@
             </p>
             <p class="row">
               <span class="text-muted col-2">모집인원</span>
-              <span class="px-4 col-4">5명</span>
+              <span class="px-4 col-4">{{ recruitNumber }} 명</span>
             </p>
             <p class="row">
               <span class="text-muted col-2">진행방식</span>
@@ -100,18 +100,8 @@
         <div class="side-bar">
           <div class="text-start">
             <p class="ps-4">
-              <!-- 버튼 UI 추후 수정 예정 -->
-              <button
-                type="button"
-                class="btn btn-outline-dark btn-sm mx-1 pro-circle">
-                <i class="bi bi-bookmark"></i>
-                <i class="bi bi-bookmark-fill"></i>
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-dark btn-sm pro-circle">
-                <i class="bi bi-link-45deg pro-circle-icon"></i>
-              </button>
+              <!-- 클립보드 복사 -->
+              <copy-to-clipboard :pageUrl="pageUrl" />
               <button type="button" class="btn btn-outline-dark btn-sm mx-1">
                 수정
               </button>
@@ -250,10 +240,16 @@
 import CommentView from "@/components/CommentView.vue";
 import ReviewCarousel from "@/components/ReviewCarousel.vue";
 import WriteCommentView from "../components/WriteCommentView.vue";
+import CopyToClipboard from "../components/CopyToClipboard.vue";
 
 export default {
   name: "ProjectDetailView",
-  components: { CommentView, ReviewCarousel, WriteCommentView },
+  components: {
+    CommentView,
+    ReviewCarousel,
+    WriteCommentView,
+    CopyToClipboard
+  },
   data() {
     return {
       projectId: null,
@@ -273,131 +269,21 @@ export default {
       projectLeader: {
         user_nickname: ""
       },
-      stackList: ["VueJS", "Node.js", "Typescript"],
-      linkList: [
-        {
-          linkName: "링크제목1",
-          linkAddress: "http://localhost:8080/abc",
-          linkId: 1
-        },
-        {
-          linkName: "링크제목2",
-          linkAddress: "http://localhost:8080/def",
-          linkId: 2
-        },
-        {
-          linkName: "링크제목3",
-          linkAddress: "http://localhost:8080/ghi",
-          linkId: 3
-        }
-      ],
-      mentoList: [
-        {
-          mentoCode: "0",
-          NickName: "가나다",
-          score: 3.5,
-          scoreCount: 12,
-          title: "자바스크립트를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" }
-          ]
-        },
-        {
-          mentoCode: "1",
-          NickName: "가나다라",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바" }
-          ]
-        },
-        {
-          mentoCode: "2",
-          NickName: "가나다라마바사",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "타입스크립트" }
-          ]
-        },
-        {
-          mentoCode: "3",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" },
-            { code: "2", name: "자바스크립트" },
-            { code: "2", name: "자바스크립트" }
-          ]
-        },
-        {
-          mentoCode: "4",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" }
-          ]
-        },
-        {
-          mentoCode: "5",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" }
-          ]
-        },
-        {
-          mentoCode: "6",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" }
-          ]
-        }
-      ]
+      recruitData: [],
+      recruitNumber: null // 모집인원
     };
   },
   created() {
+    this.pageUrl = window.document.location.href;
     this.projectId = this.$route.params.projectId;
     this.getProjectData();
     this.getLeaderData();
+    this.getRecruitData();
     this.getRefUrl();
   },
   methods: {
     formatDate(datetime) {
       // TODO: 예외처리 코드 보완 필요
-      console.log(datetime);
       if (!datetime) {
         console.log("datetime undefined error 처리 필요");
         return "";
@@ -422,6 +308,17 @@ export default {
       }
     },
 
+    getRecruitNumber() {
+      // this.recruitData 가지고 처리
+      const recData = this.recruitData;
+      const len = recData.length;
+      let recNum = 0;
+      for (let i = 0; i < len; i++) {
+        recNum += recData[i].to;
+      }
+      return recNum;
+    },
+
     async getProjectData() {
       this.project = await this.$get(
         // TODO: axios.defaults.baseURL로 변경
@@ -442,6 +339,16 @@ export default {
         // TODO: axios.defaults.baseURL로 변경
         `http://localhost:3000/project/recruit/${this.projectId}/leader`
       );
+    },
+
+    async getRecruitData() {
+      this.recruitData = await this.$get(
+        // TODO: axios.defaults.baseURL로 변경
+        `http://localhost:3000/project/recruit/${this.projectId}/recruit_data`
+      );
+
+      // 모집 인원
+      this.recruitNumber = await this.getRecruitNumber();
     },
 
     async getRefUrl() {
