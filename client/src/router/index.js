@@ -127,6 +127,20 @@ const routes = [
       import(
         /* webpackChunkName: "mypage" */ "../components/MentoringApply.vue"
       )
+  },
+  {
+    path: "/mentordetail",
+    name: "MentorDetail",
+    component: () =>
+      import(/* webpackChunkName: "mypage" */ "../views/MentorDetailView.vue")
+  },
+  {
+    path: "/userprofilemodal",
+    name: "userprofile",
+    component: () =>
+      import(
+        /* webpackChunkName: "mypage" */ "../components/UserProfileModal.vue"
+      )
   }
 ];
 

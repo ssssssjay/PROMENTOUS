@@ -69,15 +69,23 @@
             </p>
             <p class="row py-4 mb-4">
               <span class="col-2 text-center"><strong>관심분야</strong></span>
-              <span class="col-2 px-3"
-                ><button
+              <span class="col px-3">
+                <span
+                  class="stack-icon mx-2 mb-2"
+                  style="width: auto"
+                  v-for="(part, index) in parts"
+                  :key="index"
+                  v-show="infoStatus"
+                  >{{ part }}</span
+                >
+                <!-- <button
                   type="button"
                   class="btn btn-primary m-1 mt-0"
                   v-for="(option, index) in selectedOptionList"
                   :key="option"
                   v-show="infoStatus">
                   {{ selectedOptionList[index] }}
-                </button>
+                </button> -->
                 <!-- <select
                   v-model="selectedOptionList"
                   class="form-select"
@@ -91,7 +99,10 @@
                     {{ option.name }}
                   </option>
                 </select> -->
-                <PartSearchLayout v-show="editStatus"></PartSearchLayout>
+                <PartSearchLayout
+                  style="float: left"
+                  @send-value="addPart"
+                  v-show="editStatus"></PartSearchLayout>
               </span>
             </p>
             <p class="row py-4 mb-4">
@@ -140,9 +151,58 @@
                 </select>
               </span>
             </p>
-            <p class="row py-4 mb-0">
-              <span class="col-2 text-center"><strong>소셜정보</strong></span>
-              <span class="col-10 text-start" v-show="infoStatus">
+            <div class="row py-4 mb-0">
+              <div class="col-2 text-center"><strong>소셜정보</strong></div>
+              <div class="col" v-show="infoStatus">
+                <a
+                  class="mb-1 px-4 tag"
+                  :href="url.address"
+                  target="_blank"
+                  v-for="(url, index) in URL_LIST"
+                  :key="index">
+                  {{ URL_LIST[index].title }}
+                </a>
+              </div>
+
+              <div class="col partTo" v-show="editStatus">
+                <input
+                  type="text"
+                  class="form-control"
+                  style="width: 200px"
+                  placeholder="링크 이름"
+                  v-model="URL.title" />
+
+                <input
+                  type="text"
+                  class="form-control"
+                  style="width: 600px"
+                  placeholder="링크 주소"
+                  v-model="URL.address" />
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="addUrl()">
+                  추가
+                </button>
+                <div v-for="(URL, index) in URL_LIST" :key="index">
+                  <div class="col partTo ms-1">
+                    <p class="form-control mb-1">
+                      {{ URL_LIST[index].title }}
+                    </p>
+                    <p class="form-control mb-1">
+                      {{ URL_LIST[index].address }}
+                    </p>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="delURL(index)">
+                      X
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <span class="col-10 text-start" v-show="infoStatus">
                 <a
                   class="px-4"
                   :href="Object.values(site)"
@@ -178,9 +238,9 @@
                   v-show="editStatus">
                   +
                 </button>
-              </span>
-            </p>
-            <p class="row">
+              </span> -->
+            </div>
+            <!-- <p class="row">
               <span class="col-2"></span>
               <span class="col-8 text-left"
                 ><a
@@ -193,7 +253,7 @@
                   >{{ Object.keys(site).join() }}</a
                 ></span
               >
-            </p>
+            </p> -->
             <hr />
             <p class="text-end">
               <button
@@ -280,6 +340,7 @@ export default {
         { partCode: "03", partName: "모바일" },
         { partCode: "04", partName: "기타" }
       ],
+      parts: [],
       stacks: [
         { partCode: "01", stackCode: "1", stackName: "Javascript" },
         { partCode: "01", stackCode: "2", stackName: "TypeScript" },
@@ -303,7 +364,9 @@ export default {
       siteList: [], // [{GitHub:'www.github.com'}, {Naver:'www.naver.com'}, ...]
       infoStatus: true,
       editStatus: false,
-      buttonStatus: "수정"
+      buttonStatus: "수정",
+      URL: { title: "", address: "" },
+      URL_LIST: [] //DB로 쏘옥
     };
   },
   setup() {},
@@ -332,6 +395,25 @@ export default {
       this.infoStatus = false;
       this.editStatus = true;
       this.buttonStatus = "저장";
+    },
+    addUrl() {
+      if (this.URL.title !== "" && this.URL.address !== "") {
+        let obj0 = {
+          ["title"]: this.URL.title,
+          ["address"]: this.URL.address
+        };
+        this.URL_LIST.push(obj0);
+        this.URL.title = "";
+        this.URL.address = "";
+      } else if (this.URL.title === "" || this.URL.address === 0) {
+        alert("링크를 정확히 입력해주세요");
+      }
+    },
+    delURL(index) {
+      this.URL_LIST.splice(index, 1);
+    },
+    addPart(data) {
+      this.parts = data;
     }
   }
 };
@@ -344,5 +426,37 @@ export default {
 
 #bt {
   margin-bottom: 50%;
+}
+
+.partTo > input {
+  display: inline;
+  margin-right: 5px;
+}
+.col.partTo {
+  position: relative;
+  bottom: 5px;
+}
+p.form-control {
+  width: 200px;
+  display: inline-block;
+  margin-right: 5px;
+}
+p.form-control:nth-child(2) {
+  width: 600px;
+}
+
+div > .tag {
+  text-decoration: none;
+}
+
+.stack-icon {
+  font-size: 20px;
+  display: inline-block;
+  padding: 0 20px;
+  text-align: center;
+  border-radius: 28px;
+  color: white;
+  background-color: #1379d2;
+  box-sizing: border-box;
 }
 </style>
