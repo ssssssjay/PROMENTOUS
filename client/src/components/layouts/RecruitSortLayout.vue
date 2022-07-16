@@ -38,25 +38,24 @@ export default {
 };
 </script>
 <style src="@vueform/multiselect/themes/default.css"></style>
-<style>
+<style scoped>
 .recruit_sort {
   width: 168px;
 }
-.multiselect.is-active {
-  box-shadow: 0 0 0 var(--ms-ring-width, 3px) var(--ms-ring-color, #49c0d0);
-}
+</style>
+<style>
 .multiselect-option {
   transition: all 0.2s;
 }
 .multiselect-option:hover {
-  background: var(--ms-option-bg-selected, #49c0d04d);
+  background: var(--ms-option-bg-selected, #1379d2);
 }
 .multiselect-option.is-selected {
-  background: var(--ms-option-bg-selected, #49c0d0);
+  background: var(--ms-option-bg-selected, #1379d2);
   color: var(--ms-option-color-selected, #fff);
 }
 .multiselect-option.is-selected.is-pointed {
-  background: var(--ms-option-bg-selected-pointed, #49c0d0);
+  background: var(--ms-option-bg-selected-pointed, #1379d2);
   color: var(--ms-option-color-selected-pointed, #fff);
 }
 </style>

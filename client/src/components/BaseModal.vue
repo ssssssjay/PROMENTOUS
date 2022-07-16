@@ -46,9 +46,16 @@ export default {
 
   .modal-container {
     background: white;
+    position: relative;
+    min-height: 400px;
+    max-height: 1000px;
     max-width: 700px;
-    width: 100%;
     padding: 1.5rem;
+    overflow-y: auto;
+  }
+  .modal-container > slot {
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

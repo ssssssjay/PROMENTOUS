@@ -43,22 +43,50 @@
           </div>
         </div>
 
-        <div class="row mb-5">
+        <div class="row mb-1">
           <label for="reqNum" class="col-sm-2">모집인원</label>
-          <div class="col-sm-3">
-            <select id="reqNum" class="form-select">
-              <option selected>분야</option>
-              <option>...</option>
-            </select>
+
+          <div class="col partTo">
+            <input
+              type="text"
+              class="form-control"
+              style="width: 200px"
+              placeholder="분야"
+              v-model="PART.name" />
+
+            <input
+              type="number"
+              class="form-control"
+              style="width: 200px"
+              placeholder="인원"
+              v-model="PART.to"
+              oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
+
+            <button type="button" class="btn btn-secondary" @click="addPart()">
+              추가
+            </button>
           </div>
-          <div class="col-sm-3">
-            <select id="inputState" class="form-select">
-              <option selected>1명</option>
-              <option>...</option>
-            </select>
+          <div class="row" v-for="(PART, index) in PART_LIST" :key="index">
+            <label for="reqNum" class="col-sm-2"> </label>
+
+            <div class="col partTo ms-1">
+              <p class="form-control mb-1">
+                {{ PART_LIST[index].name }}
+              </p>
+              <p class="form-control mb-1">
+                {{ PART_LIST[index].to }}
+              </p>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="delPart(index)">
+                X
+              </button>
+            </div>
           </div>
         </div>
-        <div class="row mb-5">
+
+        <div class="row mt-5 mb-5">
           <label for="onoff" class="col-sm-2 col-form-label">진행방식</label>
           <div class="col-sm-3">
             <select id="onoff" class="form-select" v-model="PROGRESS_METHOD">
@@ -66,9 +94,12 @@
               <option value="off">오프라인</option>
             </select>
           </div>
-          <label for="region" class="col-sm-2 col-form-label">진행 지역</label>
-
-          <div class="col-sm-3" id="region"><RegionSortLayout /></div>
+          <div class="col" v-show="PROGRESS_METHOD == 'off'">
+            <label for="region" class="col-sm-2 col-form-label me-5"
+              >진행 지역</label
+            >
+            <RegionSortLayout class="col ms-5" style="display: inline" />
+          </div>
         </div>
         <div class="row mb-5">
           <label class="col-sm-2 col-form-label">보증금 여부</label>
@@ -102,14 +133,12 @@
         <div class="row mb-5">
           <label for="stack" class="col-sm-2 col-form-label"
             >사용 기술/언어 <br />
-            <p class="ms-2">(최대 10개)</p></label
-          >
+          </label>
           <StackSearchLayout
             class="col-sm-3"
             id="stack"
             @send-value="sendValue" />
         </div>
-        {{ stacks }}
 
         <div class="row mb-5">
           <label class="col-sm-10 col-form-label"
@@ -128,9 +157,44 @@
               * 프로젝트와 관련해 참고할 수 있는 사이트를 입력해주세요.
             </p></label
           >
+          <div class="col partTo">
+            <input
+              type="text"
+              class="form-control"
+              style="width: 200px"
+              placeholder="링크 이름"
+              v-model="URL.title" />
+
+            <input
+              type="text"
+              class="form-control"
+              style="width: 300px"
+              placeholder="링크 주소"
+              v-model="URL.address" />
+            <button type="button" class="btn btn-secondary" @click="addUrl()">
+              추가
+            </button>
+          </div>
+          <div class="row" v-for="(URL, index) in URL_LIST" :key="index">
+            <div class="col partTo ms-1">
+              <p class="form-control mb-1">
+                {{ URL_LIST[index].title }}
+              </p>
+              <p class="form-control mb-1">
+                {{ URL_LIST[index].address }}
+              </p>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="delURL(index)">
+                X
+              </button>
+            </div>
+          </div>
         </div>
         <div class="row mb-5">
-          <text-editor :contents="contents" />
+          <text-editor :contents="CONTENTS" @send-EditorData="sendEditorData" />
+          {{ PROJECT_DESC }}
         </div>
       </form>
       <registerbtn-layout class="regBtn" :btnText="btnText" />
@@ -155,6 +219,11 @@ export default {
   },
   data() {
     return {
+      PART_LIST: [],
+      PART: { name: "", to: "" },
+      URL: { title: "", address: "" },
+      URL_LIST: [],
+      TOTAL_TO: 0,
       PROJECT_ID: "",
       PROJECT_TITLE: "",
       EXP_START_DATE: "",
@@ -163,12 +232,15 @@ export default {
       WARRANTY_CHECK: "",
       WARRANTY: "",
       MEETING_URL: "",
-      date: "",
-      stacks: "",
+      SELECTED_PART: "",
+      SELECTED_TO: "",
+      DATE: "",
+      STACKS: "",
       btnText: "작성 완료",
-      contents:
-        "<h1>1. 프로젝트 주제</h1> <h3>    -프로젝트 내용, 시작 동기 등에 관해 적어주세요!</h3><br><br><h1>2. 모임 방식/ 진행 방법</h1> <h3>    -모임을 1주일에 몇 번 정도 진행할 지 적어주세요!</h3><br><h3>    -모임 진행을 희망하는 요일을 적어주세요!</h3><br><h3>    -모임 진행 방식에 대해 상세히 적어주세요!</h3><br><br><h1>3. 그 외 자유 작성 사항</h1>"
+      CONTENTS:
+        "<h1>1. 프로젝트 주제</h1> <h3>    -프로젝트 내용, 시작 동기 등에 관해 적어주세요!</h3><br><br><h1>2. 모임 방식/ 진행 방법</h1> <h3>    -모임을 1주일에 몇 번 정도 진행할 지 적어주세요!</h3><br><h3>    -모임 진행을 희망하는 요일을 적어주세요!</h3><br><h3>    -모임 진행 방식에 대해 상세히 적어주세요!</h3><br><br><h1>3. 그 외 자유 작성 사항</h1>",
       //  "1. 프로젝트 주제  2. 모임 방식/ 진행 방법 3.그 외 자유 작성 사항"
+      PROJECT_DESC: ""
     };
   },
   setup() {},
@@ -178,6 +250,56 @@ export default {
   methods: {
     sendValue(data) {
       this.stacks = data;
+    },
+    sendEditorData(data) {
+      this.PROJECT_DESC = data;
+    },
+    addPart() {
+      if (
+        this.PART.name !== "" &&
+        this.PART.to !== 0 &&
+        this.PART.to < 10 &&
+        this.TOTAL_TO < 10 &&
+        this.TOTAL_TO + this.PART.to < 10
+      ) {
+        this.TOTAL_TO += this.PART.to;
+        let obj = {
+          ["name"]: this.PART.name,
+          ["to"]: this.PART.to
+        };
+        this.PART_LIST.push(obj);
+        this.PART.name = "";
+        this.PART.to = 0;
+      } else if (this.PART.name === "" || this.PART.to === 0) {
+        alert("분야, 인원을 정확히 입력해주세요");
+      } else if (
+        this.TOTAL_TO > 9 ||
+        this.PART.to > 9 ||
+        this.TOTAL_TO + this.PART.to >= 10
+      ) {
+        alert("인원은 최대 9명 모집 가능합니다.");
+      }
+    },
+    addUrl() {
+      if (this.URL.title !== "" && this.URL.address !== "") {
+        let obj0 = {
+          ["title"]: this.URL.title,
+          ["address"]: this.URL.address
+        };
+        this.URL_LIST.push(obj0);
+        this.URL.title = "";
+        this.URL.address = "";
+      } else if (this.URL.title === "" || this.URL.address === 0) {
+        alert("링크를 정확히 입력해주세요");
+      }
+    },
+
+    delPart(index) {
+      this.TOTAL_TO -= this.PART_LIST[index].to;
+      this.PART_LIST.splice(index, 1);
+    },
+    delURL(index) {
+      this.URL_LIST.splice(index, 1);
     }
   }
 };
@@ -193,5 +315,18 @@ export default {
 .warranty {
   width: 150px;
   display: inline;
+}
+.partTo > input {
+  display: inline;
+  margin-right: 5px;
+}
+.col.partTo {
+  position: relative;
+  bottom: 5px;
+}
+p.form-control {
+  width: 200px;
+  display: inline-block;
+  margin-right: 5px;
 }
 </style>

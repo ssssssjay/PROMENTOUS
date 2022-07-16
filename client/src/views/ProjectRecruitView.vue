@@ -16,7 +16,9 @@
 
           <RecruitStatus />
         </div>
-        <registerbtn-layout :btnText="btnText" @click="goToMenu('../write')" />
+        <registerbtn-layout
+          :btnText="btnText"
+          @click="goToMenu('../Recruitwrite')" />
       </div>
       <div
         class="d-flex pt-5 mb-4 align-items-start justify-content-between section_second">
@@ -159,7 +161,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .banner {
   color: #fff;
   height: 200px;
