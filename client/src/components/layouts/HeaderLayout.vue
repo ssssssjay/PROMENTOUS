@@ -86,7 +86,7 @@
 
         <div class="siglog">
           <button
-            v-if="user.email == undefined"
+            v-if="user.user_id == undefined"
             class="btn btn-outline-dark"
             type="button"
             @click="onClickOpen">
@@ -99,7 +99,6 @@
             @click="onClickLogout">
             <span>로그아웃</span>
           </button> -->
-
           <div class="loginDropdown" v-else>
             <img
               src="@/img/user2.jpg"

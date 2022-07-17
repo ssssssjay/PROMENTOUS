@@ -202,6 +202,28 @@
   </div>
 </template>
 <script>
+/*
+{
+  param: {
+    "project_id":, x 오토인크리먼트로 알아서
+    "leader_user":, ㅇ this.$store.state.blahblah...
+    "title":, ㅇ
+    "exp_start_date":, ㅇ
+    "exp_period":, ㅇ INT
+    "progress_method":, ㅇ enum('ON','OFF')
+    "status_code":, ㅇ default값 설정이 안되어있음 "REC"으로 설정하는게 좋을듯
+    "main_area_code":, ㅇ 널값허용
+    "sub_area_code":, ㅇ 널값허용
+    "stack_code":, ㅇ "T01,R01,P01"
+    "project_contact":, ㅇ "url"
+    "project_desc":, ㅇ "thml tag..."
+    "warranty":, ㅇ INT
+    "meeting_url":, ㅇ
+    "created_datetime": x 레지스터 데이트로 알아서
+  }
+}
+*/
+
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import RegionSortLayout from "@/components/layouts/RegionSortLayout.vue";

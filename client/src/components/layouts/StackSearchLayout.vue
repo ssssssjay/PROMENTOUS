@@ -14,6 +14,10 @@
   </div>
 </template>
 <script>
+// 생성자함수
+// function Stack(value, label) {
+//   (this.value = value), (this.label = label);
+// }
 export default {
   components: {
     StackSearch
@@ -22,29 +26,37 @@ export default {
   data() {
     return {
       value: [],
-      options: [
-        "Javascript",
-        "TypeScript",
-        "React",
-        "Java",
-        "Spring",
-        "Node.js",
-        "Flutter",
-        "Swift",
-        "Kotlin",
-        "AWS",
-        "Kubernetes",
-        "Docker"
-      ]
+      options: [] // 배열들을 갖다 넣기
     };
   },
   setup() {},
-  created() {},
+  created() {
+    this.getStackList();
+  },
   mounted() {},
   unmounted() {},
   methods: {
+    async getStackList() {
+      const stackList = await this.$get(
+        `http://localhost:3000/common/stackList`
+      );
+      for (let i = 0; i < stackList.length; i++) {
+        // value, label
+        // let data = new Stack(
+        //   stackList[i].code_data_name,
+        //   stackList[i].code_data_desc
+        // );
+        let data = {
+          value: stackList[i].code_data_name,
+          label: stackList[i].code_data_desc
+        };
+        this.options.push(data);
+      }
+      // console.log(this.options);
+    },
     transValue() {
       this.$emit("send-value", this.value);
+      // console.log(this.value);
     }
   }
 };

@@ -22,12 +22,10 @@ export default {
   },
   methods: {
     async callback(response) {
+      // response는 날것그대로의 데이터이고, userData는 정제된 데이터이다.
       const userData = await decodeCredential(response.credential);
-      // console.log("Handle the response", response);
-      // console.log("DecodeCredential", userData);
-      // 포스트요청을 먼저보내고
-      // const postEx = await this.$post(`http://localhost:3000/login`, {
-      await this.$post(`http://localhost:3000/login`, {
+      // 포스트요청을 먼저보내고 응답값을 받은 뒤,
+      const loginUser = await this.$post(`http://localhost:3000/login`, {
         param: [
           {
             user_nickname: userData.name,
@@ -38,40 +36,20 @@ export default {
             user_nickname: userData.name,
             user_image: userData.picture
           }
-          // 필드명과 반드시 동일 : 내가 쏴줄 데이터값
+          // 필드명과 반드시 동일_이래야 쿼리문이 스무스함 : 내가 쏴줄 데이터값
         ]
-      }); // 세션스토리지에 로그인 데이터를 담고
-      // vuex에도 담고
-      // 로그인버튼은 사라지고 로그아웃 버튼이 생긴다.
-      this.$store.commit("user", userData);
+      });
+      // vuex의 user에 담는다(+로컬스토리지와 연동이 되는 모듈을 설치함)
+      // 로그인버튼은 사라지고 로그아웃 버튼이 생긴다.(뷰엑스의 유저로 와치중)
+      this.$store.commit("user", loginUser.data[0]);
+      // 희한하게 loginUser에는 응답 상태등등 잡다구리한게 다온다. 포스트요청의 특징으로 보임
+      // console.log(loginUser);
       console.log(this.$store.state.user);
-      // console.log(postEx);
-      // console.log(postEx.data);
       // 페이지를 마이페이지로 이동시킨다
       this.$router.push("myPageInfo");
       // location.href = "http://localhost:8080/myPageinfo";
       // 모달영역을 지원준다
       this.$emit("onClickClose");
-    },
-    async login(kakao_account) {
-      await this.$api("/api/login", {
-        param: [
-          {
-            email: kakao_account.email,
-            nickname: kakao_account.profile.nickname
-          },
-          { nickname: kakao_account.profile.nickname }
-        ]
-      });
-      this.$store.commit("user", kakao_account);
-    },
-    kakaoLogout() {
-      window.Kakao.Auth.logout((response) => {
-        console.log(response);
-        this.$store.commit("user", {});
-        alert("로그아웃");
-        this.$router.push({ path: "/" });
-      });
     }
   }
 };

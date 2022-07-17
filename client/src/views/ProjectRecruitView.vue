@@ -13,8 +13,7 @@
           <RegionSortLayout
             @send-LargeCity="SendLargeCity"
             @send-RestCity="SendRestCity" />
-
-          <RecruitStatus />
+          <RecruitStatus @status-sort="statusSort" />
         </div>
         <registerbtn-layout
           :btnText="btnText"
@@ -25,11 +24,11 @@
         <RecruitSortLayout />
         <div class="d-flex">
           <StackSearchLayout @send-value="sendValue" />
-
           <SearchAll />
         </div>
       </div>
-      <CardList />
+      <CardList :projects="projects" />
+      <PaginationLayout :page="page" @paging="paging" />
     </section>
   </div>
 </template>
@@ -41,6 +40,7 @@ import SearchAll from "../components/SearchAll.vue";
 import RecruitStatus from "@/components/layouts/RecruitStatus.vue";
 import CardList from "@/components/CardList.vue";
 import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
+import PaginationLayout from "@/components/layouts/PaginationLayout.vue";
 export default {
   components: {
     RecruitSortLayout,
@@ -49,99 +49,26 @@ export default {
     SearchAll,
     RecruitStatus,
     CardList,
-    RegisterbtnLayout
+    RegisterbtnLayout,
+    PaginationLayout
   },
   data() {
     return {
       MAIN_AREA_CODE: "",
       SUB_AREA_CODE: "",
-      stacks: "",
+      stacks: [],
       btnText: "모집글 작성",
-      projects: [
-        {
-          title: "Vue-Todo",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "devprogramming4",
-          expDate: "2022-08-09",
-          usingStack: ["nodeJS", "vue", "mysql"],
-          bookmarkCount: 3,
-          viewCount: 5,
-          status: "진행중"
-        },
-        {
-          title: "React-Todo",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "sungjae",
-          expDate: "2022-08-08",
-          usingStack: ["JS", "nodeJS"],
-          bookmarkCount: 2,
-          viewCount: 4,
-          status: "진행중"
-        },
-        {
-          title: "뷰로 인생 끝장내버리기",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "뷰쳐돌이",
-          expDate: "2022-06-20",
-          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
-          bookmarkCount: 100,
-          viewCount: 1000,
-          status: "진행중"
-        },
-        {
-          title: "뷰로 인생 끝장내버리기",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "뷰쳐돌이",
-          expDate: "2022-06-20",
-          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
-          bookmarkCount: 100,
-          viewCount: 1000,
-          status: "진행중"
-        },
-        {
-          title: "뷰로 인생 끝장내버리기",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "뷰쳐돌이",
-          expDate: "2022-06-20",
-          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
-          bookmarkCount: 100,
-          viewCount: 1000,
-          status: "진행중"
-        },
-        {
-          title: "뷰로 인생 끝장내버리기",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "뷰쳐돌이",
-          expDate: "2022-06-20",
-          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
-          bookmarkCount: 100,
-          viewCount: 1000,
-          status: "진행중"
-        },
-        {
-          title: "뷰로 인생 끝장내버리기",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "뷰쳐돌이",
-          expDate: "2022-06-20",
-          usingStack: [
-            "Vue",
-            "nodeJS",
-            "mySQL",
-            "AWS",
-            "mySQL",
-            "AWS",
-            "mySQL",
-            "AWS"
-          ],
-          bookmarkCount: 100,
-          viewCount: 1000,
-          status: "진행중"
-        }
-      ]
+      page: 1, // Math.floor => 버림 , Math.ceil => 올림
+      projects: [],
+      // 데이터가져올떄 param안에 넣을 정렬요소들. 기본값들은 하드코딩하고, 특수 상황에선 자식에서 emit으로 값을 변경할것이다.
+      pageToMove: 1,
+      recruitStatus: "REC"
     };
   },
   setup() {},
-  created() {},
+  created() {
+    this.getProjectsData();
+  },
   mounted() {},
   unmounted() {},
   methods: {
@@ -151,12 +78,51 @@ export default {
     sendValue(data) {
       this.stacks = data;
     },
-
     SendLargeCity(data) {
       this.MAIN_AREA_CODE = data;
     },
     SendRestCity(data) {
       this.SUB_AREA_CODE = data;
+    },
+    async getProjectsData() {
+      const response = await this.$post(
+        `http://localhost:3000/project/recruit/`,
+        {
+          param: {
+            page: this.pageToMove,
+            status: this.recruitStatus
+          }
+        }
+      );
+      this.page = Math.ceil(Math.ceil(response.data.count[0].cnt / 8));
+      this.projects = response.data.projectRecruitList;
+      this.projects.forEach((project) => {
+        project.exp_start_date = this.convertDate(project.exp_start_date);
+        project.stack_code = this.convertStack(project.stack_code);
+        project.status_code = this.convertStatus(project.status_code);
+      });
+    },
+    convertDate(raw_date) {
+      return raw_date.substr(0, 10);
+    },
+    convertStack(raw_stack) {
+      return raw_stack.split(",").map(String);
+    },
+    convertStatus(raw_status) {
+      if (raw_status === "REC") {
+        return "모집중";
+      } else if (raw_status === "FIN") {
+        return "모집완료";
+      }
+    },
+    statusSort(status) {
+      console.log(this.recruitStatus);
+      this.recruitStatus = status;
+      this.getProjectsData();
+    },
+    paging(data) {
+      this.pageToMove = data;
+      this.getProjectsData();
     }
   }
 };
