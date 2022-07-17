@@ -6,29 +6,18 @@
           class="region lgRegion"
           placeholder="지역선택"
           v-model="selectedLargeCity"
-          @click="transLargeCity"
-          :options="[
-            ...new Set(
-              dongList.map((data) => {
-                return data.cityTitle;
-              })
-            )
-          ]"
-          @clear="deselected" />
+          @select="transLargeCity"
+          @change="test"
+          :options="largeCityData"
+          @clear="clearLarge" />
         <RestRegionSort
           class="region restRegion"
           placeholder="지역선택"
           noOptionsText="대도시를 선택하세요!"
           v-model="selectedRestCity"
-          @click="transRestCity"
-          :options="
-            dongList
-              .filter((data) => data.cityTitle === selectedLargeCity)
-              .map((data) => {
-                return data.dongTitle;
-              })
-          "
-          @select="selected" />
+          @select="transRestCity"
+          :options="restCityData"
+          @clear="clearRest" />
       </div>
     </section>
   </div>
@@ -45,63 +34,63 @@ export default {
     return {
       selectedLargeCity: "",
       selectedRestCity: "",
-      dongList: [
-        {
-          cityCode: "02",
-          cityTitle: "서울",
-          dongCode: "1",
-          dongTitle: "역삼동"
-        },
-        {
-          cityCode: "02",
-          cityTitle: "서울",
-          dongCode: "2",
-          dongTitle: "압구정동"
-        },
-        {
-          cityCode: "02",
-          cityTitle: "서울",
-          dongCode: "3",
-          dongTitle: "오금동"
-        },
-        {
-          cityCode: "031",
-          cityTitle: "경기도",
-          dongCode: "1",
-          dongTitle: "수내동"
-        },
-        {
-          cityCode: "031",
-          cityTitle: "경기도",
-          dongCode: "2",
-          dongTitle: "정자동"
-        },
-        {
-          cityCode: "031",
-          cityTitle: "경기도",
-          dongCode: "3",
-          dongTitle: "서현동"
-        }
-      ]
+      largeCityData: ["온라인"],
+      restCityData: []
     };
   },
   setup() {},
-  created() {},
+  created() {
+    this.getLargeCityData();
+  },
   mounted() {},
   unmounted() {},
   methods: {
-    selected() {
-      console.log("selectedLargeCity : ", this.selectedLargeCity);
-      console.log("selectedRestCity : ", this.selectedRestCity);
-    },
-    deselected() {
+    test() {
+      this.restCityData = [];
       this.selectedRestCity = "";
+    },
+    clearLarge() {
+      this.selectedLargeCity = "";
+      this.selectedRestCity = "";
+      this.restCityData = [];
+      this.$emit("send-LargeCity", this.selectedLargeCity);
+      this.$emit("send-RestCity", this.selectedRestCity);
+    },
+    clearRest() {
+      this.selectedRestCity = "";
+      this.$emit("send-RestCity", this.selectedRestCity);
     },
     transLargeCity() {
       this.$emit("send-LargeCity", this.selectedLargeCity);
+      this.getRestCityData();
     },
     transRestCity() {
       this.$emit("send-RestCity", this.selectedRestCity);
+    },
+    async getLargeCityData() {
+      const response = await this.$get(`http://localhost:3000/common/mainArea`);
+      for (let i = 0; i < response.length; i++) {
+        let data = {
+          value: response[i].code_data_name,
+          label: response[i].code_data_desc
+        };
+        this.largeCityData.push(data);
+      }
+    },
+    async getRestCityData() {
+      const target = this.largeCityData.find(
+        (item) => item.value === this.selectedLargeCity
+      );
+      const response = await this.$get(
+        `http://localhost:3000/common/subArea?main=${target.value}` // target.value {value: 'M01', label: '경기도'}
+      );
+      for (let i = 0; i < response.length; i++) {
+        let data = {
+          value: response[i].code_data_name,
+          label: response[i].code_data_desc
+        };
+        this.restCityData.push(data);
+      }
     }
   }
 };
@@ -116,7 +105,7 @@ export default {
   column-gap: 12px;
 }
 .region {
-  width: 160px;
+  width: 180px;
   margin: 0;
 }
 </style>
