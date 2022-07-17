@@ -8,9 +8,9 @@
         <div
           class="panel-body"
           v-for="comment in commentList"
-          :key="comment.id">
+          :key="comment.reply_id">
           <!-- 원댓글 -->
-          <div class="media-block" v-if="comment.parent === null">
+          <div class="media-block" v-if="comment.parent_id === null">
             <!-- 왼쪽 프사 -->
             <a class="media-left" href="#">
               <img
@@ -21,16 +21,16 @@
             <!-- 우측 영역 -->
             <div class="media-body">
               <div class="mar-btm">
-                <!-- 작성자 닉네임 -->
+                <!-- 작성자 아이디 -> 닉네임으로 변ㄴ경..  -->
                 <a
                   href="#"
                   class="btn-link text-semibold media-heading box-inline a-black fs-5"
-                  >{{ comment.writer }}</a
+                  >{{ comment.writer_nickname }}</a
                 >
-                <p class="text-muted text-sm">{{ comment.insert_date }}</p>
+                <p class="text-muted text-sm">{{ comment.created_datetime }}</p>
               </div>
               <p>
-                {{ comment.content }}
+                {{ comment.contents }}
               </p>
               <div class="pad-ver text-end pe-4">
                 <!-- 누르면 취소 버튼으로 바뀌게.. -->
@@ -47,8 +47,10 @@
                 <write-comment-view />
                 <hr />
               </div>
-              <div v-for="recomment in commentList" :key="recomment.id">
-                <div class="media-block" v-if="recomment.parent == comment.id">
+              <div v-for="recomment in commentList" :key="recomment.reply_id">
+                <div
+                  class="media-block"
+                  v-if="recomment.parent_id == comment.reply_id">
                   <a class="media-left" href="#"
                     ><img
                       class="img-circle img-sm"
@@ -61,7 +63,7 @@
                         <a
                           href="#"
                           class="btn-link text-semibold media-heading box-inline col-9 a-black fs-5"
-                          >{{ recomment.writer }}</a
+                          >{{ recomment.writer_nickname }}</a
                         >
                         <span class="col-3 text-end">
                           <!-- 수정 여부에 따라 텍스트 필드  -->
@@ -87,7 +89,7 @@
                       </p>
                     </div>
                     <p>
-                      {{ recomment.content }}
+                      {{ recomment.contents }}
                     </p>
                     <div class="pad-ver text-end pe-4">
                       <button
@@ -117,54 +119,40 @@
 import WriteCommentView from "../components/WriteCommentView.vue";
 export default {
   components: { WriteCommentView },
+  props: {
+    // 어떤 페이지냐에 따라 API 호출 주소 분기
+    pageType: {
+      type: String,
+      default: ""
+    },
+    projectId: {
+      type: Number,
+      default: null
+    }
+  },
   data() {
     return {
       isRecomment: false,
-      commentList: [
-        {
-          id: 1,
-          is_secret: false,
-          content: "안녕하세요. 참가하고 싶은데 언제까지 모집하시나요?",
-          insert_date: "2022/06/05 13:01",
-          writer: "떡볶이",
-          parent: null,
-          seq: 1
-        },
-        {
-          id: 2,
-          is_secret: false,
-          content: "7월 30일까지 모집할 예정입니다.",
-          insert_date: "2022/06/05 18:41",
-          writer: "오뎅",
-          parent: 1, // 부모댓글의 id
-          seq: 2
-        },
-        {
-          id: 4,
-          is_secret: false,
-          content: "답글 테스트...",
-          insert_date: "2022/06/05 18:41",
-          writer: "오뎅",
-          parent: 1, // 부모댓글의 id
-          seq: 3
-        },
-        {
-          id: 3,
-          is_secret: true,
-          content: "Node.js를 잘 다뤄야 하나요?",
-          insert_date: "2022/06/06 07:34",
-          writer: "순대",
-          parent: null, // 부모댓글의 id
-          seq: 1
-        }
-      ]
+      commentList: []
     };
   },
   setup() {},
-  created() {},
+  created() {
+    this.getCommentList();
+  },
   mounted() {},
   unmounted() {},
   methods: {
+    async getCommentList() {
+      let data = {};
+      data.pageType = data.pageType = "projectRecruit"; // TODO: 수정 필요
+      this.commentList = await this.$get(
+        // TODO: axios.defaults.baseURL로 변경
+        `http://localhost:3000/comment/recruit/get/${this.projectId}`
+      );
+      // await console.log(this.commentList);
+    },
+
     deleteCheckAlert() {
       this.$swal({
         title: "정말 삭제하시겠습니까?",
