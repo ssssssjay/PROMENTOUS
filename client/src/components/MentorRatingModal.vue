@@ -1,28 +1,22 @@
 <template>
   <Modal ref="baseModal" class="modal">
     <div class="content-container" :key="i" v-for="(mt, i) in mentoring">
-      <p>
-        <br />
-        {{ mentoringdata[i].rating }}
-        <br />
-        {{ mt.mentorUserId }}
-        {{ content }}
-      </p>
+      {{ mt.mentorUserId }}
       <input
         type="text"
         name=""
         id=""
         size="60"
-        v-model="mentoringdata[i].mentorRating.comment"
+        v-model="mt.mentorRating[0].comment"
         maxlength="1000"
         class="txt input-group-text" />
       <star-rating
-        v-model:rating="mentoringdata[i].mentorRating.score"
+        v-model:rating="mt.mentorRating[0].score"
         @click="transRating"
         :active-color="colors"></star-rating>
     </div>
     <div class="buttons-container">
-      <button class="btn confirm" @click="[transTxt(), confirm()]">확인</button>
+      <button class="btn confirm" @click="[confirm()]">확인</button>
       <button class="btn cancel" @click="cancel">취소</button>
     </div>
   </Modal>
@@ -46,19 +40,15 @@ export default {
     mentoring: Array
   },
   data() {
-    return {
-      mentoringdata: this.mentoring,
-      txt: "",
-      rating: 0
-    };
+    return {};
   },
   methods: {
-    transTxt() {
-      this.$emit("MentorTxt", this.txt);
-    },
-    transRating() {
-      this.$emit("MentorRating", this.rating);
-    }
+    // transTxt() {
+    //   this.$emit("MentorTxt", this.txt);
+    // },
+    // transRating() {
+    //   this.$emit("MentorRating", this.rating);
+    // }
   },
   setup() {
     const baseModal = ref(null);
