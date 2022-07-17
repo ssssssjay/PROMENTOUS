@@ -16,9 +16,7 @@
         :active-color="colors"></star-rating>
     </div>
     <div class="buttons-container">
-      <button
-        class="btn confirm"
-        @click="[confirm(), ratedchange(i), menRatingSave()]">
+      <button class="btn confirm" @click="[confirm(), menRatingSave()]">
         확인
       </button>
       <button class="btn cancel" @click="cancel">취소</button>
@@ -47,16 +45,8 @@ export default {
     return { params: [] };
   },
   methods: {
-    // transTxt() {
-    //   this.$emit("MentorTxt", this.txt);
-    // },
-    // transRating() {
-    //   this.$emit("MentorRating", this.rating);
-    // }
-    ratedchange(index) {
-      index;
-      // alert(this.mentoring[index].mentorRating[0].rated);
-      //this.mentoring[index].mentorRating[0].rated = "yes";
+    refresh() {
+      this.$parent.projectIdSelect();
     },
     async menRatingSave() {
       /*POST 재료  */
@@ -65,7 +55,7 @@ export default {
         let element = {};
         element = this.mentoring[index].mentorRating[0];
         element.projectId = 1;
-        element.rateUserId = this.$store.state.user;
+        element.rateUserId = this.$store.state.user.user_id;
         element.mentorUserId = this.mentoring[index].mentorUserId;
         tempArr.push(element);
       }
@@ -78,6 +68,8 @@ export default {
 
         this.params
       );
+
+      this.refresh();
     }
   },
   setup() {

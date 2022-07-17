@@ -721,6 +721,7 @@ export default {
       this.projectIdSelect(); /* 팀개요 정보 다가져옴. */
     },
     filterFinishMentoring() {
+      this.FinishMentoring = [];
       for (let i = 0; i < this.mentoring.length; i++) {
         if (
           this.mentoring[i].mentoringStatus == "5" &&
