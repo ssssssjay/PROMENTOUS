@@ -4,12 +4,13 @@
     <input type="hidden" v-model="value" />
     <button
       type="button"
-      class="btn btn-outline-dark btn-sm pro-circle"
+      class="btn btn-sm pro-circle pro_button"
       v-clipboard:copy="value"
       v-clipboard:success="onSuccess"
       v-clipboard:error="onError"
       @click="showAlert">
       <i class="bi bi-link-45deg pro-circle-icon"></i>
+      공유
     </button>
   </span>
 </template>
