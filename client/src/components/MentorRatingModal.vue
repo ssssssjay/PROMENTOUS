@@ -12,16 +12,16 @@
         class="txt input-group-text" />
       <star-rating
         v-model:rating="mt.mentorRating[0].score"
-        @click="transRating"
+        @click="[transRating, (mt.mentorRating[0].rated = 'yes')]"
         :active-color="colors"></star-rating>
-      <div class="buttons-container">
-        <button
-          class="btn confirm"
-          @click="[confirm(), ratedchange(i), menRatingSave()]">
-          확인
-        </button>
-        <button class="btn cancel" @click="cancel">취소</button>
-      </div>
+    </div>
+    <div class="buttons-container">
+      <button
+        class="btn confirm"
+        @click="[confirm(), ratedchange(i), menRatingSave()]">
+        확인
+      </button>
+      <button class="btn cancel" @click="cancel">취소</button>
     </div>
   </Modal>
 </template>
@@ -62,7 +62,11 @@ export default {
       /*POST 재료  */
       let tempArr = [];
       for (let index = 0; index < this.mentoring.length; index++) {
-        const element = this.mentoring[index];
+        let element = {};
+        element = this.mentoring[index].mentorRating[0];
+        element.projectId = 1;
+        element.rateUserId = this.$store.state.user;
+        element.mentorUserId = this.mentoring[index].mentorUserId;
         tempArr.push(element);
       }
       this.params = tempArr;
