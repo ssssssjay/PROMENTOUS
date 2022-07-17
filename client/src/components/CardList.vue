@@ -20,6 +20,7 @@
             <div class="d-flex flex-column mb-1">
               <div>
                 <i class="bi bi-eye me-1"></i>
+                <!-- TODO : view count 기능 구현(아래는 더미데이터 초기버전이라 데이터의 형태가 다를것임) -->
                 <!-- <span> {{ project.viewCount }}</span> -->
               </div>
             </div>
@@ -33,8 +34,6 @@
           <span v-show="project.stack_code.length > 3">
             + {{ project.stack_code.length - 3 }}
           </span>
-
-          <!-- <div class="stack-icon">+3</div> -->
         </section>
       </div>
     </section>
@@ -42,57 +41,18 @@
 </template>
 <script>
 export default {
-  inject: ["message"],
   props: {
-    status: String // "REC"로 넘어옴
-    // projects: Array
+    projects: Array
   },
   components: {},
   data() {
-    return {
-      projects: []
-      // projects: this.projects
-    };
+    return {};
   },
   setup() {},
-  created() {
-    this.getProjectsData();
-    console.log(this.message);
-  },
+  created() {},
   mounted() {},
-  unmounted() {
-    console.log("cardlist unmounted");
-  },
+  unmounted() {},
   methods: {
-    test() {
-      console.log("CardList test fn");
-    },
-    convertDate(raw_date) {
-      return raw_date.substr(0, 10);
-    },
-    convertStack(raw_stack) {
-      return raw_stack.split(",").map(String);
-    },
-    convertStatus(raw_status) {
-      if (raw_status === "REC") {
-        return "모집중";
-      } else if (raw_status === "FIN") {
-        return "모집완료";
-      }
-    },
-    async getProjectsData() {
-      this.projects = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/`
-      );
-      this.projects.forEach((project) => {
-        project.exp_start_date = this.convertDate(project.exp_start_date);
-        project.stack_code = this.convertStack(project.stack_code);
-        project.status_code = this.convertStatus(project.status_code);
-      });
-      console.log(this.projects);
-      // this.$emit("test");
-    },
     // 카드 클릭시 id를 파라미터로 전달하고 해당 상세글로 이동
     goToDetail(id) {
       const path = `/project/recruit/${id}`;
