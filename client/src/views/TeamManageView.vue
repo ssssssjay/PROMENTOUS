@@ -11,14 +11,14 @@
 
     <section class="container">
       <!-- <div>//지원자정보 (배열)>> 팀선택시변경되어야</div>
-      <div>{{ this.applicants }}</div> -->
-      <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div>
+      <div>{{ this.applicants }}</div>
+      <div>//팀원 (배열)>> 팀선택시변경되어야</div>
       <div>{{ this.teamMembers }}</div>
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
-      <div>{{ this.mentoring }}</div> -->
-      <!-- <div>팀상태</div>
-      <div>{{ this.teamStatusList }}</div> -->
-      <!-- <div><br /></div>
+      <div>{{ this.mentoring }}</div>
+      <div>팀상태</div>
+      <div>{{ this.teamStatusList }}</div>
+      <div><br /></div>
       <div><br /></div>
       <div><br /></div>
       <div>프로젝트리스트</div>
@@ -32,6 +32,8 @@
       <div>{{ typeof this.projectList2 }}</div>
       <div>{{ this.projectList2[0] }}</div>
       <div>{{ this.teamTotalInfo.data }}</div> -->
+      <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
+      <div>{{ this.mentoring }}</div>
       <div class="row">
         <div class="col select d-inline-block">
           <div class="d-flex select">
@@ -205,7 +207,7 @@
                   class="card-img-top"
                   alt="..." />
 
-                <h5 class="card-title">{{ app.applicantNickName }}</h5>
+                <h5 class="card-title">{{ app.applicantNickname }}</h5>
 
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">
@@ -258,7 +260,7 @@
                   class="card-img-top"
                   alt="..." />
                 <p>{{ mem.rating }}</p>
-                <h5 class="card-title">{{ mem.memberNickName }}</h5>
+                <h5 class="card-title">{{ mem.userNickname }}</h5>
 
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">이메일 {{ mem.memberEmail }}</li>
@@ -390,6 +392,7 @@
                 <li class="page-item active" aria-current="page">
                   <span class="page-link">1</span>
                 </li>
+                <!-- 하드코딩 탈출 필요 -->
                 <li class="page-item"><a class="page-link" href="#">2</a></li>
                 <li class="page-item"><a class="page-link" href="#">3</a></li>
               </ul>
@@ -634,6 +637,15 @@ export default {
           mentorRating: { comment: "d", score: 4, rated: "no" }
         }
       ],
+      //paging 처리 위한 object
+
+      mentoringTotalPageCount: 0,
+      selectedPage: 1, //default 1 페이지
+      projectInfoParams: {
+        project_id: "3",
+        mentoring_page: "1"
+      },
+      params: {},
       //김인호 test
       paramsForTest: {
         c2: "zz",
@@ -644,10 +656,7 @@ export default {
         sub_area_code: "S125",
         stack_code: "J02,R01"
       },
-      projectInfoParams: {
-        project_id: "3",
-        mentoring_page: "1"
-      },
+
       teamTotalInfo: {},
       sessionUserId: "3",
       initUrl: "",
@@ -743,6 +752,20 @@ export default {
     stringToArray(string) {
       return string.split(",");
     },
+    // 페이지 클릭시점에 멘토링정보 끌고오는 메서드
+    //  DB에서 받은 정보는 :: this.mentoring 에 꽃힌다
+    async getMentoringsBySelectedPage() {
+      this.params.project_id = this.selectedProjectId;
+      this.params.selectedPage = this.selectedPage;
+      // mentoringInfo
+      this.mentoring = await this.$post(
+        // TODO: axios.defaults.baseURL로 변경
+        `/manage/getMentoringsBySelectedPage`,
+        this.params
+      );
+      // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
+    },
+
     // 선택 하는 순간에 해당 project 정보 teamTotalInfo 끌어옴
     async projectIdSelect() {
       this.projectInfoParams.project_id = this.selectedProjectId;
@@ -776,8 +799,28 @@ export default {
         );
         this.teamMembers[q].likeStackCode = str.split(",");
       }
-      //멘토정보 (배열)
+      //멘토링페이지정보
+      this.mentoringTotalPageCount =
+        this.teamTotalInfo.data.mentoringTotalPageCount.totalCount;
+      //멘토정보 최초 앞 4개만 가져옴 (배열)
       this.mentoring = this.teamTotalInfo.data.mentorings;
+    },
+    // 저장 버튼 클릭 시 DATA UPDATE
+    async saveTeamManageInfo() {
+      this.params.project_id = this.selectedProjectId;
+      this.params.selectedPage = this.selectedPage;
+      this.params.meeting_url = this.urlAddress;
+      this.params.meeting_url_title = this.urlTitle;
+      this.params.status_code = this.teamStatus;
+      this.params.warranty = this.deposit;
+      // saveTeamManageInfo
+      this.result = await this.$post(
+        // TODO: axios.defaults.baseURL로 변경
+        `/manage/saveTeamManageInfo`,
+        this.params
+      );
+      alert(this.result);
+      // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
     }
   }
 };
