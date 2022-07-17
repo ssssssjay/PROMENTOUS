@@ -12,8 +12,7 @@
     <section class="container">
       <!-- <div>//지원자정보 (배열)>> 팀선택시변경되어야</div>
       <div>{{ this.applicants }}</div>
-      <div>//팀원 (배열)>> 팀선택시변경되어야</div>
-      <div>{{ this.teamMembers }}</div>
+      
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
       <div>{{ this.mentoring }}</div>
       <div>팀상태</div>
@@ -32,6 +31,8 @@
       <div>{{ typeof this.projectList2 }}</div>
       <div>{{ this.projectList2[0] }}</div>
       <div>{{ this.teamTotalInfo.data }}</div> -->
+      <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div>
+      <div>{{ this.teamMembers }}</div> -->
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
       <div>{{ this.mentoring }}</div>
       <div class="row">
@@ -259,7 +260,7 @@
                   src="@/img/maleAvatar.svg"
                   class="card-img-top"
                   alt="..." />
-                <p>{{ mem.rating }}</p>
+
                 <h5 class="card-title">{{ mem.userNickname }}</h5>
 
                 <ul class="list-group list-group-flush">
@@ -314,6 +315,7 @@
                 class="col mentoring"
                 :key="index2"
                 v-for="(men, index2) in mentoring">
+                <p>{{ men.mentorRating }}</p>
                 <p class="mentoringName">
                   {{ men.mentorUserId }}멘토님의 {{ men.mentoringTitle }}
                 </p>
@@ -494,7 +496,7 @@ export default {
           ],
           role: "백엔드",
           likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: { comment: "a", score: 1 }
+          rating: [{ comment: "c", score: 4, rated: "yes" }]
         },
         {
           memberId: "",
@@ -512,7 +514,7 @@ export default {
           ],
           role: "백엔드",
           likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: { comment: "b", score: 2 }
+          rating: [{ comment: "c", score: 3, rated: "yes" }]
         },
         {
           memberId: "",
@@ -530,7 +532,7 @@ export default {
           ],
           role: "백엔드",
           likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: { comment: "c", score: 3 }
+          rating: [{ comment: "c", score: 3, rated: "yes" }]
         },
         {
           memberId: "",
@@ -548,7 +550,7 @@ export default {
           ],
           role: "백엔드",
           likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: { comment: "c", score: 3 }
+          rating: [{ comment: "c", score: 3, rated: "yes" }]
         },
         {
           memberId: "",
@@ -566,7 +568,7 @@ export default {
           ],
           role: "백엔드",
           likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: { comment: "c", score: 3 }
+          rating: [{ comment: "c", score: 3, rated: "yes" }]
         },
         {
           memberId: "",
@@ -584,7 +586,7 @@ export default {
           ],
           role: "백엔드",
           likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: { comment: "c", score: 3 }
+          rating: [{ comment: "c", score: 3, rated: "yes" }]
         },
         {
           memberId: "",
@@ -602,7 +604,7 @@ export default {
           ],
           role: "백엔드",
           likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: { comment: "c", score: 3 }
+          rating: [{ comment: "c", score: 3, rated: "yes" }]
         }
       ],
       mentoring: [
@@ -697,30 +699,32 @@ export default {
       handleClick2
     };
   },
-  created() {
-    this.filterFinishMentoring();
+  created() {},
+  beforeMount() {
+    this.managePageInit();
   },
-  async mounted() {
-    // 팀STATUS 필드 셀렉박스용
-    this.teamStatusList = await this.$get(
-      `/common/getTeamStatusListForTeamManage`
-    );
-    // 내 SESSIONID기준으로  팀 리스트끌고오기
-    this.initUrl = `/manage/getTeamListForManage/`;
-    this.initUrl += this.sessionUserId;
-    this.projectList = await this.$get(this.initUrl, this.projectInfoParams);
-    // 가져온 리스트 첫번째 값으로 팀정보 다끌고오기
-    this.selectedProjectId = this.projectList[0].projectId;
-    this.selectedStatus = this.projectList[0].statusName;
-    this.projectIdSelect();
-  },
+  mounted() {},
   unmounted() {},
   methods: {
+    async managePageInit() {
+      // 팀STATUS 필드 셀렉박스용
+      this.teamStatusList = await this.$get(
+        `/common/getTeamStatusListForTeamManage`
+      );
+      // 내 SESSIONID기준으로  팀 리스트끌고오기
+      this.initUrl = `/manage/getTeamListForManage/`;
+      this.initUrl += this.sessionUserId;
+      this.projectList = await this.$get(this.initUrl, this.projectInfoParams);
+      // 가져온 리스트 첫번째 값으로 팀정보 다끌고오기
+      this.selectedProjectId = this.projectList[0].projectId;
+      this.selectedStatus = this.projectList[0].statusName;
+      this.projectIdSelect(); /* 팀개요 정보 다가져옴. */
+    },
     filterFinishMentoring() {
       for (let i = 0; i < this.mentoring.length; i++) {
         if (
           this.mentoring[i].mentoringStatus == "5" &&
-          this.mentoring[i].mentorRating.rated == "no"
+          this.mentoring[i].mentorRating[0].rated == "no"
         ) {
           this.FinishMentoring.push(this.mentoring[i]);
         }
@@ -804,6 +808,8 @@ export default {
         this.teamTotalInfo.data.mentoringTotalPageCount.totalCount;
       //멘토정보 최초 앞 4개만 가져옴 (배열)
       this.mentoring = this.teamTotalInfo.data.mentorings;
+      /*this.filterFinishMentoring(); */
+      this.filterFinishMentoring();
     },
     // 저장 버튼 클릭 시 DATA UPDATE
     async saveTeamManageInfo() {
@@ -819,7 +825,6 @@ export default {
         `/manage/saveTeamManageInfo`,
         this.params
       );
-      alert(this.result);
       // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
     }
   }

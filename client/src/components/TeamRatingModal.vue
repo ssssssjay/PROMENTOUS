@@ -11,18 +11,17 @@
         name=""
         id=""
         size="60"
-        v-model="membermodaldata[i].rating.comment"
+        v-model="member.rating[0].comment"
         maxlength="1000"
         class="txt input-group-text" />
-      {{ txt0 }}
+      {{ member.userNickname }}
       <star-rating
-        v-model:rating="membermodaldata[i].rating.score"
+        v-model:rating="member.rating[0].score"
         @click="transRating"
         :active-color="colors"></star-rating>
-      {{ rating0 }}
     </div>
     <div class="buttons-container">
-      <button class="btn confirm" @click="[transTxt(), confirm()]">확인</button>
+      <button class="btn confirm" @click="[confirm()]">확인</button>
       <button class="btn cancel" @click="cancel">취소</button>
     </div>
   </Modal>
