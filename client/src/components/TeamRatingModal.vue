@@ -1,11 +1,7 @@
 <template>
   <Modal ref="baseModal" class="modal">
     <div class="content-container" :key="i" v-for="(member, i) in teammember">
-      <p>
-        <br />
-
-        <br />
-      </p>
+      <p>{{ member.memberNickName }}</p>
       <input
         type="text"
         name=""
@@ -14,14 +10,16 @@
         v-model="member.rating[0].comment"
         maxlength="1000"
         class="txt input-group-text" />
-      {{ member.userNickname }}
+
       <star-rating
         v-model:rating="member.rating[0].score"
         @click="transRating"
         :active-color="colors"></star-rating>
     </div>
     <div class="buttons-container">
-      <button class="btn confirm" @click="[confirm()]">확인</button>
+      <button class="btn confirm" @click="[confirm(), memRatingSave()]">
+        확인
+      </button>
       <button class="btn cancel" @click="cancel">취소</button>
     </div>
   </Modal>
@@ -45,11 +43,37 @@ export default {
     teammember: Array
   },
   data() {
-    return {
-      membermodaldata: this.teammember
-    };
+    return {};
   },
-  methods: {},
+  methods: {
+    refresh() {
+      this.$parent.projectIdSelect();
+    },
+    async memRatingSave() {
+      /*POST 재료  */
+      let tempArr = [];
+      for (let index = 0; index < this.teammember.length; index++) {
+        let element = {};
+        element = this.teammember[index].Rating[0];
+        element.projectId = 1;
+        element.rateUserId = this.$store.state.user.user_id;
+        // element.mentorUserId = this.mentoring[index].mentorUserId;
+        // 평가받는 유저아이디?
+        tempArr.push(element);
+      }
+      this.params = tempArr;
+
+      /*POST 발사  */
+      this.result = await this.$post(
+        // TODO: axios.defaults.baseURL로 변경
+        `/manage/saveMentorRating`,
+
+        this.params
+      );
+
+      this.refresh();
+    }
+  },
   setup() {
     const baseModal = ref(null);
     const resolvePromise = ref(null);

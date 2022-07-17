@@ -115,8 +115,8 @@
                   @click="closeProfile"></button>
                 <br />
                 <div class="user">
-                  <span class="nickname">EVELO</span>
-                  <div class="email">evelo0702@gmail.com</div>
+                  <span class="nickname">{{ user.user_nickname }}</span>
+                  <div class="email">{{ user.user_account }}</div>
                 </div>
                 <div class="userMenu">
                   <a

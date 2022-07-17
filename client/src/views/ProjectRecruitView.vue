@@ -24,6 +24,7 @@
         <RecruitSortLayout />
         <div class="d-flex">
           <StackSearchLayout @send-value="sendValue" />
+          {{ stacks }}
           <SearchAll />
         </div>
       </div>

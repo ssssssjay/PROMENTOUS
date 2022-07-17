@@ -11,6 +11,9 @@ export default {
   mounted() {},
   unmounted() {},
   methods: {
+    toTop(){
+      
+    },
     functionA() {
       //     console.log("AXIOS에서 호출함");
     },

@@ -12,7 +12,7 @@
     <section class="container">
       <!-- <div>//지원자정보 (배열)>> 팀선택시변경되어야</div>
       <div>{{ this.applicants }}</div>
-      
+
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
       <div>{{ this.mentoring }}</div>
       <div>팀상태</div>
@@ -29,10 +29,13 @@
       <div>프로젝트리스트2</div>
       <div>{{ this.projectList2 }}</div>
       <div>{{ typeof this.projectList2 }}</div>
-      <div>{{ this.projectList2[0] }}</div>
-      <div>{{ this.teamTotalInfo.data }}</div> -->
+      <div>{{ this.projectList2[0] }}</div> -->
+
+      <div>{{ this.teamTotalInfo.data }}</div>
+
       <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div>
       <div>{{ this.teamMembers }}</div> -->
+
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
       <div>{{ this.mentoring }}</div>
       <div class="row">
@@ -98,8 +101,6 @@
             @click="watch()" />
         </div>
 
-        <!-- ---------------------------------------------------------------------------------------------- -->
-        <!-- 팀 모임 url -->
         <div class="p-2 mb-5 bd-highlight teamUrl">
           팀모임 링크
           <span class="url mx-4" v-show="correctionMode === false">
@@ -131,6 +132,7 @@
             </div>
           </span>
         </div>
+
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 팀 STATUS -->
 
@@ -153,11 +155,11 @@
         <div class="p-2 d-inline-flex mb-5 bd-highlight">
           시작일
           <Datepicker
-            v-model="date"
+            v-model="actualStartDate"
             locale="kst"
-            range
             class="mx-5 datepicker"
             v-show="correctionMode === true" />
+          {{ actualStartDate }}
           <!-- <Datepicker
             v-model="endDate"
             locale="kst"
@@ -173,13 +175,14 @@
           보증금
           <input
             type="number"
-            class="deposit"
+            class="deposit form-control"
             v-model="deposit"
             v-show="correctionMode" />
           <div class="deposit" v-show="correctionMode === false">
             {{ deposit }}원
           </div>
         </div>
+
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 관련링크  -->
         <!-- <div class="p-2 mb-5 bd-highlight">관련 링크</div> -->
@@ -204,7 +207,7 @@
                 :key="index"
                 v-for="(app, index) in applicants">
                 <img
-                  src="@/img/maleAvatar.svg"
+                  src="{{app.applicantImg}}"
                   class="card-img-top"
                   alt="..." />
 
@@ -256,10 +259,7 @@
                 style="width: 240px"
                 :key="index"
                 v-for="(mem, index) in teamMembers">
-                <img
-                  src="@/img/maleAvatar.svg"
-                  class="card-img-top"
-                  alt="..." />
+                <img src="{{mem.memberImg}}" class="card-img-top" alt="..." />
 
                 <h5 class="card-title">{{ mem.userNickname }}</h5>
 
@@ -300,7 +300,7 @@
               <TeamRatingModal
                 ref="modal"
                 :content="modalContent"
-                :teammember="teamMembers"
+                :teammember="FinishMemberRating"
                 :colors="teamRatingColor" />
             </div>
           </div>
@@ -315,7 +315,6 @@
                 class="col mentoring"
                 :key="index2"
                 v-for="(men, index2) in mentoring">
-                <p>{{ men.mentorRating }}</p>
                 <p class="mentoringName">
                   {{ men.mentorUserId }}멘토님의 {{ men.mentoringTitle }}
                 </p>
@@ -381,6 +380,7 @@
               </div>
               <button class="btn btn-outline-secondary" @click="handleClick2">
                 멘토평가
+
                 <MentorRatingModal
                   ref="modal2"
                   :content="modalContent"
@@ -388,7 +388,6 @@
                   :colors="mentorRatingColor" />
               </button>
             </div>
-            <!-- <button @click="filterFMentoring">zzzzzz</button> -->
             <nav aria-label="...">
               <ul class="pagination pagination-sm justify-content-center">
                 <li class="page-item active" aria-current="page">
@@ -426,12 +425,14 @@ export default {
   },
   data() {
     return {
-      FinishMentoring: [],
+      //db작업 x 변수
       teamRatingColor: "#ddee4d",
       mentorRatingColor: "#1379d2",
-      endDate: "",
       btnText: "수정하기",
       btnText2: "저장하기",
+      FinishMentoring: [],
+      FinishMemberRating: [],
+      actualStartDate: "Fri Jul 01 2022 18:33:00 GMT+0900 (한국 표준시)",
       selectedStatus: "",
       selectedProjectId: "",
       datetime: "2011-08-03tdst324324234234",
@@ -590,7 +591,7 @@ export default {
         },
         {
           memberId: "",
-          memberNickName: "cc",
+          memberNickName: "ccccc",
           memberEmail: "evelo0702@gmail.com",
           userSocialUrl: [
             {
@@ -604,7 +605,7 @@ export default {
           ],
           role: "백엔드",
           likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: [{ comment: "c", score: 3, rated: "yes" }]
+          rating: [{ comment: "cccc", score: 3, rated: "no" }]
         }
       ],
       mentoring: [
@@ -731,6 +732,14 @@ export default {
         }
       }
     },
+    filterFinishMemberRating() {
+      this.FinishMemberRating = [];
+      for (let i = 0; i < this.teamMembers.length; i++) {
+        if (this.teamMembers[i].rating[0].rated == "no") {
+          this.FinishMemberRating.push(this.teamMembers[i]);
+        }
+      }
+    },
     selected() {
       console.log("SelectedStatus : ", this.SelectedStatus);
       console.log("SelectedProject : ", this.SelectedProject);
@@ -796,6 +805,7 @@ export default {
         this.applicants[q].likeStackCode = str.split(",");
       }
       //멤버정보 (배열)
+      this.filterFinishMemberRating();
       this.teamMembers = this.teamTotalInfo.data.members;
       for (let q = 0; q < this.teamMembers.length; q++) {
         let str = this.teamMembers[q].likeStackCode.slice(
@@ -809,7 +819,6 @@ export default {
         this.teamTotalInfo.data.mentoringTotalPageCount.totalCount;
       //멘토정보 최초 앞 4개만 가져옴 (배열)
       this.mentoring = this.teamTotalInfo.data.mentorings;
-      /*this.filterFinishMentoring(); */
       this.filterFinishMentoring();
     },
     // 저장 버튼 클릭 시 DATA UPDATE
@@ -909,6 +918,7 @@ div.register {
   margin: 0px 20px;
 }
 .deposit {
+  width: 300px;
   margin: 0px 80px;
 }
 div.applicantList {
@@ -1000,5 +1010,15 @@ button.btn.btn-primary {
 .emptyProject > p {
   font-size: 24px;
   font-weight: bold;
+}
+.partTo > input {
+  display: inline;
+  margin-right: 5px;
+}
+
+p.form-control {
+  width: 200px;
+  display: inline-block;
+  margin-right: 5px;
 }
 </style>
