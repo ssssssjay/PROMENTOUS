@@ -21,9 +21,7 @@
         :active-color="colors"></star-rating>
     </div>
     <div class="buttons-container">
-      <button class="btn confirm" @click="[confirm(), ratingSave()]">
-        확인
-      </button>
+      <button class="btn confirm" @click="[confirm()]">확인</button>
       <button class="btn cancel" @click="cancel">취소</button>
     </div>
   </Modal>
@@ -51,11 +49,7 @@ export default {
       membermodaldata: this.teammember
     };
   },
-  methods: {
-    async ratingSave() {
-      alert("12345");
-    }
-  },
+  methods: {},
   setup() {
     const baseModal = ref(null);
     const resolvePromise = ref(null);

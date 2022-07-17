@@ -14,10 +14,14 @@
         v-model:rating="mt.mentorRating[0].score"
         @click="transRating"
         :active-color="colors"></star-rating>
-    </div>
-    <div class="buttons-container">
-      <button class="btn confirm" @click="[confirm()]">확인</button>
-      <button class="btn cancel" @click="cancel">취소</button>
+      <div class="buttons-container">
+        <button
+          class="btn confirm"
+          @click="[confirm(), ratedchange(i), menRatingSave()]">
+          확인
+        </button>
+        <button class="btn cancel" @click="cancel">취소</button>
+      </div>
     </div>
   </Modal>
 </template>
@@ -40,7 +44,7 @@ export default {
     mentoring: Array
   },
   data() {
-    return {};
+    return { params: [] };
   },
   methods: {
     // transTxt() {
@@ -49,6 +53,28 @@ export default {
     // transRating() {
     //   this.$emit("MentorRating", this.rating);
     // }
+    ratedchange(index) {
+      index;
+      // alert(this.mentoring[index].mentorRating[0].rated);
+      //this.mentoring[index].mentorRating[0].rated = "yes";
+    },
+    async menRatingSave() {
+      /*POST 재료  */
+      let tempArr = [];
+      for (let index = 0; index < this.mentoring.length; index++) {
+        const element = this.mentoring[index];
+        tempArr.push(element);
+      }
+      this.params = tempArr;
+
+      /*POST 발사  */
+      this.result = await this.$post(
+        // TODO: axios.defaults.baseURL로 변경
+        `/manage/saveMentorRating`,
+
+        this.params
+      );
+    }
   },
   setup() {
     const baseModal = ref(null);
