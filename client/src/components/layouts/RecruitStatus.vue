@@ -9,8 +9,8 @@
           type="radio"
           name="flexRadioDefault"
           id="recruitStatusRadio1"
-          value="ING"
-          @change="radioChange"
+          value="REC"
+          @change="$emit('statusSort', recruitStatus)"
           checked />
         <label class="form-check-label" for="recruitStatusRadio1">
           모집 중
@@ -23,8 +23,8 @@
           type="radio"
           name="flexRadioDefault"
           id="recruitStatusRadio2"
-          value="END"
-          @change="radioChange" />
+          value="FIN"
+          @change="$emit('statusSort', recruitStatus)" />
         <label class="form-check-label" for="recruitStatusRadio2">
           모집 완료
         </label>
@@ -44,11 +44,7 @@ export default {
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {
-    radioChange() {
-      console.log(this.recruitStatus);
-    }
-  }
+  methods: {}
 };
 </script>
 <style lang="scss" scoped>
