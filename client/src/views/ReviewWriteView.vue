@@ -125,6 +125,9 @@ export default {
     sendValue(data) {
       this.stacks = data;
     },
+    delPart(index) {
+      this.PART_LIST.splice(index, 1);
+    },
     addUrl() {
       if (this.URL.title !== "" && this.URL.address !== "") {
         let obj0 = {
@@ -138,10 +141,6 @@ export default {
       } else if (this.URL.title === "" || this.URL.address === 0) {
         alert("링크를 정확히 입력해주세요");
       }
-    },
-
-    delPart(index) {
-      this.PART_LIST.splice(index, 1);
     },
     delURL(index) {
       this.URL_LIST.splice(index, 1);

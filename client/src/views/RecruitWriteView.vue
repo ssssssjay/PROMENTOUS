@@ -42,7 +42,35 @@
             </select>
           </div>
         </div>
+        <div class="row mb-5">
+          <label class="col-sm-10 col-form-label">팀장 분야<br /> </label>
+          <div class="col partTo" v-show="this.PartAdd == 'x'">
+            <input
+              type="text"
+              class="form-control"
+              style="width: 200px"
+              placeholder=""
+              v-model="LEADER_DEPT_NAME" />
 
+            <button type="button" class="btn btn-secondary" @click="addPart2()">
+              추가
+            </button>
+          </div>
+          <div class="row" v-show="this.PartAdd == 'o'">
+            <div class="col partTo ms-1">
+              <p class="form-control mb-1">
+                {{ LEADER_DEPT_NAME }}
+              </p>
+
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="delPart2()">
+                X
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="row mb-1">
           <label for="reqNum" class="col-sm-2">모집인원</label>
 
@@ -52,29 +80,29 @@
               class="form-control"
               style="width: 200px"
               placeholder="분야"
-              v-model="PART.name" />
+              v-model="DEPT.name" />
 
             <input
               type="number"
               class="form-control"
               style="width: 200px"
               placeholder="인원"
-              v-model="PART.to"
+              v-model="DEPT.to"
               oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
 
             <button type="button" class="btn btn-secondary" @click="addPart()">
               추가
             </button>
           </div>
-          <div class="row" v-for="(PART, index) in PART_LIST" :key="index">
+          <div class="row" v-for="(DEPT, index) in DEPT_LIST" :key="index">
             <label for="reqNum" class="col-sm-2"> </label>
 
             <div class="col partTo ms-1">
               <p class="form-control mb-1">
-                {{ PART_LIST[index].name }}
+                {{ DEPT_LIST[index].name }}
               </p>
               <p class="form-control mb-1">
-                {{ PART_LIST[index].to }}
+                {{ DEPT_LIST[index].to }}
               </p>
               <button
                 type="button"
@@ -90,11 +118,11 @@
           <label for="onoff" class="col-sm-2 col-form-label">진행방식</label>
           <div class="col-sm-3">
             <select id="onoff" class="form-select" v-model="PROGRESS_METHOD">
-              <option value="on">온라인</option>
-              <option value="off">오프라인</option>
+              <option value="ON">온라인</option>
+              <option value="OFF">오프라인</option>
             </select>
           </div>
-          <div class="col" v-show="PROGRESS_METHOD == 'off'">
+          <div class="col" v-show="PROGRESS_METHOD == 'OFF'">
             <label for="region" class="col-sm-2 col-form-label me-5"
               >진행 지역</label
             >
@@ -110,20 +138,20 @@
                 id="O"
                 name="contact"
                 value="O"
-                v-model="WARRANTY_CHECK"
+                v-model="WARRANTY"
                 class="me-2" />
               <label for="O" class="me-3">O</label>
               <input
                 class="me-3 form-select warranty"
                 type="number"
                 v-model="WARRANTY"
-                v-show="WARRANTY_CHECK === 'O'" />
+                v-show="WARRANTY !== '-1' && WARRANTY !== ''" />
               <input
                 type="radio"
                 id="X"
+                value="-1"
                 name="contact"
-                value="X"
-                v-model="WARRANTY_CHECK"
+                v-model="WARRANTY"
                 class="me-2" />
               <label for="X" class="me-3">X</label>
               {{ WARRANTY }}
@@ -222,6 +250,7 @@
     "created_datetime": x 레지스터 데이트로 알아서
   }
 }
+
 */
 
 import Datepicker from "@vuepic/vue-datepicker";
@@ -241,8 +270,10 @@ export default {
   },
   data() {
     return {
-      PART_LIST: [],
-      PART: { name: "", to: "" },
+      LEADER_DEPT_NAME: "",
+      DEPT_LIST: [],
+      PartAdd: "x",
+      DEPT: { name: "", to: 0 },
       URL: { title: "", address: "" },
       URL_LIST: [],
       TOTAL_TO: 0,
@@ -251,8 +282,7 @@ export default {
       EXP_START_DATE: "",
       EXP_PERIOD: "",
       PROGRESS_METHOD: "",
-      WARRANTY_CHECK: "",
-      WARRANTY: "",
+      WARRANTY: "-1",
       MEETING_URL: "",
       SELECTED_PART: "",
       SELECTED_TO: "",
@@ -271,33 +301,33 @@ export default {
   unmounted() {},
   methods: {
     sendValue(data) {
-      this.stacks = data;
+      this.STACKS = data;
     },
     sendEditorData(data) {
       this.PROJECT_DESC = data;
     },
     addPart() {
       if (
-        this.PART.name !== "" &&
-        this.PART.to !== 0 &&
-        this.PART.to < 10 &&
+        this.DEPT.name !== "" &&
+        this.DEPT.to !== 0 &&
+        this.DEPT.to < 10 &&
         this.TOTAL_TO < 10 &&
-        this.TOTAL_TO + this.PART.to < 10
+        this.TOTAL_TO + this.DEPT.to < 10
       ) {
-        this.TOTAL_TO += this.PART.to;
+        this.TOTAL_TO += this.DEPT.to;
         let obj = {
-          ["name"]: this.PART.name,
-          ["to"]: this.PART.to
+          ["name"]: this.DEPT.name,
+          ["to"]: this.DEPT.to
         };
-        this.PART_LIST.push(obj);
-        this.PART.name = "";
-        this.PART.to = 0;
-      } else if (this.PART.name === "" || this.PART.to === 0) {
+        this.DEPT_LIST.push(obj);
+        this.DEPT.name = "";
+        this.DEPT.to = 0;
+      } else if (this.DEPT.name === "" || this.DEPT.to === 0) {
         alert("분야, 인원을 정확히 입력해주세요");
       } else if (
         this.TOTAL_TO > 9 ||
-        this.PART.to > 9 ||
-        this.TOTAL_TO + this.PART.to >= 10
+        this.DEPT.to > 9 ||
+        this.TOTAL_TO + this.DEPT.to >= 10
       ) {
         alert("인원은 최대 9명 모집 가능합니다.");
       }
@@ -317,11 +347,18 @@ export default {
     },
 
     delPart(index) {
-      this.TOTAL_TO -= this.PART_LIST[index].to;
-      this.PART_LIST.splice(index, 1);
+      this.TOTAL_TO -= this.DEPT_LIST[index].to;
+      this.DEPT_LIST.splice(index, 1);
     },
     delURL(index) {
       this.URL_LIST.splice(index, 1);
+    },
+    addPart2() {
+      this.PartAdd = "o";
+    },
+    delPart2() {
+      this.LEADER_DEPT_NAME = "";
+      this.PartAdd = "x";
     }
   }
 };
