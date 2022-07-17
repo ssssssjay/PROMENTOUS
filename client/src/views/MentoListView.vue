@@ -12,7 +12,9 @@
     <!-- ---------------------------------------------------------------------------------------------- -->
     <section class="container">
       <div class="Regbtn">
-        <registerbtn-layout :btnText="btnText" />
+        <registerbtn-layout
+          :btnText="btnText"
+          @click="goToMenu('/mentorregister')" />
       </div>
       <div
         class="d-flex pt-5 mb-4 align-items-start justify-content-between section_second">
@@ -62,7 +64,9 @@
                 class="img-fluid rounded-start pfimg"
                 alt="..." />
 
-              <button class="btn btn-outline-dark mentoDetail">
+              <button
+                class="btn btn-outline-dark mentoDetail"
+                @click="goToMenu('/mentordetail')">
                 멘토 상세보기
               </button>
             </div>
@@ -202,7 +206,11 @@ export default {
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
+  methods: {
+    goToMenu(path) {
+      this.$router.push({ path: path });
+    }
+  }
 };
 </script>
 <style scoped>
