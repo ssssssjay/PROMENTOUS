@@ -1,0 +1,341 @@
+<template>
+  <!-- 유저 프로필 모달 영역 -->
+  <div class="modal-container" v-if="modalStatus">
+    <div class="modal-conten">
+      <UserProfileModalVue></UserProfileModalVue>
+      <i class="bi bi-x-lg" @click="modalOff"></i>
+    </div>
+  </div>
+  <!-- 배너 -->
+  <div>
+    <section class="banner">
+      <div class="comment container">
+        <h1 class="title">멘토</h1>
+        <p class="des">멘토 상세정보를 확인해보세요.</p>
+      </div>
+    </section>
+    <div class="container mt-5">
+      <!-- 상단 -->
+      <div class="top">
+        <p class="text-start text-muted">1999/11/13</p>
+        <p class="row">
+          <span class="col-9 h2"
+            ><strong v-show="infoStatus">{{ title }}</strong>
+            <input
+              class="form-control form-control-lg"
+              type="text"
+              :placeholder="title"
+              aria-label=".form-control-lg example"
+              style="width: 400px"
+              v-model="title"
+              v-show="editStatus" />
+            <button class="btn btn-outline-dark mx-4 px-4" v-show="applyYes">
+              <strong>신청하기!</strong>
+            </button>
+            <button
+              class="btn btn-outline-dark mx-4 px-4"
+              disabled
+              v-show="applyNo">
+              신청 불가
+            </button>
+            <button
+              class="btn btn-dark px-4"
+              @click="changeApplyStatus"
+              v-show="editStatus">
+              신청 상태 전환
+            </button>
+          </span>
+          <span class="col-3 text-end"
+            ><button class="btn btn-outline-primary mx-4">링크복사</button
+            ><button
+              class="btn btn-outline-primary"
+              @click="changeStatus"
+              v-show="infoStatus">
+              수정하기</button
+            ><button
+              class="btn btn-primary"
+              @click="changeStatus"
+              v-show="editStatus">
+              저장하기
+            </button></span
+          >
+        </p>
+        <hr />
+        <span
+          class="stack-icon mx-2"
+          style="width: auto"
+          v-for="(part, index) in likePart"
+          :key="index"
+          >{{ part }}</span
+        >
+      </div>
+      <!-- 멘토정보 -->
+      <div class="row mt-5">
+        <div class="col-2 text-center">
+          <img
+            src="../assets/profile.jpg"
+            alt=""
+            style="width: 120px; border-radius: 10%" />
+          <div class="mt-2 h4">
+            <strong
+              ><button class="btn btn-primary" @click="modalOn">
+                {{ this.$store.state.myNickname }}
+              </button></strong
+            >
+            <!-- <strong>{{ mentor.nickname }}</strong> -->
+          </div>
+          <div>
+            <button class="btn btn-outline-primary">
+              <i class="bi bi-star-fill pro_star_color"></i>
+              {{ mentor.score }} / ({{ mentor.scoreCount }})
+            </button>
+          </div>
+        </div>
+
+        <div class="col text-start px-4">
+          <p class="h2"><strong>최근후기</strong></p>
+          <div class="col" style="height: 160px; overflow: auto">
+            <div
+              data-bs-spy="scroll"
+              data-bs-target="#list-example"
+              data-bs-offset="0"
+              class="scrollspy-example col h5 mb-3 ellipsis"
+              tabindex="0"
+              v-for="(num, i) in reputations"
+              :key="i">
+              <i
+                class="bi bi-star-fill pro_star_color"
+                v-for="(n, i) in parseInt(num.score)"
+                :key="i"></i>
+              {{ num.comment }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <hr />
+      </div>
+      <!-- 자기소개/경력 -->
+      <div class="selfInfo mt-5">
+        <div class="mb-3">
+          <label for="formGroupExampleInput" class="form-label h3 text-center"
+            ><strong>멘토 경력 및 자기소개</strong></label
+          >
+          <textarea
+            class="form-control"
+            id="exampleFormControlTextarea1"
+            rows="3"
+            v-model="selfInfo"
+            v-show="editStatus"></textarea>
+          <p class="h5" v-show="infoStatus">{{ selfInfo }}</p>
+        </div>
+      </div>
+      <div class="mt-5">
+        <hr />
+      </div>
+      <!-- 하단부 -->
+      <div class="bottom mt-5">
+        <div class="row">
+          <div class="col-2 h3"><strong>멘토링 이력</strong></div>
+          <div
+            class="col text-start px-0 h5"
+            style="height: 95px; overflow: auto">
+            <div class="mb-3" v-for="(mentoring, i) in mentorings" :key="i">
+              <a
+                :href="mentoring.href"
+                style="text-decoration: none; color: #1379d2"
+                ><strong>{{ mentoring.name }}</strong></a
+              >
+            </div>
+          </div>
+        </div>
+        <!-- 참고링크 -->
+        <p class="row py-4 mb-0 mt-3">
+          <span class="col-2 text-start h3"><strong>참고링크</strong></span>
+          <span class="col-10 text-start h5" v-show="infoStatus">
+            <a
+              class="px-4 mx-0 text-start"
+              :href="Object.values(site)"
+              v-for="(site, index) in siteList"
+              :key="index"
+              target="_blank"
+              style="color: #1379d2"
+              ><strong>{{ Object.keys(site).join() }}</strong></a
+            >
+          </span>
+          <span class="col-4 px-0 pt-0" v-show="editStatus">
+            <input
+              type="text"
+              class="form-control text-start"
+              placeholder="사이트 제목을 입력해주세요!"
+              name=""
+              id=""
+              v-model="site.name" />
+          </span>
+          <span class="col-5 px-2 pt-0" v-show="editStatus">
+            <input
+              type="url"
+              class="form-control text-start"
+              placeholder="사이트 링크를 입력해주세요!"
+              name=""
+              id=""
+              v-model="site.link" />
+          </span>
+          <span class="col-1 text-center">
+            <button
+              type="button"
+              class="btn btn-outline-primary px-4"
+              @click="addSite"
+              v-show="editStatus">
+              +
+            </button>
+          </span>
+        </p>
+      </div>
+      <div class="mt-5">
+        <hr />
+      </div>
+      <!-- 댓글 -->
+      <CommentView class="mt-5"></CommentView>
+    </div>
+  </div>
+</template>
+
+<script>
+import CommentView from "@/components/CommentView.vue";
+import UserProfileModalVue from "@/components/UserProfileModal.vue";
+export default {
+  components: { CommentView, UserProfileModalVue },
+
+  data() {
+    return {
+      title: "'최강' 캡틴안산의 Vue 멘토링",
+      likePart: ["프론트엔드", "백엔드", "모바일"],
+      mentor: { nickname: "joansdev", score: "4.5", scoreCount: "15" },
+      reputations: [
+        {
+          score: "4",
+          comment:
+            "이해했다고 말씀드려도, 정말 이해했는지 직접 확인해보고 넘어가주십니다. 그리고 또"
+        },
+        {
+          score: "2.5",
+          comment: "자기주장이 많이 강한 편이신 것 같아요 ^^"
+        },
+        {
+          score: "5",
+          comment:
+            "프로멘토우스를 통해 첫 개발 멘토링을 진행해봤는데, 성공적이었습니다. 인프런이나"
+        },
+        {
+          score: "4",
+          comment:
+            "비용만 받고 야박하게 서비스를 진행하는 여타 멘토분들과는 다르게 한 개라도 더..."
+        },
+        {
+          score: "4",
+          comment:
+            "비용만 받고 야박하게 서비스를 진행하는 여타 멘토분들과는 다르게 한 개라도 더..."
+        }
+      ],
+      selfInfo:
+        "누구나 다루기 쉬운 Vue.js 입문의 리뉴얼 강의입니다. 입문자의 관점으로 더욱더 눈높이를 낮춰 프론트엔드 개발할 때 알고 있으면 좋은 지식들을 상세하게 설명하였습니다. Vue.js로 재밌게 웹 개발을 시작하실 수 있도록 알차게 내용을 구성하였으니, 관심 있으신 분들은 강의 소개 영상을 꼭 확인해보세요! 😁",
+      mentorings: [
+        {
+          name: "찰리와 초콜릿기계 설계해보기",
+          href: "https://www.naver.com/"
+        },
+        { name: "쀼 프로젝트", href: "https://www.naver.com/" },
+        { name: "업무자동화 프로그램 개발", href: "https://www.naver.com/" },
+        { name: "React를 활용한 ...", href: "https://www.naver.com/" },
+        { name: "여행 숙박 매칭 프로그램", href: "https://www.naver.com/" },
+        { name: "업무자동화 프로그램 개발", href: "https://www.naver.com/" }
+      ],
+
+      site: { name: "", link: "" }, // site: {name:'GitHub', link:'www.github.com'}
+      siteList: [],
+      infoStatus: true,
+      editStatus: false,
+      applyYes: true,
+      applyNo: false,
+      modalStatus: false
+    };
+  },
+  setup() {},
+  created() {},
+  mounted() {},
+  unmounted() {},
+  methods: {
+    changeApplyStatus() {
+      [this.applyYes, this.applyNo] = [this.applyNo, this.applyYes];
+    },
+    changeStatus() {
+      [this.infoStatus, this.editStatus] = [this.editStatus, this.infoStatus];
+    },
+    addSite() {
+      let obj = {
+        [this.site.name]: this.site.link
+      };
+      this.siteList.push(obj);
+      alert("소설정보가 추가되었습니다.");
+    },
+    modalOn() {
+      this.modalStatus = true;
+    },
+    modalOff() {
+      this.modalStatus = false;
+    }
+  }
+};
+</script>
+
+<style scoped>
+.banner {
+  margin-bottom: 42px;
+  height: 200px;
+  background-color: #1379d2;
+}
+.comment {
+  padding-top: 50px;
+  color: white;
+  font-weight: 900;
+}
+
+.stack-icon {
+  font-size: 20px;
+  display: inline-block;
+  padding: 0 20px;
+  text-align: center;
+  border-radius: 28px;
+  color: white;
+  background-color: #1379d2;
+  box-sizing: border-box;
+}
+
+.ellipsis {
+  width: 750px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.modal-conten {
+  background-color: white;
+  width: 80%;
+  height: 80%;
+  margin: 0;
+  padding: 0;
+  border-radius: 0.5%;
+  overflow: auto;
+}
+
+.bi.bi-x-lg {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.8rem;
+  font-size: 1.5rem;
+}
+</style>
