@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="row mb-5">
-          <label class="col-sm-10 col-form-label">팀장 분야<br /> </label>
+          <label class="col-2">팀장 분야<br /> </label>
           <div class="col partTo" v-show="this.PartAdd == 'x'">
             <input
               type="text"
@@ -56,7 +56,7 @@
               추가
             </button>
           </div>
-          <div class="row" v-show="this.PartAdd == 'o'">
+          <div class="col" v-show="this.PartAdd == 'o'">
             <div class="col partTo ms-1">
               <p class="form-control mb-1">
                 {{ LEADER_DEPT_NAME }}
@@ -80,7 +80,7 @@
               class="form-control"
               style="width: 200px"
               placeholder="분야"
-              v-model="DEPT.name" />
+              v-model="DEPT.apply_dept_code" />
 
             <input
               type="number"
@@ -99,7 +99,7 @@
 
             <div class="col partTo ms-1">
               <p class="form-control mb-1">
-                {{ DEPT_LIST[index].name }}
+                {{ DEPT_LIST[index].apply_dept_code }}
               </p>
               <p class="form-control mb-1">
                 {{ DEPT_LIST[index].to }}
@@ -191,14 +191,14 @@
               class="form-control"
               style="width: 200px"
               placeholder="링크 이름"
-              v-model="URL.title" />
+              v-model="URL.url_title" />
 
             <input
               type="text"
               class="form-control"
               style="width: 300px"
               placeholder="링크 주소"
-              v-model="URL.address" />
+              v-model="URL.url_address" />
             <button type="button" class="btn btn-secondary" @click="addUrl()">
               추가
             </button>
@@ -206,10 +206,10 @@
           <div class="row" v-for="(URL, index) in URL_LIST" :key="index">
             <div class="col partTo ms-1">
               <p class="form-control mb-1">
-                {{ URL_LIST[index].title }}
+                {{ URL_LIST[index].url_title }}
               </p>
               <p class="form-control mb-1">
-                {{ URL_LIST[index].address }}
+                {{ URL_LIST[index].url_address }}
               </p>
               <button
                 type="button"
@@ -273,8 +273,8 @@ export default {
       LEADER_DEPT_NAME: "",
       DEPT_LIST: [],
       PartAdd: "x",
-      DEPT: { name: "", to: 0 },
-      URL: { title: "", address: "" },
+      DEPT: { apply_dept_code: "", to: 0 },
+      URL: { url_title: "", url_address: "" },
       URL_LIST: [],
       TOTAL_TO: 0,
       PROJECT_ID: "",
@@ -282,7 +282,7 @@ export default {
       EXP_START_DATE: "",
       EXP_PERIOD: "",
       PROGRESS_METHOD: "",
-      WARRANTY: "-1",
+      WARRANTY: "",
       MEETING_URL: "",
       SELECTED_PART: "",
       SELECTED_TO: "",
@@ -308,7 +308,7 @@ export default {
     },
     addPart() {
       if (
-        this.DEPT.name !== "" &&
+        this.DEPT.apply_dept_code !== "" &&
         this.DEPT.to !== 0 &&
         this.DEPT.to < 10 &&
         this.TOTAL_TO < 10 &&
@@ -316,13 +316,13 @@ export default {
       ) {
         this.TOTAL_TO += this.DEPT.to;
         let obj = {
-          ["name"]: this.DEPT.name,
+          ["apply_dept_code"]: this.DEPT.apply_dept_code,
           ["to"]: this.DEPT.to
         };
         this.DEPT_LIST.push(obj);
-        this.DEPT.name = "";
+        this.DEPT.apply_dept_code = "";
         this.DEPT.to = 0;
-      } else if (this.DEPT.name === "" || this.DEPT.to === 0) {
+      } else if (this.DEPT.apply_dept_code === "" || this.DEPT.to === 0) {
         alert("분야, 인원을 정확히 입력해주세요");
       } else if (
         this.TOTAL_TO > 9 ||
@@ -333,15 +333,15 @@ export default {
       }
     },
     addUrl() {
-      if (this.URL.title !== "" && this.URL.address !== "") {
+      if (this.URL.url_title !== "" && this.URL.url_address !== "") {
         let obj0 = {
-          ["title"]: this.URL.title,
-          ["address"]: this.URL.address
+          ["url_title"]: this.URL.url_title,
+          ["url_address"]: this.URL.url_address
         };
         this.URL_LIST.push(obj0);
-        this.URL.title = "";
-        this.URL.address = "";
-      } else if (this.URL.title === "" || this.URL.address === 0) {
+        this.URL.url_title = "";
+        this.URL.url_address = "";
+      } else if (this.URL.url_title === "" || this.URL.url_address === 0) {
         alert("링크를 정확히 입력해주세요");
       }
     },
