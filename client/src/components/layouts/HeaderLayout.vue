@@ -101,13 +101,13 @@
           </button> -->
           <div class="loginDropdown" v-else>
             <img
-              src="@/img/user2.jpg"
+              v-bind:src="userImage"
               class="dropProfile bi bi-person-workspace"
               @click="viewProfile" />
             <transition name="slide-up">
               <div class="login dropdown-menu show mt-2" v-if="clickProfile">
                 <img
-                  src="@/img/user2.jpg"
+                  v-bind:src="userImage"
                   class="dropProfile bi bi-person-workspace" />
                 <button
                   type="button"
@@ -162,7 +162,8 @@ export default {
   data() {
     return {
       modalShow: false,
-      clickProfile: false
+      clickProfile: false,
+      userImage: this.$store.state.user.user_image
     };
   },
   computed: {

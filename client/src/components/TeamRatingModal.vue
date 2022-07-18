@@ -57,8 +57,7 @@ export default {
         element = this.teammember[index].Rating[0];
         element.projectId = 1;
         element.rateUserId = this.$store.state.user.user_id;
-        // element.mentorUserId = this.mentoring[index].mentorUserId;
-        // 평가받는 유저아이디?
+
         tempArr.push(element);
       }
       this.params = tempArr;
