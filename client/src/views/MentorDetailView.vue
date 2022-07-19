@@ -1,203 +1,203 @@
 <template>
   <!-- 유저 프로필 모달 영역 -->
-  <div class="modal-container" v-if="modalStatus">
-    <div class="modal-conten">
-      <UserProfileModalVue></UserProfileModalVue>
-      <i class="bi bi-x-lg" @click="modalOff"></i>
-    </div>
-  </div>
-  <!-- 배너 -->
   <div>
-    <section class="banner">
-      <div class="comment container">
-        <h1 class="title">멘토</h1>
-        <p class="des">멘토 상세정보를 확인해보세요.</p>
+    <div class="modal-container" v-if="modalStatus">
+      <div class="modal-conten">
+        <UserProfileModalVue></UserProfileModalVue>
+        <i class="bi bi-x-lg" @click="modalOff"></i>
       </div>
-    </section>
-    <div class="container mt-5">
-      <!-- 상단 -->
-      <div class="top">
-        <p class="text-start text-muted">1999/11/13</p>
-        <p class="row">
-          <span class="col-9 h2"
-            ><strong v-show="infoStatus">{{ title }}</strong>
-            <input
-              class="form-control form-control-lg"
-              type="text"
-              :placeholder="title"
-              aria-label=".form-control-lg example"
-              style="width: 400px"
-              v-model="title"
-              v-show="editStatus" />
-            <button class="btn btn-outline-dark mx-4 px-4" v-show="applyYes">
-              <strong>신청하기!</strong>
-            </button>
-            <button
-              class="btn btn-outline-dark mx-4 px-4"
-              disabled
-              v-show="applyNo">
-              신청 불가
-            </button>
-            <button
-              class="btn btn-dark px-4"
-              @click="changeApplyStatus"
-              v-show="editStatus">
-              신청 상태 전환
-            </button>
-          </span>
-          <span class="col-3 text-end"
-            ><button class="btn btn-outline-primary mx-4">링크복사</button
-            ><button
-              class="btn btn-outline-primary"
-              @click="changeStatus"
-              v-show="infoStatus">
-              수정하기</button
-            ><button
-              class="btn btn-primary"
-              @click="changeStatus"
-              v-show="editStatus">
-              저장하기
-            </button></span
-          >
-        </p>
-        <hr />
-        <span
-          class="stack-icon mx-2"
-          style="width: auto"
-          v-for="(part, index) in likePart"
-          :key="index"
-          >{{ part }}</span
-        >
-      </div>
-      <!-- 멘토정보 -->
-      <div class="row mt-5">
-        <div class="col-2 text-center">
-          <img
-            src="../assets/profile.jpg"
-            alt=""
-            style="width: 120px; border-radius: 10%" />
-          <div class="mt-2 h4">
-            <strong
-              ><button class="btn btn-primary" @click="modalOn">
-                {{ this.$store.state.myNickname }}
-              </button></strong
+    </div>
+    <!-- 배너 -->
+    <div>
+      <section class="banner">
+        <div class="comment container">
+          <h1 class="title">멘토</h1>
+          <p class="des">멘토 상세정보를 확인해보세요.</p>
+        </div>
+      </section>
+      <div class="container mt-5">
+        <!-- 상단 -->
+        <div class="top">
+          <p class="text-start text-muted">1999/11/13</p>
+          <p class="row">
+            <span class="col-9 h2"
+              ><strong v-show="infoStatus">{{ title }}</strong>
+              <input
+                class="form-control form-control-lg"
+                type="text"
+                :placeholder="title"
+                aria-label=".form-control-lg example"
+                style="width: 400px"
+                v-model="title"
+                v-show="editStatus" />
+              <button class="btn btn-outline-dark mx-4 px-4" v-show="applyYes">
+                <strong>신청하기!</strong>
+              </button>
+              <button
+                class="btn btn-outline-dark mx-4 px-4"
+                disabled
+                v-show="applyNo">
+                신청 불가
+              </button>
+              <button
+                class="btn btn-dark px-4"
+                @click="changeApplyStatus"
+                v-show="editStatus">
+                신청 상태 전환
+              </button>
+            </span>
+            <span class="col-3 text-end"
+              ><button class="btn btn-outline-primary mx-4">링크복사</button
+              ><button
+                class="btn btn-outline-primary"
+                @click="changeStatus"
+                v-show="infoStatus">
+                수정하기</button
+              ><button
+                class="btn btn-primary"
+                @click="changeStatus"
+                v-show="editStatus">
+                저장하기
+              </button></span
             >
-            <!-- <strong>{{ mentor.nickname }}</strong> -->
-          </div>
-          <div>
-            <button class="btn btn-outline-primary">
-              <i class="bi bi-star-fill pro_star_color"></i>
-              {{ mentor.score }} / ({{ mentor.scoreCount }})
-            </button>
-          </div>
-        </div>
-
-        <div class="col text-start px-4">
-          <p class="h2"><strong>최근후기</strong></p>
-          <div class="col" style="height: 160px; overflow: auto">
-            <div
-              data-bs-spy="scroll"
-              data-bs-target="#list-example"
-              data-bs-offset="0"
-              class="scrollspy-example col h5 mb-3 ellipsis"
-              tabindex="0"
-              v-for="(num, i) in reputations"
-              :key="i">
-              <i
-                class="bi bi-star-fill pro_star_color"
-                v-for="(n, i) in parseInt(num.score)"
-                :key="i"></i>
-              {{ num.comment }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-5">
-        <hr />
-      </div>
-      <!-- 자기소개/경력 -->
-      <div class="selfInfo mt-5">
-        <div class="mb-3">
-          <label for="formGroupExampleInput" class="form-label h3 text-center"
-            ><strong>멘토 경력 및 자기소개</strong></label
+          </p>
+          <hr />
+          <span
+            class="stack-icon mx-2"
+            style="width: auto"
+            v-for="(part, index) in likePart"
+            :key="index"
+            >{{ part }}</span
           >
-          <textarea
-            class="form-control"
-            id="exampleFormControlTextarea1"
-            rows="3"
-            v-model="selfInfo"
-            v-show="editStatus"></textarea>
-          <p class="h5" v-show="infoStatus">{{ selfInfo }}</p>
         </div>
-      </div>
-      <div class="mt-5">
-        <hr />
-      </div>
-      <!-- 하단부 -->
-      <div class="bottom mt-5">
-        <div class="row">
-          <div class="col-2 h3"><strong>멘토링 이력</strong></div>
-          <div
-            class="col text-start px-0 h5"
-            style="height: 95px; overflow: auto">
-            <div class="mb-3" v-for="(mentoring, i) in mentorings" :key="i">
-              <a
-                :href="mentoring.href"
-                style="text-decoration: none; color: #1379d2"
-                ><strong>{{ mentoring.name }}</strong></a
+        <!-- 멘토정보 -->
+        <div class="row mt-5">
+          <div class="col-2 text-center">
+            <img
+              src="../assets/profile.jpg"
+              alt=""
+              style="width: 120px; border-radius: 10%" />
+            <div class="mt-2 h4">
+              <strong
+                ><button class="btn btn-primary" @click="modalOn">
+                  {{ this.$store.state.myNickname }}
+                </button></strong
               >
+              <!-- <strong>{{ mentor.nickname }}</strong> -->
+            </div>
+            <div>
+              <button class="btn btn-outline-primary">
+                <i class="bi bi-star-fill pro_star_color"></i>
+                {{ mentor.score }} / ({{ mentor.scoreCount }})
+              </button>
+            </div>
+          </div>
+          <div class="col text-start px-4">
+            <p class="h2"><strong>최근후기</strong></p>
+            <div class="col" style="height: 160px; overflow: auto">
+              <div
+                data-bs-spy="scroll"
+                data-bs-target="#list-example"
+                data-bs-offset="0"
+                class="scrollspy-example col h5 mb-3 ellipsis"
+                tabindex="0"
+                v-for="(num, i) in reputations"
+                :key="i">
+                <i
+                  class="bi bi-star-fill pro_star_color"
+                  v-for="(n, i) in parseInt(num.score)"
+                  :key="i"></i>
+                {{ num.comment }}
+              </div>
             </div>
           </div>
         </div>
-        <!-- 참고링크 -->
-        <p class="row py-4 mb-0 mt-3">
-          <span class="col-2 text-start h3"><strong>참고링크</strong></span>
-          <span class="col-10 text-start h5" v-show="infoStatus">
-            <a
-              class="px-4 mx-0 text-start"
-              :href="Object.values(site)"
-              v-for="(site, index) in siteList"
-              :key="index"
-              target="_blank"
-              style="color: #1379d2"
-              ><strong>{{ Object.keys(site).join() }}</strong></a
+        <div class="mt-5">
+          <hr />
+        </div>
+        <!-- 자기소개/경력 -->
+        <div class="selfInfo mt-5">
+          <div class="mb-3">
+            <label for="formGroupExampleInput" class="form-label h3 text-center"
+              ><strong>멘토 경력 및 자기소개</strong></label
             >
-          </span>
-          <span class="col-4 px-0 pt-0" v-show="editStatus">
-            <input
-              type="text"
-              class="form-control text-start"
-              placeholder="사이트 제목을 입력해주세요!"
-              name=""
-              id=""
-              v-model="site.name" />
-          </span>
-          <span class="col-5 px-2 pt-0" v-show="editStatus">
-            <input
-              type="url"
-              class="form-control text-start"
-              placeholder="사이트 링크를 입력해주세요!"
-              name=""
-              id=""
-              v-model="site.link" />
-          </span>
-          <span class="col-1 text-center">
-            <button
-              type="button"
-              class="btn btn-outline-primary px-4"
-              @click="addSite"
-              v-show="editStatus">
-              +
-            </button>
-          </span>
-        </p>
+            <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              rows="3"
+              v-model="selfInfo"
+              v-show="editStatus"></textarea>
+            <p class="h5" v-show="infoStatus">{{ selfInfo }}</p>
+          </div>
+        </div>
+        <div class="mt-5">
+          <hr />
+        </div>
+        <!-- 하단부 -->
+        <div class="bottom mt-5">
+          <div class="row">
+            <div class="col-2 h3"><strong>멘토링 이력</strong></div>
+            <div
+              class="col text-start px-0 h5"
+              style="height: 95px; overflow: auto">
+              <div class="mb-3" v-for="(mentoring, i) in mentorings" :key="i">
+                <a
+                  :href="mentoring.href"
+                  style="text-decoration: none; color: #1379d2"
+                  ><strong>{{ mentoring.name }}</strong></a
+                >
+              </div>
+            </div>
+          </div>
+          <!-- 참고링크 -->
+          <p class="row py-4 mb-0 mt-3">
+            <span class="col-2 text-start h3"><strong>참고링크</strong></span>
+            <span class="col-10 text-start h5" v-show="infoStatus">
+              <a
+                class="px-4 mx-0 text-start"
+                :href="Object.values(site)"
+                v-for="(site, index) in siteList"
+                :key="index"
+                target="_blank"
+                style="color: #1379d2"
+                ><strong>{{ Object.keys(site).join() }}</strong></a
+              >
+            </span>
+            <span class="col-4 px-0 pt-0" v-show="editStatus">
+              <input
+                type="text"
+                class="form-control text-start"
+                placeholder="사이트 제목을 입력해주세요!"
+                name=""
+                id=""
+                v-model="site.name" />
+            </span>
+            <span class="col-5 px-2 pt-0" v-show="editStatus">
+              <input
+                type="url"
+                class="form-control text-start"
+                placeholder="사이트 링크를 입력해주세요!"
+                name=""
+                id=""
+                v-model="site.link" />
+            </span>
+            <span class="col-1 text-center">
+              <button
+                type="button"
+                class="btn btn-outline-primary px-4"
+                @click="addSite"
+                v-show="editStatus">
+                +
+              </button>
+            </span>
+          </p>
+        </div>
+        <div class="mt-5">
+          <hr />
+        </div>
+        <!-- 댓글 -->
+        <CommentView class="mt-5"></CommentView>
       </div>
-      <div class="mt-5">
-        <hr />
-      </div>
-      <!-- 댓글 -->
-      <CommentView class="mt-5"></CommentView>
     </div>
   </div>
 </template>
