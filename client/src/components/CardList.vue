@@ -25,12 +25,19 @@
               </div>
             </div>
           </div>
-          <div
-            class="stack-icon me-1"
-            v-for="(stack, i) in project.stack_code"
-            :key="i">
-            {{ stack }}
+          <div v-if="project.stack_code.length <= 3">
+            <div
+              class="stack-icon me-1"
+              v-for="(stack, i) in project.stack_code"
+              :key="i">
+              {{ stack }}
+            </div>
           </div>
+          <span v-else>
+            <div class="stack-icon me-1">{{ project.stack_code[0] }}</div>
+            <div class="stack-icon me-1">{{ project.stack_code[1] }}</div>
+            <div class="stack-icon me-1">{{ project.stack_code[2] }}</div>
+          </span>
           <span v-show="project.stack_code.length > 3">
             + {{ project.stack_code.length - 3 }}
           </span>

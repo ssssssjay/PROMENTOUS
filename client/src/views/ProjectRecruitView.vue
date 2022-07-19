@@ -16,6 +16,7 @@
           <RecruitStatus @status-sort="statusSort" />
         </div>
         <registerbtn-layout
+          v-if="user.user_id"
           :btnText="btnText"
           @click="goToMenu('../Recruitwrite')" />
       </div>
@@ -52,6 +53,11 @@ export default {
     CardList,
     RegisterbtnLayout,
     PaginationLayout
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
   },
   data() {
     return {
