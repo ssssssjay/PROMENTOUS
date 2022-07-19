@@ -8,12 +8,16 @@
     </section>
     <!-- ---------------------------------------------------------------------------------------------- -->
     <!-- 상태선택박스 -->
+    <div>{{ this.applicants }}</div>
+    <hr />
+    <div>{{ this.teamMembers }}</div>
+    <hr />
+    <div>{{ this.mentoring }}</div>
 
     <section class="container">
-      <!-- <div>//지원자정보 (배열)>> 팀선택시변경되어야</div>
-      <div>{{ this.applicants }}</div>
+      <!-- <div>//지원자정보 (배열)>> 팀선택시변경되어야</div> -->
 
-      <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
+      <!-- <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
       <div>{{ this.mentoring }}</div>
       <div>팀상태</div>
       <div>{{ this.teamStatusList }}</div>
@@ -30,14 +34,13 @@
       <div>{{ this.projectList2 }}</div>
       <div>{{ typeof this.projectList2 }}</div>
       <div>{{ this.projectList2[0] }}</div> -->
+      <!-- <div>{{ this.teamTotalInfo.data }}</div> -->
 
-      <div>{{ this.teamTotalInfo.data }}</div>
+      <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div> -->
+      <!-- <div>{{ this.teamMembers }}</div> -->
+      <!--
+      <div>멘토정보 (배열)>> 팀선택시변경되어야</div> -->
 
-      <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div>
-      <div>{{ this.teamMembers }}</div> -->
-
-      <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
-      <div>{{ this.mentoring }}</div>
       <div class="row">
         <div class="col select d-inline-block">
           <div class="d-flex select">
@@ -86,7 +89,6 @@
     <section class="container" v-if="selectedProjectId !== ''">
       <!-- v-if="SelectedProject" -->
       <!-- 선택해서 불러온 프로젝트 내용 -->
-
       <div class="d-flex flex-column bd-highlight mb-3">
         <!--수정버튼 -->
         <div class="d-flex justify-content-center title"></div>
@@ -101,9 +103,11 @@
             @click="watch()" />
         </div>
 
+        <!-- 팀모임링크 -->
+        <!-- ////////////////////////////////////////////////////////// -->
         <div class="p-2 mb-5 bd-highlight teamUrl">
           팀모임 링크
-          <span class="url mx-4" v-show="correctionMode === false">
+          <span class="url mx-4 form-control" v-show="correctionMode === false">
             <span>링크제목</span>
             <span>{{ urlTitle }}</span>
           </span>
@@ -117,7 +121,7 @@
                 v-model="urlTitle" />
             </div>
           </span>
-          <span class="url mx-4" v-show="correctionMode === false">
+          <span class="url mx-4 form-control" v-show="correctionMode === false">
             <span>URL</span>
             <span>{{ urlAddress }}</span>
           </span>
@@ -139,13 +143,13 @@
         <div class="p-2 mb-5 d-inline-flex bd-highlight TeamStatus">
           팀 STATUS
           <TeamStatus
-            class="mx-5 TeamStatusSelect"
+            class="mx-4 TeamStatusSelect"
             v-model="teamStatus"
             placeholder="팀상태를 선택해주세요"
             :options="teamStatusList"
             v-show="correctionMode === true" />
           <button
-            class="mx-5 btn btn-primary"
+            class="mx-4 btn btn-primary"
             v-show="correctionMode === false">
             {{ teamStatus }}
           </button>
@@ -159,15 +163,9 @@
             locale="kst"
             class="mx-5 datepicker"
             v-show="correctionMode === true" />
-          {{ actualStartDate }}
-          <!-- <Datepicker
-            v-model="endDate"
-            locale="kst"
-            class="mx-5 datepicker"
-            v-show="correctionMode === true" />
-          <p class="mx-5" v-show="correctionMode === false">
-            {{ endDate }}
-          </p> -->
+          <p v-show="correctionMode === false" class="ms-5">
+            {{ actualStartDate.slice(0, 15) }}
+          </p>
         </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 보증금 -->
@@ -175,10 +173,10 @@
           보증금
           <input
             type="number"
-            class="deposit form-control"
+            class="deposit mx-5 form-control"
             v-model="deposit"
             v-show="correctionMode" />
-          <div class="deposit" v-show="correctionMode === false">
+          <div class="deposit mx-5" v-show="correctionMode === false">
             {{ deposit }}원
           </div>
         </div>
@@ -190,84 +188,128 @@
         <!-- 모집글 링크 -->
         <div class="p-2 mb-5 bd-highlight">
           모집글 링크
-          <span class="url mx-4 text-center">
+          <span class="url mx-4 text-start">
             <a href="{{recrutingUrl}}">모집글 링크로 </a>
           </span>
         </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 지원자관리  -->
+
+        <ApplicantProfileModal
+          ref="modal3"
+          :content="modalContent"
+          :memberData="this.applicantsList[this.memberIndex]" />
         <div class="p-2 mb-5 d-inline-flex bd-highlight">
           지원자관리
 
           <div class="row mx-5">
-            <div class="row applicantList">
+            <div class="row applicantList bg">
               <div
-                class="applicant text-center card"
+                class="applicant text-center card m-2"
                 style="width: 240px"
                 :key="index"
-                v-for="(app, index) in applicants">
+                v-for="(app, index) in applicantsList">
                 <img
                   src="{{app.applicantImg}}"
-                  class="card-img-top"
-                  alt="..." />
+                  class="card-img-top m-2"
+                  alt="..."
+                  @click="[handleClick3(), transIndex(index)]" />
 
-                <h5 class="card-title">{{ app.applicantNickname }}</h5>
+                <h5 class="card-title applicantNickname">
+                  {{ app.applicantNickname }}
+                </h5>
 
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item">
+                  <li class="list-group-item applicantAccount">
                     이메일 {{ app.applicantAccount }}
                   </li>
-                  <li class="list-group-item">
+                  <li class="list-group-item insertDate">
                     신청일시 {{ app.insertDate.substr(0, 10) }}
                   </li>
-                  <!-- <li class="list-group-item">
+                  <li class="list-group-item">
                     신청분야
                     <button class="btn btn-primary">
                       {{ app.applyDeptId }}
                     </button>
-                  </li> -->
-                  <li class="row list-group-item">
+                  </li>
+                  <li class="row list-group-item likeStackCode">
                     관심스택
                     <br />
                     <div>
                       <button
                         class="btn m-1 btn-primary Stack"
                         :key="i"
-                        v-for="(stack, i) in applicants[index].likeStackCode">
+                        v-for="(stack, i) in applicantsList[index]
+                          .likeStackCode">
                         {{ stack }}
                       </button>
                     </div>
                   </li>
                 </ul>
                 <div class="card-body">
-                  <button class="btn m-1 btn-primary">승인</button>
-                  <button class="btn m-1 btn-primary">거절</button>
+                  <button class="btn m-1 btn-primary" @click="approve(index)">
+                    승인
+                  </button>
+                  <button class="btn m-1 btn-primary" @click="reject(index)">
+                    거절
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <!-- 모달 -->
+        <!-- ////////////////////////////////////////////////////////// -->
+
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 팀원  -->
+        <TeamMemberProfileModal
+          ref="modal3"
+          :content="modalContent"
+          :memberData="this.teamMembers[this.memberIndex]" />
         <div class="p-2 mb-5 d-inline-flex bd-highlight">
-          팀원정보
+          <div class="memberText">
+            팀원보기
+            <div class="memberRating">
+              <button
+                class="btn m-1 btn-primary"
+                @click="handleClick"
+                v-if="this.teamTotalInfo.data.basicInfo.statusCode == 'FIN'">
+                팀원평가
+              </button>
+              <button
+                v-else
+                class="btn m-1 btn-primary"
+                @click="handleClick"
+                disabled>
+                팀원평가
+              </button>
+            </div>
+          </div>
 
           <div class="row mx-5">
-            <div class="row applicantList">
+            <div class="row applicantList bg">
               <div
-                class="applicant text-center card"
+                class="applicant text-center card m-2"
                 style="width: 240px"
                 :key="index"
                 v-for="(mem, index) in teamMembers">
-                <img src="{{mem.memberImg}}" class="card-img-top" alt="..." />
+                <img
+                  v-bind:src="mem.userImage"
+                  class="card-img-top mt-2"
+                  alt="..."
+                  @click="[handleClick3(), transIndex(index)]" />
 
-                <h5 class="card-title">{{ mem.userNickname }}</h5>
+                <h5 class="card-title applicantNickname">
+                  {{ mem.userNickname }}
+                </h5>
 
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item">이메일 {{ mem.memberEmail }}</li>
-                  <li class="list-group-item">
+                  <li class="list-group-item applicantAccount">
+                    이메일 {{ mem.memberEmail }}
+                  </li>
+                  <li class="list-group-item userSocialUrl">
                     소셜링크
-                    <br />
                     <a
                       href="{{url.address}}"
                       :key="index0"
@@ -276,12 +318,15 @@
                     </a>
                   </li>
                   <li class="list-group-item">
-                    역할 <button class="btn btn-primary">{{ mem.role }}</button>
+                    역할
+                    <button class="btn btn-primary role">
+                      {{ mem.role }}
+                    </button>
                   </li>
                   <li class="row list-group-item">
                     관심스택
                     <br />
-                    <div class="col">
+                    <div>
                       <button
                         class="btn m-1 btn-primary Stack"
                         :key="i"
@@ -293,23 +338,39 @@
                 </ul>
               </div>
             </div>
-            <div class="card-body">
-              <button class="btn m-1 btn-primary" @click="handleClick">
-                팀원평가
-              </button>
-              <TeamRatingModal
-                ref="modal"
-                :content="modalContent"
-                :teammember="FinishMemberRating"
-                :colors="teamRatingColor" />
-            </div>
           </div>
         </div>
+
+        <TeamRatingModal
+          ref="modal"
+          :content="modalContent"
+          :teammember="FinishMemberRating"
+          :colors="teamRatingColor" />
+
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 멘토링  -->
+
         <div class="p-2 mb-5 d-inline-flex bd-highlight">
-          멘토링
-          <div class="mx-5 List">
+          <div class="mentoringText">
+            멘토링
+            <div class="mentorRating">
+              <button
+                class="btn btn-outline-secondary"
+                @click="handleClick2"
+                v-if="this.FinishMentoring.length > 0">
+                멘토평가
+              </button>
+              <button
+                class="btn btn-outline-secondary"
+                @click="handleClick2"
+                v-else
+                disabled>
+                멘토평가
+              </button>
+            </div>
+          </div>
+
+          <div class="List mx-5">
             <div class="row">
               <div
                 class="col mentoring"
@@ -378,26 +439,23 @@
                   </button>
                 </div>
               </div>
-              <button class="btn btn-outline-secondary" @click="handleClick2">
-                멘토평가
+              <nav style="height: 30px">
+                <ul class="pagination pagination-sm justify-content-center">
+                  <li class="page-item active" aria-current="page">
+                    <span class="page-link">1</span>
+                  </li>
+                  <!-- 하드코딩 탈출 필요 -->
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                </ul>
+              </nav>
 
-                <MentorRatingModal
-                  ref="modal2"
-                  :content="modalContent"
-                  :mentoring="FinishMentoring"
-                  :colors="mentorRatingColor" />
-              </button>
+              <MentorRatingModal
+                ref="modal2"
+                :content="modalContent"
+                :mentoring="FinishMentoring"
+                :colors="mentorRatingColor" />
             </div>
-            <nav aria-label="...">
-              <ul class="pagination pagination-sm justify-content-center">
-                <li class="page-item active" aria-current="page">
-                  <span class="page-link">1</span>
-                </li>
-                <!-- 하드코딩 탈출 필요 -->
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-              </ul>
-            </nav>
           </div>
         </div>
       </div>
@@ -412,6 +470,8 @@ import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
 import { ref } from "vue";
 import TeamRatingModal from "@/components/TeamRatingModal.vue";
 import MentorRatingModal from "@/components/MentorRatingModal.vue";
+import TeamMemberProfileModal from "@/components/UserProfileModal.vue";
+import ApplicantProfileModal from "@/components/UserProfileModal.vue";
 
 export default {
   name: "App",
@@ -421,13 +481,17 @@ export default {
     TeamStatus,
     RegisterbtnLayout,
     TeamRatingModal,
-    MentorRatingModal
+    MentorRatingModal,
+    TeamMemberProfileModal,
+    ApplicantProfileModal
   },
   data() {
     return {
       //db작업 x 변수
+      memberIndex: 0,
       teamRatingColor: "#ddee4d",
       mentorRatingColor: "#1379d2",
+      applicantsList: [],
       btnText: "수정하기",
       btnText2: "저장하기",
       FinishMentoring: [],
@@ -498,114 +562,6 @@ export default {
           role: "백엔드",
           likeStackCode: ["Javascript", "Java", "Python", "Node"],
           rating: [{ comment: "c", score: 4, rated: "yes" }]
-        },
-        {
-          memberId: "",
-          memberNickName: "bb",
-          memberEmail: "evelo0702@gmail.com",
-          userSocialUrl: [
-            {
-              title: "기술블로그",
-              address: "주소"
-            },
-            {
-              title: "깃허브",
-              address: "주소"
-            }
-          ],
-          role: "백엔드",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: [{ comment: "c", score: 3, rated: "yes" }]
-        },
-        {
-          memberId: "",
-          memberNickName: "cc",
-          memberEmail: "evelo0702@gmail.com",
-          userSocialUrl: [
-            {
-              title: "기술블로그",
-              address: "주소"
-            },
-            {
-              title: "깃허브",
-              address: "주소"
-            }
-          ],
-          role: "백엔드",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: [{ comment: "c", score: 3, rated: "yes" }]
-        },
-        {
-          memberId: "",
-          memberNickName: "cc",
-          memberEmail: "evelo0702@gmail.com",
-          userSocialUrl: [
-            {
-              title: "기술블로그",
-              address: "주소"
-            },
-            {
-              title: "깃허브",
-              address: "주소"
-            }
-          ],
-          role: "백엔드",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: [{ comment: "c", score: 3, rated: "yes" }]
-        },
-        {
-          memberId: "",
-          memberNickName: "cc",
-          memberEmail: "evelo0702@gmail.com",
-          userSocialUrl: [
-            {
-              title: "기술블로그",
-              address: "주소"
-            },
-            {
-              title: "깃허브",
-              address: "주소"
-            }
-          ],
-          role: "백엔드",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: [{ comment: "c", score: 3, rated: "yes" }]
-        },
-        {
-          memberId: "",
-          memberNickName: "cc",
-          memberEmail: "evelo0702@gmail.com",
-          userSocialUrl: [
-            {
-              title: "기술블로그",
-              address: "주소"
-            },
-            {
-              title: "깃허브",
-              address: "주소"
-            }
-          ],
-          role: "백엔드",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: [{ comment: "c", score: 3, rated: "yes" }]
-        },
-        {
-          memberId: "",
-          memberNickName: "ccccc",
-          memberEmail: "evelo0702@gmail.com",
-          userSocialUrl: [
-            {
-              title: "기술블로그",
-              address: "주소"
-            },
-            {
-              title: "깃허브",
-              address: "주소"
-            }
-          ],
-          role: "백엔드",
-          likeStackCode: ["Javascript", "Java", "Python", "Node"],
-          rating: [{ comment: "cccc", score: 3, rated: "no" }]
         }
       ],
       mentoring: [
@@ -615,29 +571,6 @@ export default {
           mentoringTitle: "자바스크립트 가이드",
           mentoringStatus: "5",
           mentorRating: { comment: "a", score: 1, rated: "yes" }
-        },
-        {
-          mentoringId: "",
-          mentorUserId: "evelo2",
-          mentoringTitle: "자바스크립트 가이드",
-          mentoringStatus: "5",
-
-          mentorRating: { comment: "b", score: 2, rated: "no" }
-        },
-        {
-          mentoringId: "",
-          mentorUserId: "evelo3",
-          mentoringTitle: "자바스크립트 가이드",
-          mentoringStatus: "3",
-
-          mentorRating: { comment: "c", score: 3 }
-        },
-        {
-          mentoringId: "",
-          mentorUserId: "evelo4",
-          mentoringTitle: "자바스크립트 가이드",
-          mentoringStatus: "5",
-          mentorRating: { comment: "d", score: 4, rated: "no" }
         }
       ],
       //paging 처리 위한 object
@@ -671,9 +604,11 @@ export default {
   setup() {
     const modal = ref(null);
     const modal2 = ref(null);
+    const modal3 = ref(null);
     const modalContent = ref(["코멘트와 평점을 입력해주세요"]);
     const result = ref("");
     const result2 = ref("");
+    const result3 = ref("");
     const handleClick = async () => {
       const ok = await modal.value.show();
       if (ok) {
@@ -690,14 +625,26 @@ export default {
         result2.value = "cancel";
       }
     };
+    const handleClick3 = async () => {
+      const ok = await modal3.value.show();
+      if (ok) {
+        result3.value = "ok";
+      } else {
+        result3.value = "cancel";
+      }
+    };
+
     return {
       modal,
       modal2,
+      modal3,
       modalContent,
       result,
       result2,
+      result3,
       handleClick,
-      handleClick2
+      handleClick2,
+      handleClick3
     };
   },
   created() {},
@@ -707,6 +654,21 @@ export default {
   mounted() {},
   unmounted() {},
   methods: {
+    approve(index) {
+      this.applicantsList[index].applyStatus = "ACC";
+    },
+    reject(index) {
+      this.applicantsList[index].applyStatus = "REJ";
+    },
+    transIndex(index) {
+      this.memberIndex = index;
+    },
+    modalOn() {
+      this.modalStatus = true;
+    },
+    modalOff() {
+      this.modalStatus = false;
+    },
     async managePageInit() {
       // 팀STATUS 필드 셀렉박스용
       this.teamStatusList = await this.$get(
@@ -720,6 +682,13 @@ export default {
       this.selectedProjectId = this.projectList[0].projectId;
       this.selectedStatus = this.projectList[0].statusName;
       this.projectIdSelect(); /* 팀개요 정보 다가져옴. */
+    },
+    filterApplicant() {
+      for (let i = 0; i < this.applicants.length; i++) {
+        if (this.applicants[i].applyStatus == "NEW") {
+          this.applicantsList.push(this.applicants[i]);
+        }
+      }
     },
     filterFinishMentoring() {
       this.FinishMentoring = [];
@@ -804,8 +773,8 @@ export default {
         );
         this.applicants[q].likeStackCode = str.split(",");
       }
+      this.filterApplicant();
       //멤버정보 (배열)
-      this.filterFinishMemberRating();
       this.teamMembers = this.teamTotalInfo.data.members;
       for (let q = 0; q < this.teamMembers.length; q++) {
         let str = this.teamMembers[q].likeStackCode.slice(
@@ -814,6 +783,7 @@ export default {
         );
         this.teamMembers[q].likeStackCode = str.split(",");
       }
+      this.filterFinishMemberRating();
       //멘토링페이지정보
       this.mentoringTotalPageCount =
         this.teamTotalInfo.data.mentoringTotalPageCount.totalCount;
@@ -899,9 +869,7 @@ div.register {
 }
 .url {
   display: inline-block;
-  width: 30%;
-  border: 2px solid black;
-  border-radius: 10px;
+  width: 40%;
 }
 .url > span:first-child {
   font-size: 20px;
@@ -921,6 +889,9 @@ div.register {
   width: 300px;
   margin: 0px 80px;
 }
+.teamMember {
+  margin-left: 14px;
+}
 div.applicantList {
   max-width: 1000px;
   overflow-x: auto;
@@ -929,8 +900,11 @@ div.applicantList {
 .Stack {
   font-size: 12px;
 }
+.likeStackCode {
+  height: 150px;
+}
 .List {
-  width: 1000px;
+  width: 950px;
   height: 400px;
   background-color: gainsboro;
 }
@@ -996,6 +970,7 @@ button.btn.btn-primary {
   background-color: #49c0d0;
   border-color: #49c0d0;
 }
+
 .emptyProject {
   min-width: 1400;
   min-height: 800px;
@@ -1015,10 +990,37 @@ button.btn.btn-primary {
   display: inline;
   margin-right: 5px;
 }
-
+.userSocialUrl {
+  height: 200px;
+}
+.userSocialUrl > a {
+  display: block;
+}
 p.form-control {
   width: 200px;
   display: inline-block;
   margin-right: 5px;
+}
+.row.applicantList.bg {
+  background-color: gainsboro;
+  width: 2000px;
+  height: 650px;
+  padding: 10px;
+}
+.mentoringText {
+  position: relative;
+}
+.mentorRating {
+  position: absolute;
+  width: 100px;
+  left: -10px;
+}
+.memberText {
+  position: relative;
+}
+.memberRating {
+  position: absolute;
+  width: 100px;
+  left: -10px;
 }
 </style>

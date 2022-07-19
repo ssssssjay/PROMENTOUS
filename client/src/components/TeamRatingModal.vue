@@ -1,7 +1,7 @@
 <template>
   <Modal ref="baseModal" class="modal">
     <div class="content-container" :key="i" v-for="(member, i) in teammember">
-      <p>{{ member.memberNickName }}</p>
+      <p>{{ member.userNickname }}</p>
       <input
         type="text"
         name=""
