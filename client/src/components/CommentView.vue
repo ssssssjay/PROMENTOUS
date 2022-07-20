@@ -27,7 +27,9 @@
                   class="btn-link text-semibold media-heading box-inline a-black fs-5"
                   >{{ comment.writer_nickname }}</a
                 >
-                <p class="text-muted text-sm">{{ comment.created_datetime }}</p>
+                <p class="text-muted text-sm">
+                  {{ formatDate(comment.created_datetime) }}
+                </p>
               </div>
               <p>
                 {{ comment.contents }}
@@ -177,6 +179,15 @@ export default {
       this.deleteCheckAlert();
       // 여기서 댓글 삭제 구현
       // 삭제를 누른 댓글의 Id를 가져오기.
+    },
+    formatDate(datetime) {
+      console.log(datetime);
+      // TODO: 예외처리 코드 보완 필요
+      if (!datetime) {
+        console.log("datetime undefined error 처리 필요");
+        return "";
+      }
+      return datetime.substr(0, 16).replace("T", " ");
     }
   }
 };
