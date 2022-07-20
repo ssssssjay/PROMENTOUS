@@ -33,6 +33,7 @@
           <label for="onoff" class="col-sm-2 col-form-label">진행기간</label>
           <div class="col-sm-3">
             <select id="onoff" class="form-select" v-model="EXP_PERIOD">
+              <option disabled>예상기간을 선택해주세요!</option>
               <option value="1">1개월</option>
               <option value="2">2개월</option>
               <option value="3">3개월</option>
@@ -118,6 +119,7 @@
           <label for="onoff" class="col-sm-2 col-form-label">진행방식</label>
           <div class="col-sm-3">
             <select id="onoff" class="form-select" v-model="PROGRESS_METHOD">
+              <option disabled>진행방식을 선택해주세요!</option>
               <option value="ON">온라인</option>
               <option value="OFF">오프라인</option>
             </select>
@@ -154,7 +156,6 @@
                 v-model="WARRANTY"
                 class="me-2" />
               <label for="X" class="me-3">X</label>
-              {{ WARRANTY }}
             </div>
           </div>
         </div>
@@ -225,7 +226,10 @@
           {{ PROJECT_DESC }}
         </div>
       </form>
-      <registerbtn-layout class="regBtn" :btnText="btnText" />
+      <registerbtn-layout
+        class="regBtn"
+        :btnText="btnText"
+        @click="insertProject" />
     </div>
   </div>
 </template>
@@ -239,15 +243,12 @@
     "exp_start_date":, ㅇ
     "exp_period":, ㅇ INT
     "progress_method":, ㅇ enum('ON','OFF')
-    "status_code":, ㅇ default값 설정이 안되어있음 "REC"으로 설정하는게 좋을듯
     "main_area_code":, ㅇ 널값허용
     "sub_area_code":, ㅇ 널값허용
     "stack_code":, ㅇ "T01,R01,P01"
     "project_contact":, ㅇ "url"
     "project_desc":, ㅇ "thml tag..."
     "warranty":, ㅇ INT
-    "meeting_url":, ㅇ
-    "created_datetime": x 레지스터 데이트로 알아서
   }
 }
 
@@ -280,7 +281,7 @@ export default {
       PROJECT_ID: "",
       PROJECT_TITLE: "",
       EXP_START_DATE: "",
-      EXP_PERIOD: "",
+      EXP_PERIOD: 0,
       PROGRESS_METHOD: "",
       WARRANTY: "",
       MEETING_URL: "",
@@ -359,6 +360,60 @@ export default {
     delPart2() {
       this.LEADER_DEPT_NAME = "";
       this.PartAdd = "x";
+    },
+    // 온라인 요청과 오프라인 요청을 나누어서 보내준다. 우선 아래는 온라인
+    async insertProject() {
+      if (
+        this.LEADER_DEPT_NAME === "" ||
+        this.PROJECT_TITLE === "" ||
+        this.PROJECT_DESC === "" ||
+        this.EXP_PERIOD === 0 ||
+        this.DEPT_LIST === [] ||
+        this.PROGRESS_METHOD === "" ||
+        this.WARRANTY === "" ||
+        this.STACKS === [] ||
+        this.MEETING_URL === ""
+      ) {
+        this.$swal("작성하지 않은 부분이 있어요!");
+      } else {
+        const response = await this.$post(
+          `http://localhost:3000/project/recruit/insertPost`,
+          {
+            param: {
+              leader_user: this.$store.state.user.user_id,
+              title: this.PROJECT_TITLE,
+              // exp_start_date: this.EXP_START_DATE,
+              exp_start_date: "2022-07-18 00:00:00",
+              exp_period: parseInt(this.EXP_PERIOD),
+              progress_method: this.PROGRESS_METHOD,
+              stack_code: this.STACKS.join(),
+              project_contact: this.MEETING_URL,
+              project_desc: this.PROJECT_DESC,
+              warranty: parseInt(this.WARRANTY)
+            }
+          }
+        );
+        console.log(response);
+        const postId = response.data.insertId;
+        for (let i = 0; i < this.URL_LIST.length; i++) {
+          this.URL_LIST[i].post_category = "RCB";
+          this.URL_LIST[i].post_id = postId;
+        }
+        for (let i = 0; i < this.DEPT_LIST.length; i++) {
+          this.DEPT_LIST[i].project_id = postId;
+        }
+        await this.insertAdditional();
+        this.$router.push("/project/recruit");
+      }
+    },
+    async insertAdditional() {
+      const response = await this.$post(
+        `http://localhost:3000/project/recruit/insertAdditional`,
+        {
+          param: [this.URL_LIST, this.DEPT_LIST]
+        }
+      );
+      console.log(response);
     }
   }
 };
