@@ -129,9 +129,7 @@ export default {
       return datetime.substr(0, 10);
     },
     async getReviewData() {
-      this.review = await this.$get(
-        `/project/review/${this.reviewId}`
-      );
+      this.review = await this.$get(`/project/review/${this.reviewId}`);
 
       this.project = await this.$get(
         `/project/recruit/${this.review.project_id}`

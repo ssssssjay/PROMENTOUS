@@ -112,10 +112,7 @@ export default {
 
       // TODO: 대댓글인 경우 targetId, targetSeq 설정해주는 것 필요함.!
 
-      const r = await this.$post(
-        `/comment/register`,
-        data
-      );
+      const r = await this.$post(`/comment/register`, data);
       // TODO: 정상 등록 -> 댓글 부분 화면 갱신 필요 -> 댓글 get 다시 요청
       if (r.status === 200) {
         console.log("댓글 등록 성공");
