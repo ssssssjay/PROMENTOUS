@@ -81,8 +81,7 @@ export default {
       // TODO: 대댓글인 경우 targetId, targetSeq 설정해주는 것 필요함.!
 
       const r = await this.$post(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/comment/register/${this.projectId}`,
+        `/comment/register/${this.projectId}`,
         data
       );
       // TODO: 정상 등록 -> 댓글 부분 화면 갱신 필요

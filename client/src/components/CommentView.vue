@@ -147,8 +147,7 @@ export default {
       let data = {};
       data.pageType = data.pageType = "projectRecruit"; // TODO: 수정 필요
       this.commentList = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/comment/recruit/get/${this.projectId}`
+        `/comment/recruit/get/${this.projectId}`
       );
       // await console.log(this.commentList);
     },

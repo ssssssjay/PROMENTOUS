@@ -319,8 +319,7 @@ export default {
 
     async getProjectData() {
       this.project = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/${this.projectId}`
+        `/project/recruit/${this.projectId}`
       );
 
       this.project.stack_code = await this.project.stack_code
@@ -334,15 +333,13 @@ export default {
 
     async getLeaderData() {
       this.projectLeader = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/${this.projectId}/leader`
+        `/project/recruit/${this.projectId}/leader`
       );
     },
     // 모집 인원
     async getRecruitData() {
       this.recruitData = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/${this.projectId}/recruit_data`
+        `/project/recruit/${this.projectId}/recruit_data`
       );
 
       // 모집 인원수
@@ -350,15 +347,13 @@ export default {
     },
     async getCurrentMembers() {
       this.projectLeader = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/${this.projectId}/currentMembers`
+        `/project/recruit/${this.projectId}/currentMembers`
       );
     },
 
     async getRefUrl() {
       this.refUrl = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/${this.projectId}/ref_url`
+        `/project/recruit/${this.projectId}/ref_url`
       );
     }
   }
