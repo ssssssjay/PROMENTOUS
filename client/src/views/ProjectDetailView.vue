@@ -338,15 +338,21 @@ export default {
         `http://localhost:3000/project/recruit/${this.projectId}/leader`
       );
     },
-
+    // 모집 인원
     async getRecruitData() {
       this.recruitData = await this.$get(
         // TODO: axios.defaults.baseURL로 변경
         `http://localhost:3000/project/recruit/${this.projectId}/recruit_data`
       );
 
-      // 모집 인원
+      // 모집 인원수
       this.recruitNumber = await this.getRecruitNumber();
+    },
+    async getCurrentMembers() {
+      this.projectLeader = await this.$get(
+        // TODO: axios.defaults.baseURL로 변경
+        `http://localhost:3000/project/recruit/${this.projectId}/currentMembers`
+      );
     },
 
     async getRefUrl() {

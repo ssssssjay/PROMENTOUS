@@ -502,6 +502,7 @@ export default {
       actualStartDate: "Fri Jul 01 2022 18:33:00 GMT+0900 (한국 표준시)",
       selectedStatus: "",
       selectedProjectId: "",
+      projectId: "",
       datetime: "2011-08-03tdst324324234234",
       correctionMode: true,
       projectList2: [],
