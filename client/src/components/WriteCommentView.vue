@@ -67,8 +67,8 @@ export default {
     async registerComment() {
       // 댓글 등록 시 넘겨줄 정보들
       let data = this.commentData;
-      data.pageType = "projectRecruit";
-      data.writerId = 1; // TODO: 추후 store에서 가져와서 넣어줄 예정
+      data.pageType = this.pageType;
+      data.writerId = this.$store.state.user.user_id;
       data.commentText = this.commentText;
       data.sequence = 1; // 댓글 그룹 내 순서
       // 대댓글이 아닌 원댓글 작성 필드이므로 targetId, parentId는 null
@@ -77,7 +77,7 @@ export default {
       if (data.commentText === "" || !data.commentText) {
         return;
       }
-
+      // 댓글 등록 시 화면 새로고침 or 댓글 보여주는 부분 새로고침 필요
       // TODO: 대댓글인 경우 targetId, targetSeq 설정해주는 것 필요함.!
 
       const r = await this.$post(`/comment/register/${this.projectId}`, data);
