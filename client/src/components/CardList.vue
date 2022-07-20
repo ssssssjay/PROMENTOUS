@@ -20,8 +20,7 @@
             <div class="d-flex flex-column mb-1">
               <div>
                 <i class="bi bi-eye me-1"></i>
-                <!-- TODO : view count 기능 구현(아래는 더미데이터 초기버전이라 데이터의 형태가 다를것임) -->
-                <!-- <span> {{ project.viewCount }}</span> -->
+                <span> {{ project.viewCount }}</span>
               </div>
             </div>
           </div>
