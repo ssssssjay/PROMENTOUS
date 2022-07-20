@@ -17,6 +17,7 @@
           v-model="selectedRestCity"
           @select="transRestCity"
           :options="restCityData"
+          :disabled="selectedLargeCity === 'ON'"
           @clear="clearRest" />
       </div>
     </section>
@@ -34,7 +35,7 @@ export default {
     return {
       selectedLargeCity: "",
       selectedRestCity: "",
-      largeCityData: ["온라인"],
+      largeCityData: [{ value: "ON", label: "온라인" }],
       restCityData: []
     };
   },

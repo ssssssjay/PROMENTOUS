@@ -59,7 +59,7 @@
               <span>멘토링</span>
             </a>
           </span>
-          <span class="dropdown">
+          <span class="dropdown" v-if="user.user_id">
             <a
               role="button"
               id="dropdownMenuLink"
