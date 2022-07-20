@@ -8,6 +8,9 @@
     </section>
     <!-- ---------------------------------------------------------------------------------------------- -->
     <!-- 상태선택박스 -->
+    <div>MENTORINGTOTALPAGE ::: {{ this.mentoringTotalPageCount }}</div>
+    <div>MENTORING 현재선택한PAGE ::: {{ this.selectedMentoringPage }}</div>
+    <hr />
     <div>{{ this.applicants }}</div>
     <hr />
     <div>{{ this.teamMembers }}</div>
@@ -576,7 +579,7 @@ export default {
       //paging 처리 위한 object
 
       mentoringTotalPageCount: 0,
-      selectedPage: 1, //default 1 페이지
+      selectedMentoringPage: 1, //default 1 페이지
       projectInfoParams: {
         project_id: "3",
         mentoring_page: "1"
@@ -720,6 +723,7 @@ export default {
       this.correctionMode = true;
     },
     watch() {
+      alert("저장기능 + 저장한뒤 refresh 필요!");
       this.correctionMode = false;
     },
 
@@ -739,14 +743,16 @@ export default {
     //  DB에서 받은 정보는 :: this.mentoring 에 꽃힌다
     async getMentoringsBySelectedPage() {
       this.params.project_id = this.selectedProjectId;
-      this.params.selectedPage = this.selectedPage;
-      // mentoringInfo
+      this.params.selectedPage = this.selectedMentoringPage;
+      // mentoringInfo 가져오고 filter동작시킬 것!
       this.mentoring = await this.$post(
         // TODO: axios.defaults.baseURL로 변경
         `/manage/getMentoringsBySelectedPage`,
         this.params
       );
-      // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
+      this.filterFinishMentoring();
+      this.selectedMentoringPage = this.params.selectedPage;
+      // selectedMentoringPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
     },
 
     // 선택 하는 순간에 해당 project 정보 teamTotalInfo 끌어옴
@@ -787,14 +793,14 @@ export default {
       //멘토링페이지정보
       this.mentoringTotalPageCount =
         this.teamTotalInfo.data.mentoringTotalPageCount.totalCount;
-      //멘토정보 최초 앞 4개만 가져옴 (배열)
+      //멘토정보 최초 앞 4개만 가져옴 + 필터링 동작필요!  (배열)
       this.mentoring = this.teamTotalInfo.data.mentorings;
       this.filterFinishMentoring();
     },
-    // 저장 버튼 클릭 시 DATA UPDATE
+    // 저장 버튼 클릭 시 DATA UPDATE   + TODO : PAGE1초기화 필요!
     async saveTeamManageInfo() {
       this.params.project_id = this.selectedProjectId;
-      this.params.selectedPage = this.selectedPage;
+      this.params.selectedPage = this.selectedMentoringPage;
       this.params.meeting_url = this.urlAddress;
       this.params.meeting_url_title = this.urlTitle;
       this.params.status_code = this.teamStatus;
