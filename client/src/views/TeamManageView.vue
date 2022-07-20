@@ -11,7 +11,9 @@
     <div>MENTORINGTOTALPAGE ::: {{ this.mentoringTotalPageCount }}</div>
     <div>MENTORING 현재선택한PAGE ::: {{ this.selectedMentoringPage }}</div>
     <hr />
-    <div>{{ this.applicants }}</div>
+    <div>{{ this.applicants[0] }}</div>
+    <hr />
+    {{ this.applicantsList }}
     <hr />
     <div>{{ this.teamMembers }}</div>
     <hr />
@@ -212,6 +214,7 @@
                 style="width: 240px"
                 :key="index"
                 v-for="(app, index) in applicantsList">
+                {{ applicantList }}
                 <img
                   src="{{app.applicantImg}}"
                   class="card-img-top m-2"
@@ -442,16 +445,15 @@
                   </button>
                 </div>
               </div>
-              <nav style="height: 30px">
+              <!-- <nav style="height: 30px">
                 <ul class="pagination pagination-sm justify-content-center">
                   <li class="page-item active" aria-current="page">
                     <span class="page-link">1</span>
                   </li>
-                  <!-- 하드코딩 탈출 필요 -->
                   <li class="page-item"><a class="page-link" href="#">2</a></li>
                   <li class="page-item"><a class="page-link" href="#">3</a></li>
                 </ul>
-              </nav>
+              </nav> -->
 
               <MentorRatingModal
                 ref="modal2"
@@ -462,6 +464,7 @@
           </div>
         </div>
       </div>
+      <PaginationLayout :page="page" @paging="paging" />
     </section>
   </div>
 </template>
@@ -491,6 +494,7 @@ export default {
   data() {
     return {
       //db작업 x 변수
+
       memberIndex: 0,
       teamRatingColor: "#ddee4d",
       mentorRatingColor: "#1379d2",

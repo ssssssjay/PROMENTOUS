@@ -20,47 +20,41 @@
         class="d-flex pt-5 mb-4 align-items-start justify-content-between section_second">
         <RecruitSortLayout />
         <div class="d-flex">
-          <PartSearchLayout />
+          <PartSearchLayout @send-value="sendValue" />
           <SearchAll />
         </div>
       </div>
       <div class="row mt-n4">
         <div
           class="d-flex justify-content-between align-items-center mb-2 mentoList"
-          :key="mento.mentoCode"
-          v-for="mento in mentoList">
+          :key="index"
+          v-for="(mento, index) in mentoList">
           <div class="row g-0">
             <div class="col-md-8">
               <div class="card-body">
-                <span class="mentoNickName">{{ mento.NickName }}</span>
+                <span class="mentoNickName">{{ mento.USER_NICKNAME }}</span>
                 <i class="bi bi-star-fill star"></i>
-                <span class="mentoScore">{{ mento.score }}</span>
-                <span>({{ mento.scoreCount }})</span>
-                <p class="card-title">{{ mento.title }}</p>
+                <span class="mentoScore">{{ mento.showRate }}</span>
+                <span>({{ mento.RATE.length }})</span>
+                <p class="card-title">{{ mento.TITLE }}</p>
                 <p class="card-text">
-                  {{ mento.comment }}
+                  {{ mento.INTRO }}
                 </p>
                 <div
                   class="mentoPart"
-                  :key="part.code"
-                  v-for="part in mentoList[mento.mentoCode].part"
+                  :key="i"
+                  v-for="(code, i) in mentoList[index].DEPT_CODE3"
                   style="display: inline">
-                  <button class="partName">{{ part.name }}</button>
+                  <button class="partName">{{ code }}</button>
                 </div>
-                <span v-show="mento.part.length > 3"
-                  >+{{ mento.part.length - 3 }}</span
+                <span v-show="mento.DEPT_CODE.length > 3"
+                  >+{{ mento.DEPT_CODE.length - 3 }}</span
                 >
               </div>
             </div>
             <div class="men_title col-md-4 imgCard">
               <img
-                v-if="mento.gender === 'female'"
-                src="@/img/femaleAvatar.svg"
-                class="img-fluid rounded-start pfimg"
-                alt="..." />
-              <img
-                v-if="mento.gender === 'male'"
-                src="@/img/maleAvatar.svg"
+                v-bind:src="mento.USER_IMAGE"
                 class="img-fluid rounded-start pfimg"
                 alt="..." />
 
@@ -95,120 +89,54 @@ export default {
   },
   data() {
     return {
+      part: [],
       searchData: "",
       btnText: "멘토 등록 하기",
       mentoList: [
         {
-          mentoCode: "0",
-          gender: "male",
-          NickName: "EVELO",
-          score: 3.5,
-          scoreCount: 13,
-          title: "10년차 웹개발자의 코드 리뷰 및 컨설팅",
-          comment:
-            "오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해.......",
-          part: [
-            { code: "1", name: "프론트엔드" },
-            { code: "2", name: "디자인" }
-          ]
-        },
-        {
-          mentoCode: "1",
-          gender: "female",
-          NickName: "가나다라",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬를 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "UI/ UX" },
-            { code: "2", name: "기획" }
-          ]
-        },
-        {
-          mentoCode: "2",
-          gender: "male",
-          NickName: "가나다라마바사",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬을 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "데이터베이스" },
-            { code: "2", name: "데이터사이언스" }
-          ]
-        },
-        {
-          mentoCode: "3",
-          gender: "male",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬을 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "데이터베이스" },
-            { code: "2", name: "데이터사이언스" }
-          ]
-        },
-        {
-          mentoCode: "4",
-          gender: "female",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬을 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" }
-          ]
-        },
-        {
-          mentoCode: "5",
-          gender: "male",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬을 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" },
-            { code: "3", name: "데이터사이언스" },
-            { code: "4", name: "데이터베이스" }
-          ]
-        },
-        {
-          mentoCode: "6",
-          gender: "female",
-          NickName: "가나다라마",
-          score: 4,
-          scoreCount: 12,
-          title: "파이썬을 도와주는 멘토링",
-          comment:
-            "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
-          part: [
-            { code: "1", name: "파이썬" },
-            { code: "2", name: "자바스크립트" }
-          ]
+          USER_IMAGE:
+            "http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg",
+          USER_NICKNAME: "evelo0702",
+          TITLE: "파이썬을 도와주는 멘토링",
+          INTRO:
+            "오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해서 더욱 좋은 개발자를 만들고싶습니다.",
+          DEPT_CODE: ["자바스크립트", "파이썬", "스프링", "뷰"],
+          DEPT_CODE3: [], // db에서 가져올 데이터 x
+          RATE: [5, 2, 3, 4, 5],
+          totalRate: 0, // db에서 가져올 데이터 x
+          showRate: 0 // db에서 가져올 데이터 x
         }
       ]
     };
   },
   setup() {},
   created() {},
-  mounted() {},
+  mounted() {
+    this.deptCodeFilter();
+    this.rateData();
+  },
   unmounted() {},
   methods: {
+    sendValue(data) {
+      this.part = data;
+    },
     goToMenu(path) {
       this.$router.push({ path: path });
+    },
+    deptCodeFilter() {
+      for (let i = 0; i < this.mentoList.length; i++) {
+        this.mentoList[i].DEPT_CODE3 = this.mentoList[i].DEPT_CODE.slice(0, 3);
+      }
+    },
+    rateData() {
+      for (let i = 0; i < this.mentoList.length; i++) {
+        for (let j = 0; j < this.mentoList[i].RATE.length; j++) {
+          this.mentoList[i].totalRate += this.mentoList[i].RATE[j];
+        }
+        this.mentoList[i].showRate = (
+          this.mentoList[i].totalRate / this.mentoList[i].RATE.length
+        ).toFixed(1);
+      }
     }
   }
 };
