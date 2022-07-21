@@ -100,7 +100,7 @@ export default {
       data.projectId = this.projectId;
       data.writerId = 1; // TODO: 이건 세션에서 가져와서 넣어줘야됨
       data.commentText = this.commentText;
-      data.parentId = null; // 넣어줄거 생각하기.. 
+      data.parentId = null; // 넣어줄거 생각하기..
 
       data.targetId = null; // 얘가 parent의 역할,, (같은 그룹을 짓는건데 부모 댓글의 id로.. )
       data.targetSeq = 1; // 여기는 그 그룹 안에서 순서(1, 2, 3, 4...)
@@ -112,11 +112,7 @@ export default {
 
       // TODO: 대댓글인 경우 targetId, targetSeq 설정해주는 것 필요함.!
 
-      const r = await this.$post(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/comment/register`,
-        data
-      );
+      const r = await this.$post(`/comment/register`, data);
       // TODO: 정상 등록 -> 댓글 부분 화면 갱신 필요 -> 댓글 get 다시 요청
       if (r.status === 200) {
         console.log("댓글 등록 성공");

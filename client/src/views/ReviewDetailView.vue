@@ -129,14 +129,10 @@ export default {
       return datetime.substr(0, 10);
     },
     async getReviewData() {
-      this.review = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/review/${this.reviewId}`
-      );
+      this.review = await this.$get(`/project/review/${this.reviewId}`);
 
       this.project = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/${this.review.project_id}`
+        `/project/recruit/${this.review.project_id}`
       );
 
       this.project.stack_code = await this.project.stack_code

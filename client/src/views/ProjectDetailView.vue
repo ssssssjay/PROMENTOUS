@@ -37,7 +37,7 @@
               <span class="px-4 col-4">{{ progressMethod }}</span>
               <span class="text-muted col-2">보증금</span>
               <!-- TODO: warranty 없을때 X로 뜨도록 하는 함수 작성해야 함 -->
-              <span class="px-4 col-4">{{ project.warranty }} 원</span>
+              <span class="px-4 col-4">{{ warrantyText }}</span>
             </p>
             <p class="row">
               <span class="text-muted col-2">연락수단</span>
@@ -250,6 +250,7 @@ export default {
   },
   data() {
     return {
+      warrantyText: "",
       projectId: null,
       recruitStatus: "모집중",
       progressMethod: "온라인",
@@ -289,6 +290,14 @@ export default {
       return datetime.substr(0, 10);
     },
 
+    setWarrantyText(warranty) {
+      if (warranty === -1) {
+        return "X";
+      } else {
+        return warranty + " 원";
+      }
+    },
+
     setStatusText(status_code) {
       // const statusText = "";
       if (status_code === "REC") {
@@ -318,15 +327,13 @@ export default {
     },
 
     async getProjectData() {
-      this.project = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/${this.projectId}`
-      );
+      this.project = await this.$get(`/project/recruit/${this.projectId}`);
 
       this.project.stack_code = await this.project.stack_code
         .split(",")
         .map(String); // string to array
       this.recruitStatus = await this.setStatusText(this.project.status_code);
+      this.warrantyText = await this.setWarrantyText(this.project.warranty);
       this.progressMethod = await this.setProgressMethodText(
         this.project.progress_method
       );
@@ -334,15 +341,13 @@ export default {
 
     async getLeaderData() {
       this.projectLeader = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/${this.projectId}/leader`
+        `/project/recruit/${this.projectId}/leader`
       );
     },
     // 모집 인원
     async getRecruitData() {
       this.recruitData = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/${this.projectId}/recruit_data`
+        `/project/recruit/${this.projectId}/recruit_data`
       );
 
       // 모집 인원수
@@ -350,15 +355,13 @@ export default {
     },
     async getCurrentMembers() {
       this.projectLeader = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/${this.projectId}/currentMembers`
+        `/project/recruit/${this.projectId}/currentMembers`
       );
     },
 
     async getRefUrl() {
       this.refUrl = await this.$get(
-        // TODO: axios.defaults.baseURL로 변경
-        `http://localhost:3000/project/recruit/${this.projectId}/ref_url`
+        `/project/recruit/${this.projectId}/ref_url`
       );
     }
   }
