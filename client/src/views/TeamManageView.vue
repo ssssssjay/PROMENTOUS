@@ -8,17 +8,21 @@
     </section>
     <!-- ---------------------------------------------------------------------------------------------- -->
     <!-- 상태선택박스 -->
-    <div>MENTORINGTOTALPAGE ::: {{ this.mentoringTotalPageCount }}</div>
+    <!-- <div>MENTORINGTOTALPAGE ::: {{ this.mentoringTotalPageCount }}</div>
     <div>MENTORING 현재선택한PAGE ::: {{ this.selectedMentoringPage }}</div>
     <hr />
     <div>{{ this.applicants[0] }}</div>
     <hr />
     {{ this.applicantsList }}
     <hr />
-    <div>{{ this.teamMembers }}</div>
-    <hr />
-    <div>{{ this.mentoring }}</div>
+    {{ this.applicantsList[0] }}
+    <div>{{ this.teamStatusList }}</div>
 
+    <hr />
+    <div>{{ this.teamMembers[0].rating }}</div>
+    <hr />
+    <div>{{ this.mentoring }}</div> -->
+    <!-- <div>{{ this.teamStatusList }}</div> -->
     <section class="container">
       <!-- <div>//지원자정보 (배열)>> 팀선택시변경되어야</div> -->
 
@@ -40,6 +44,8 @@
       <div>{{ typeof this.projectList2 }}</div>
       <div>{{ this.projectList2[0] }}</div> -->
       <!-- <div>{{ this.teamTotalInfo.data }}</div> -->
+
+      <div>{{ this.teamTotalInfo.data.basicInfo }}</div>
 
       <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div> -->
       <!-- <div>{{ this.teamMembers }}</div> -->
@@ -102,10 +108,12 @@
             :btnText="btnText"
             v-show="correctionMode === false"
             @click="correction()" />
+          <!-- 수정하기 -->
           <RegisterbtnLayout
             :btnText="btnText2"
             v-show="correctionMode"
-            @click="watch()" />
+            @click="[watch(), changeStatus(), saveTeamManageInfo()]" />
+          <!--저장하기 -->
         </div>
 
         <!-- 팀모임링크 -->
@@ -151,8 +159,14 @@
             class="mx-4 TeamStatusSelect"
             v-model="teamStatus"
             placeholder="팀상태를 선택해주세요"
-            :options="teamStatusList"
+            :options="[
+              { value: 'REC', label: '모집중' },
+              { value: 'ING', label: '모집완료' },
+              { value: 'ADD', label: '추가모집' },
+              { value: 'FIN', label: '활동종료' }
+            ]"
             v-show="correctionMode === true" />
+          {{ teamStatus }}
           <button
             class="mx-4 btn btn-primary"
             v-show="correctionMode === false">
@@ -161,17 +175,18 @@
         </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 진행기간 -->
-        <div class="p-2 d-inline-flex mb-5 bd-highlight">
+        <!-- <div class="p-2 d-inline-flex mb-5 bd-highlight">
           시작일
           <Datepicker
             v-model="actualStartDate"
             locale="kst"
             class="mx-5 datepicker"
             v-show="correctionMode === true" />
+          {{ actualStartDate }}
           <p v-show="correctionMode === false" class="ms-5">
             {{ actualStartDate.slice(0, 15) }}
           </p>
-        </div>
+        </div> -->
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 보증금 -->
         <div class="p-2 mb-5 d-inline-flex bd-highlight">
@@ -214,7 +229,6 @@
                 style="width: 240px"
                 :key="index"
                 v-for="(app, index) in applicantsList">
-                {{ applicantList }}
                 <img
                   src="{{app.applicantImg}}"
                   class="card-img-top m-2"
@@ -280,7 +294,7 @@
               <button
                 class="btn m-1 btn-primary"
                 @click="handleClick"
-                v-if="this.teamTotalInfo.data.basicInfo.statusCode == 'FIN'">
+                v-if="this.teamStatus == 'FIN'">
                 팀원평가
               </button>
               <button
@@ -514,13 +528,13 @@ export default {
         {
           // 팀장id="",
           // 멘토여부=""
-          statusCode: "FIN",
+          statusCode: "REC",
           statusName: "진행중",
           projectId: "1",
           projectName: "#################파이썬으로 만드는 TODO LIST"
         },
         {
-          statusCode: "FIN",
+          statusCode: "REC",
           statusName: "진행중",
           projectId: "2",
           projectName: "#################웹게임만들기"
@@ -536,8 +550,8 @@ export default {
       projectid: "",
       urlAddress: "",
       urlTitle: "",
-      teamStatus: "모집중",
-      teamStatusList: ["모집중", "진행 중", "추가 모집", "진행 완료"],
+      teamStatus: "",
+
       deposit: 0,
       recruitingUrl: "",
       applicants: [
@@ -659,9 +673,25 @@ export default {
   beforeMount() {
     this.managePageInit();
   },
-  mounted() {},
+  mounted() {
+    // this.filterStatusCode();
+  },
   unmounted() {},
   methods: {
+    changeStatus() {
+      this.teamTotalInfo.data.basicInfo.statusCode = this.teamStatus;
+    },
+    // filterStatusCode() {
+    //   if (this.teamTotalInfo.data.basicInfo.statusCode == "REC") {
+    //     this.teamStatus = "모집중";
+    //   } else if (this.teamTotalInfo.data.basicInfo.statusCode == "ING") {
+    //     this.teamStatus = "모집완료";
+    //   } else if (this.teamTotalInfo.data.basicInfo.statusCode == "ADD") {
+    //     this.teamStatus = "추가모집";
+    //   } else if (this.teamTotalInfo.data.basicInfo.statusCode == "FIN") {
+    //     this.teamStatus = "활동종료";
+    //   }
+    // },
     approve(index) {
       this.applicantsList[index].applyStatus = "ACC";
     },
@@ -728,7 +758,7 @@ export default {
       this.correctionMode = true;
     },
     watch() {
-      alert("저장기능 + 저장한뒤 refresh 필요!");
+      // alert("저장기능 + 저장한뒤 refresh 필요!");
       this.correctionMode = false;
     },
 
@@ -769,6 +799,7 @@ export default {
         `/manage/getProjectInfo`,
         this.projectInfoParams
       );
+      this.teamStatus = this.teamTotalInfo.data.basicInfo.statusCode;
       // 팀모임 URL
       this.urlTitle = this.teamTotalInfo.data.basicInfo.meetingUrl;
       this.urlAddress = this.teamTotalInfo.data.basicInfo.meetingUrl;
@@ -805,7 +836,7 @@ export default {
     // 저장 버튼 클릭 시 DATA UPDATE   + TODO : PAGE1초기화 필요!
     async saveTeamManageInfo() {
       this.params.project_id = this.selectedProjectId;
-      this.params.selectedPage = this.selectedMentoringPage;
+      // this.params.selectedPage = this.selectedMentoringPage;
       this.params.meeting_url = this.urlAddress;
       this.params.meeting_url_title = this.urlTitle;
       this.params.status_code = this.teamStatus;
@@ -915,12 +946,15 @@ div.applicantList {
   height: 150px;
 }
 .List {
-  width: 950px;
+  max-width: 950px;
   height: 400px;
   background-color: gainsboro;
+  overflow-x: auto;
+  flex-wrap: nowrap;
 }
+
 .mentoring {
-  max-width: 460px;
+  /* max-width: 460px; */
   height: 160px;
   display: flex;
   background: white;
