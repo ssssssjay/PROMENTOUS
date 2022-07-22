@@ -11,10 +11,10 @@
           <div class="mt-2 h4">
             {{ memberData.userNickname }}
           </div>
-          <!-- <div>
-          <i class="bi bi-star-fill pro_star_color"></i>
-          {{ score }} / ({{ scoreCount }})
-        </div> -->
+          <div>
+            <i class="bi bi-star-fill pro_star_color"></i>
+            {{ averageRate }} ({{ memberData.rating.length }})
+          </div>
         </div>
 
         <div class="col-6 text-start px-4">
@@ -34,22 +34,13 @@
             data-bs-offset="0"
             class="scrollspy-example"
             tabindex="0">
-            <h4 id="list-item-1">
-              <i class="bi bi-star-fill pro_star_color"></i> {{ score }}
+            <h4
+              id="list-item-1"
+              :key="i"
+              v-for="(rate, i) in memberData.rating">
+              <i class="bi bi-star-fill pro_star_color"></i> {{ rate.score }}
+              <span>{{ rate.comment }}</span>
             </h4>
-            <p>시간을 잘 지키십니다.</p>
-            <h4 id="list-item-2">
-              <i class="bi bi-star-fill pro_star_color"></i> 5
-            </h4>
-            <p>항상 성실하게 맡은 임무를 수행해오십니다.</p>
-            <h4 id="list-item-3">
-              <i class="bi bi-star-fill pro_star_color"></i> 0.5
-            </h4>
-            <p>코딩을 너무 못해요</p>
-            <h4 id="list-item-4">
-              <i class="bi bi-star-fill pro_star_color"></i> {{ score }}
-            </h4>
-            <p>...</p>
           </div>
         </div>
         <hr />
@@ -128,8 +119,8 @@
       </p> -->
     </div>
     <div class="buttons-container">
-      <button class="btn confirm" @click="[confirm()]">확인</button>
-      <button class="btn cancel" @click="cancel">취소</button>
+      <!-- <button class="btn confirm" @click="[confirm()]">확인</button> -->
+      <button class="btn cancel" @click="cancel">닫기</button>
     </div>
   </Modal>
 </template>
@@ -144,7 +135,7 @@ export default {
   },
   data() {
     return {
-      sampleData: ""
+      averageRate: 1
     };
   },
   setup() {
@@ -172,7 +163,13 @@ export default {
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
+  methods: {
+    rateAverage() {
+      for (let i = 0; i < this.memberData.rating.length; i++) {
+        this.averageRate += this.memberData.rating[i].score;
+      }
+    }
+  }
 };
 </script>
 <style scoped>
