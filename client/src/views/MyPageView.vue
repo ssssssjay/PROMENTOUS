@@ -107,48 +107,19 @@
             </p>
             <p class="row py-4 mb-4">
               <span class="col-2 text-center"><strong>관심 스택</strong></span>
-              <span class="col-5 px-3">
+              <span class="col px-3">
                 <span
-                  ><button
-                    class="btn btn-primary m-1 mt-0"
-                    v-for="stack in stackList"
-                    :key="stack"
-                    v-show="infoStatus">
-                    {{ stack }}
-                  </button></span
+                  class="stack-icon mx-2 mb-2"
+                  style="width: auto"
+                  v-for="(stack, index) in stacks"
+                  :key="index"
+                  v-show="infoStatus"
+                  >{{ stack }}</span
                 >
-
-                <select
-                  class="form-select"
-                  name=""
-                  id=""
-                  v-model="selectedPart"
-                  @change="addStack"
-                  v-show="editStatus">
-                  <option
-                    :value="part.partCode"
-                    v-for="part in partList"
-                    :key="part.partCode">
-                    {{ part.partName }}
-                  </option>
-                </select>
-              </span>
-              <span class="col-5 px-3">
-                <select
-                  class="form-select"
-                  name=""
-                  id=""
-                  v-model="stackList"
-                  size="3"
-                  multiple
-                  v-show="editStatus">
-                  <option
-                    :value="stack.stackName"
-                    v-for="stack in selectedStackList"
-                    :key="stack">
-                    {{ stack.stackName }}
-                  </option>
-                </select>
+                <StackSearchLayout
+                  style="float: left"
+                  @send-value="addStack2"
+                  v-show="editStatus"></StackSearchLayout>
               </span>
             </p>
             <div class="row py-4 mb-0">
@@ -260,7 +231,7 @@
                 type="button"
                 class="btn btn-primary btn-lg"
                 v-show="editStatus"
-                @click="changeStatus1">
+                @click="[changeStatus1(), passData()]">
                 {{ this.buttonStatus }}
               </button>
               <button
@@ -280,8 +251,10 @@
 
 <script>
 import PartSearchLayout from "@/components/layouts/PartSearchLayout.vue";
+import StackSearchLayout from "@/components/layouts/StackSearchLayout.vue";
+
 export default {
-  components: { PartSearchLayout },
+  components: { PartSearchLayout, StackSearchLayout },
   data() {
     return {
       user: {
@@ -341,20 +314,7 @@ export default {
         { partCode: "04", partName: "기타" }
       ],
       parts: [],
-      stacks: [
-        { partCode: "01", stackCode: "1", stackName: "Javascript" },
-        { partCode: "01", stackCode: "2", stackName: "TypeScript" },
-        { partCode: "01", stackCode: "3", stackName: "React" },
-        { partCode: "02", stackCode: "1", stackName: "Java" },
-        { partCode: "02", stackCode: "2", stackName: "Spring" },
-        { partCode: "02", stackCode: "3", stackName: "Node.js" },
-        { partCode: "03", stackCode: "1", stackName: "Flutter" },
-        { partCode: "03", stackCode: "2", stackName: "Swift" },
-        { partCode: "03", stackCode: "3", stackName: "Kotlin" },
-        { partCode: "04", stackCode: "1", stackName: "AWS" },
-        { partCode: "04", stackCode: "2", stackName: "Kubernetes" },
-        { partCode: "04", stackCode: "3", stackName: "Docker" }
-      ],
+      stacks: [],
       selectedPart: "",
       selectedStackList: [],
       stackList: [],
@@ -414,6 +374,27 @@ export default {
     },
     addPart(data) {
       this.parts = data;
+    },
+    addStack2(data) {
+      this.stacks = data;
+    },
+    // 마이페이지의 데이터를 넘겨줄 url은 어디?
+    async passData() {
+      const response = await this.$post("/user/myData", {
+        param: {
+          nickname: this.user.nickname,
+          info: this.user.selfInfo,
+          score: this.user.score,
+          scoreCount: this.user.scoreCount,
+          mentoScore: this.user.mentoScore,
+          mentoScoreCount: this.user.mentoScoreCount,
+          login: this.user.googleAccount,
+          parts: this.parts,
+          stacks: this.stacks,
+          URL_LIST: this.URL_LIST
+        }
+      });
+      console.log(response);
     }
   }
 };
