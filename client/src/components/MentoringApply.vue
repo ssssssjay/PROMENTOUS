@@ -22,7 +22,9 @@
       </p>
       <p class="row h4 mt-5">
         <span class="col-2 text-end"><strong>연락처</strong></span>
-        <span class="col-3 px-4">{{ mentor.contact }}</span>
+        <span class="col-3 px-4"
+          ><input class="form-control" type="email" v-model="contact"
+        /></span>
       </p>
       <p class="row h4 mt-5">
         <span class="col-2 text-end"><strong>멘토링 신청 횟수</strong></span>
@@ -57,7 +59,9 @@
       <div class="row">
         <hr />
         <span class="text-end"
-          ><button class="btn btn-primary btn-lg">신청하기</button></span
+          ><button class="btn btn-primary btn-lg" @click="passData">
+            신청하기
+          </button></span
         >
       </div>
     </div>
@@ -71,7 +75,7 @@ export default {
     return {
       mentor: {
         name: "joansdev",
-        contact: "joans.dev@gmail.com",
+        contact: "",
         parts: [
           { partCode: "1", name: "프론트엔드" },
           { partCode: "2", name: "백엔드" },
@@ -86,6 +90,21 @@ export default {
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
+  methods: {
+    // async passData() {
+    //   const response = await this.$post(
+    //     //eslint-disable-line no-unused-vars
+    //     "http://localhost:3000/",
+    //     {
+    //       param: {
+    //         name: this.name,
+    //         contact: this.contact,
+    //         parts: this.partList,
+    //         info: this.applyInfo
+    //       }
+    //     }
+    //   );
+    // }
+  }
 };
 </script>
