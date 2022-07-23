@@ -1,12 +1,6 @@
 <template>
   <!-- 유저 프로필 모달 영역 -->
   <div>
-    <div class="modal-container" v-if="modalStatus">
-      <div class="modal-conten">
-        <UserProfileModalVue></UserProfileModalVue>
-        <i class="bi bi-x-lg" @click="modalOff"></i>
-      </div>
-    </div>
     <!-- 배너 -->
     <div>
       <section class="banner">
@@ -78,14 +72,9 @@
               src="../assets/profile.jpg"
               alt=""
               style="width: 120px; border-radius: 10%" />
-            <!-- <div class="mt-2 h4">
-              <strong
-                ><button class="btn btn-primary" @click="modalOn">
-                  {{ this.$store.state.myNickname }}
-                </button></strong
-              >
+            <div class="mt-2 h4">
               <strong>{{ mentor.nickname }}</strong>
-            </div> -->
+            </div>
             <div>
               <button class="btn btn-outline-primary">
                 <i class="bi bi-star-fill pro_star_color"></i>
@@ -215,9 +204,8 @@
 
 <script>
 import CommentView from "@/components/CommentView.vue";
-import UserProfileModalVue from "@/components/UserProfileModal.vue";
 export default {
-  components: { CommentView, UserProfileModalVue },
+  components: { CommentView },
 
   data() {
     return {
