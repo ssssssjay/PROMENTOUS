@@ -257,7 +257,7 @@ export default {
         { name: "업무자동화 프로그램 개발", href: "https://www.naver.com/" }
       ],
 
-      site: { name: "", link: "" }, // site: {name:'GitHub', link:'www.github.com'}
+      site: { name: "111", link: "22" }, // site: {name:'GitHub', link:'www.github.com'}
       siteList: [],
       infoStatus: true,
       editStatus: false,
@@ -267,7 +267,11 @@ export default {
     };
   },
   setup() {},
-  created() {},
+
+  created() {
+    /*요걸 통해서 router 때 받아온 mentorUserId 값 해석함!*/
+    this.mentorUserId = this.$route.params.mentorUserId;
+  },
   mounted() {
     this.mentorDetail();
   },
@@ -305,6 +309,8 @@ export default {
       this.mentor.score = this.mentorData.basicInfo[0].totalRate;
       this.mentor.scoreCount = this.mentorData.basicInfo[0].rateCount;
       this.selfInfo = this.mentorData.basicInfo[0].mentoring_intro;
+      /*멘토 DEPT 코드 자연어 가져오기 */
+      this.likePart = this.mentorData.basicInfo[0].mentoring_dept_code;
       /*멘토후기정보들 가져오기*/
       this.reputations = this.mentorData.reputations;
       /*멘토링 이력  가져오기*/
