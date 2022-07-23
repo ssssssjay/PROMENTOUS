@@ -47,7 +47,7 @@
                     <button
                       type="button"
                       class="btn btn-link com_link_red"
-                      @click="deleteComment">
+                      @click="deleteCheckAlert(comment.reply_id)">
                       삭제
                     </button>
                   </span>
@@ -120,7 +120,7 @@
                             <button
                               type="button"
                               class="btn btn-link com_link_red"
-                              @click="deleteComment">
+                              @click="deleteCheckAlert(recomment.reply_id)">
                               삭제
                             </button>
                           </span>
@@ -206,27 +206,6 @@ export default {
         `/comment/recruit/get/${this.projectId}`
       );
     },
-
-    deleteCheckAlert() {
-      this.$swal({
-        title: "정말 삭제하시겠습니까?",
-        text: "삭제한 댓글은 되돌릴 수 없습니다.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "삭제",
-        cancelButtonText: "취소"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.$swal({
-            title: "삭제 완료",
-            text: "댓글이 삭제되었습니다.",
-            icon: "success"
-          });
-        }
-      });
-    },
     // 댓글 수정
     async editComment(isEdit) {
       if (!isEdit) {
@@ -247,10 +226,39 @@ export default {
       this.editText = commentData.text;
     },
 
-    deleteComment() {
-      this.deleteCheckAlert();
-      // 여기서 댓글 삭제 구현
-      // 삭제를 누른 댓글의 Id를 가져오기.
+    deleteCheckAlert(commentId) {
+      this.$swal({
+        title: "정말 삭제하시겠습니까?",
+        text: "삭제한 댓글은 되돌릴 수 없습니다.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "삭제",
+        cancelButtonText: "취소"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deleteComment(commentId);
+          this.$swal({
+            title: "삭제 완료",
+            text: "댓글이 삭제되었습니다.",
+            icon: "success"
+          });
+        }
+      });
+    },
+    async deleteComment(commentId) {
+      const r = await this.$delete(
+        `/comment/delete/${this.pageType}/${commentId}`
+      );
+      if (r.status === 200) {
+        // 콜백함수 안에서 this 호출 시 새로운 object이기 떄문에 미리 선언
+        // 참고: https://stackoverflow.com/questions/69666397/typeerror-cannot-read-properties-of-undefined-reading-router-vuejs
+        const self = this;
+        setTimeout(function () {
+          self.$router.go();
+        }, 1000);
+      }
     },
     formatDate(datetime) {
       // console.log(datetime);
