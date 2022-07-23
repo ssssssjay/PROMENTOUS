@@ -131,7 +131,7 @@
               <p>제목2 - qwerty</p>
             </div>
             <div class="text-end">
-              <button type="button" class="btn btn-outline-dark btn-sm">
+              <button type="button" class="btn btn-sm me-2 pro_button">
                 상세보기
               </button>
             </div>
@@ -150,7 +150,7 @@
                 </div>
                 <span class="col-2">1/3</span>
                 <span class="col-4">
-                  <button type="button" class="btn btn-outline-dark btn-sm">
+                  <button type="button" class="btn btn-sm me-1 pro_button">
                     지원
                   </button>
                 </span>
@@ -163,7 +163,7 @@
                 </div>
                 <span class="col-2">2/3</span>
                 <span class="col-4">
-                  <button type="button" class="btn btn-outline-dark btn-sm">
+                  <button type="button" class="btn btn-sm me-1 pro_button">
                     지원
                   </button>
                 </span>
@@ -177,7 +177,7 @@
             </div>
             <ul class="list-unstyled ps-0">
               <li
-                class="row"
+                class="row pe-0"
                 v-for="(members, part) in currentMemberList"
                 :key="part">
                 <div class="col-6">
@@ -185,9 +185,10 @@
                 </div>
                 <p class="row ps-4" v-for="member in members" :key="member">
                   <span class="col-7 pt-1">{{ member.user_nickname }}</span>
-                  <span class="col-5">
-                    <button type="button" class="btn btn-outline-dark btn-sm">
-                      상세보기
+                  <span class="col-5 p-0">
+                    <!-- TODO: 여기를 아이콘으로 바꾸는게 나을 것 같기도.. -->
+                    <button type="button" class="btn btn-sm me-1 pro_button">
+                      상세정보
                     </button>
                   </span>
                 </p>
@@ -236,7 +237,8 @@ export default {
         user_nickname: ""
       },
       recruitData: [],
-      recruitNumber: null // 모집인원
+      recruitNumber: null, // 모집인원
+      currentMemberList: []
     };
   },
   created() {
