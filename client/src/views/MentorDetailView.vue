@@ -171,7 +171,7 @@
               </button>
               <div
                 class="row"
-                v-for="(url, index) in url"
+                v-for="(url, index) in url_list"
                 :key="index"
                 v-show="editStatus">
                 <div class="col partTo">
