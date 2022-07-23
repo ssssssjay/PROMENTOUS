@@ -25,10 +25,7 @@ export default {
   },
   setup() {},
   created() {},
-  mounted() {
-    console.log("mounted");
-    // this.$refs.recruitsort.open();
-  },
+  mounted() {},
   unmounted() {},
   methods: {
     onSelectSort() {
