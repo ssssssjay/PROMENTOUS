@@ -231,7 +231,7 @@
                 :key="index"
                 v-for="(app, index) in applicantsList">
                 <img
-                  src="{{app.applicantImg}}"
+                  v-bind:src="app.userImage"
                   class="card-img-top m-2"
                   alt="..."
                   @click="[handleClick4(), transIndex(index)]" />
