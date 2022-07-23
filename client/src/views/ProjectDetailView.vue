@@ -60,7 +60,7 @@
                 class="widget-box fs-4 py-4 px-5"
                 v-html="project.project_desc"></div>
             </div>
-            <p class="row">
+            <p class="row" v-if="isRefUrl">
               <span class="text-muted col-2">참고링크</span>
               <span class="col-10">
                 <!-- TODO: 버튼 누르면 url.url_address 새창으로 열어주기 -->
@@ -265,6 +265,7 @@ export default {
         warranty: null
       },
       refUrl: [],
+      isRefUrl: true,
       projectLeader: {
         user_nickname: ""
       },
@@ -363,6 +364,9 @@ export default {
       this.refUrl = await this.$get(
         `/project/recruit/${this.projectId}/ref_url`
       );
+      if (this.refUrl.length === 0) {
+        this.isRefUrl = false;
+      }
     }
   }
 };
