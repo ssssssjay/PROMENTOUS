@@ -56,9 +56,9 @@
             </p>
             <div>
               <span class="text-muted">프로젝트 소개</span>
-              <div class="widget-box fs-4 py-4 px-5">
-                {{ project.project_desc }}
-              </div>
+              <div
+                class="widget-box fs-4 py-4 px-5"
+                v-html="project.project_desc"></div>
             </div>
             <p class="row">
               <span class="text-muted col-2">참고링크</span>
