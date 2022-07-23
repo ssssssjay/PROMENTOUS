@@ -77,7 +77,7 @@
               <span class="text-muted">후기 모아보기</span>
             </div> -->
             <div class="py-5">
-              <review-carousel />
+              <review-carousel :projectId="projectId" />
             </div>
           </div>
         </div>
