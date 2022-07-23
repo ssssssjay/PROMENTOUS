@@ -7,7 +7,13 @@
           <!-- 글 제목 -->
           <div class="row text-start">
             <div class="col-2">
-              <span class="badge pro_badge_color fs-5 mt-2">
+              <span
+                class="badge fs-5 mt-2"
+                :class="[
+                  project.status_code === `FIN`
+                    ? 'pro_badge_color_disabled'
+                    : 'pro_badge_color'
+                ]">
                 {{ recruitStatus }}
               </span>
             </div>
@@ -61,7 +67,7 @@
             <div class="my-4">
               <span class="text-muted pro_font_bold">| 프로젝트 소개</span>
               <div
-                class="widget-box fs-4 py-3 pt-5 px-5"
+                class="widget-box fs-4 p-5"
                 v-html="project.project_desc"></div>
             </div>
             <p class="row" v-if="isRefUrl">
