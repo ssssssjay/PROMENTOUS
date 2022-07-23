@@ -54,3 +54,15 @@
   color: black;
   text-decoration: none;
 }
+
+.pro_title_ellipsis {
+  /* width:70px;
+  padding:0 5px; */
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.pro_font_bold {
+  font-weight: bold;
+}

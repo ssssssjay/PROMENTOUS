@@ -6,45 +6,49 @@
         <div class="content">
           <!-- 글 제목 -->
           <div class="row text-start">
-            <div class="col-2 pt-2">
-              <span class="badge pro_badge_color fs-5">
+            <div class="col-2">
+              <span class="badge pro_badge_color fs-5 mt-2">
                 {{ recruitStatus }}
               </span>
             </div>
-            <span class="fs-1 col-8"> {{ project.title }} </span>
-            <span class="text-end col-2 pt-4">
+            <span class="fs-2 col-8 pro_title_ellipsis pb-2">
+              <strong>
+                {{ project.title }}
+              </strong>
+            </span>
+            <span class="text-end col-2 pt-3">
               {{ formatDate(project.created_datetime) }}
             </span>
             <hr />
           </div>
           <!-- 글 내용 -->
-          <div class="h4 pb-3 pt-3" style="text-align: left">
-            <p class="row">
-              <span class="text-muted col-2">시작예정일</span>
+          <div class="h4 px-2" style="text-align: left">
+            <p class="row my-4">
+              <span class="text-muted col-2 pro_font_bold">| 시작예정일</span>
               <span class="px-4 col-4">
                 <!-- {{ project.exp_start_date.substr(0, 10) }} -->
                 {{ formatDate(project.exp_start_date) }}
               </span>
-              <span class="text-muted col-2">진행기간</span>
+              <span class="text-muted col-2 pro_font_bold">| 진행기간</span>
               <span class="px-4 col-4">{{ project.exp_period }} 개월</span>
             </p>
-            <p class="row">
-              <span class="text-muted col-2">모집인원</span>
+            <p class="row my-4">
+              <span class="text-muted col-2 pro_font_bold">| 모집인원</span>
               <span class="px-4 col-4">{{ recruitNumber }} 명</span>
             </p>
-            <p class="row">
-              <span class="text-muted col-2">진행방식</span>
+            <p class="row my-4">
+              <span class="text-muted col-2 pro_font_bold">| 진행방식</span>
               <span class="px-4 col-4">{{ progressMethod }}</span>
-              <span class="text-muted col-2">보증금</span>
+              <span class="text-muted col-2 pro_font_bold">| 보증금</span>
               <!-- TODO: warranty 없을때 X로 뜨도록 하는 함수 작성해야 함 -->
               <span class="px-4 col-4">{{ warrantyText }}</span>
             </p>
-            <p class="row">
-              <span class="text-muted col-2">연락수단</span>
+            <p class="row my-4">
+              <span class="text-muted col-2 pro_font_bold">| 연락수단</span>
               <span class="px-4 col-10">{{ project.project_contact }}</span>
             </p>
-            <p class="row">
-              <span class="text-muted col-2">언어/스택</span>
+            <p class="row my-4">
+              <span class="text-muted col-2 pro_font_bold">| 언어/스택</span>
               <span class="px-4 col-10">
                 <span
                   class="badge pro_badge_color rounded-pill me-1"
@@ -54,14 +58,14 @@
                 </span>
               </span>
             </p>
-            <div>
-              <span class="text-muted">프로젝트 소개</span>
+            <div class="my-4">
+              <span class="text-muted pro_font_bold">| 프로젝트 소개</span>
               <div
-                class="widget-box fs-4 py-4 px-5"
+                class="widget-box fs-4 py-3 pt-5 px-5"
                 v-html="project.project_desc"></div>
             </div>
             <p class="row" v-if="isRefUrl">
-              <span class="text-muted col-2">참고링크</span>
+              <span class="text-muted col-2 pro_font_bold">| 참고링크</span>
               <span class="col-10">
                 <!-- TODO: 버튼 누르면 url.url_address 새창으로 열어주기 -->
                 <span v-for="url in refUrl" :key="url.ref_url_id">
@@ -109,7 +113,7 @@
           <!-- div 테두리 -->
           <div class="widget widget-box ps-3">
             <div class="widget-title h4 mb-4">
-              <span>리더 정보</span>
+              <span class="pro_font_bold">리더 정보</span>
             </div>
             <div class="row">
               <div class="col">
@@ -124,7 +128,7 @@
               </div>
             </div>
             <div class="ps-1">
-              <p class="fs-5 mt-3">프로젝트 진행 이력</p>
+              <p class="fs-5 mt-3 pro_font_bold">프로젝트 진행 이력</p>
               <div
                 class="ps-2"
                 v-show="projectLeader.leaderHistory.length === 0">
@@ -148,7 +152,7 @@
 
           <div class="widget widget-box ps-3">
             <div class="widget-title h4 mb-4">
-              <span>분야별 모집 현황</span>
+              <span class="pro_font_bold">분야별 모집 현황</span>
             </div>
             <ul class="list-unstyled ps-0">
               <li class="row" v-for="recruit in recruitData" :key="recruit">
@@ -178,7 +182,7 @@
 
           <div class="widget widget-box ps-3">
             <div class="widget-title h4 mb-4">
-              <span>팀원 정보 보기</span>
+              <span class="pro_font_bold">팀원 정보 보기</span>
             </div>
             <div v-show="Object.keys(currentMemberList).length === 0">
               아직 참여중인 팀원이 없습니다.
