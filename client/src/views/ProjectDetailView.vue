@@ -67,7 +67,7 @@
                 <span v-for="url in refUrl" :key="url.ref_url_id">
                   <a
                     target="_blank"
-                    :href="`${url.url_address}`"
+                    :href="`https://${url.url_address}`"
                     class="rev_router_link_color">
                     <button type="button" class="btn btn-sm me-2 pro_button">
                       {{ url.url_title }}
