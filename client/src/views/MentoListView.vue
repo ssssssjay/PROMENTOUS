@@ -12,11 +12,12 @@
     <!-- ---------------------------------------------------------------------------------------------- -->
     <section class="container">
       {{ this.mentoList }}
-      <div class="Regbtn">
-        <registerbtn-layout
-          :btnText="btnText"
-          @click="goToMenu('/mentorregister')" />
-      </div>
+
+      <registerbtn-layout
+        class="regbtn"
+        :btnText="btnText"
+        @click="goToMenu('/mentorregister')" />
+
       <div
         class="d-flex pt-5 mb-4 align-items-start justify-content-between section_second">
         <RecruitSortLayout />
@@ -35,25 +36,26 @@
               <div class="card-body">
                 <span class="mentoNickName">{{ mento.user_nickname }}</span>
                 <i class="bi bi-star-fill star"></i>
-                <!--   불필요한 프론트 과잉처리. 
-                <span class="mentoScore">{{ mento.showRate }}</span>
-                <span>({{ mento.RATE.length }})</span> -->
-                <p class="card-title">{{ mento.TITLE }}</p>
-                <p class="card-text">
-                  {{ mento.INTRO }}
-                </p>
+
+                <span class="mentoScore">{{ mento.totalRate }}</span>
+                <span>({{ mento.rateCount }})</span>
+                <p class="card-title">{{ mento.mentoring_title }}</p>
+                <div class="text">
+                  <p class="card-text">
+                    {{ mento.mentoring_intro }}
+                  </p>
+                </div>
                 <div
                   class="mentoPart"
                   :key="i"
-                  v-for="(code, i) in mentoList[index].DEPT_CODE3"
+                  v-for="(code, i) in mentoList[index].dept_code3"
                   style="display: inline">
                   <button class="partName">{{ code }}</button>
                 </div>
-                <!--  보강 예정  ( 대문자 변수 해제 부탁드려요  )
-                <span v-show="mento.DEPT_CODE.length > 3"
-                  >+{{ mento.DEPT_CODE.length - 3 }}</span
+
+                <span v-show="mento.dept_code.length > 3"
+                  >+{{ mento.dept_code.length - 3 }}</span
                 >
-                -->
               </div>
             </div>
             <div class="men_title col-md-4 imgCard">
@@ -64,7 +66,7 @@
 
               <button
                 class="btn btn-outline-dark mentoDetail"
-                @click="goToMenu('/mentordetail', mento.user_id)">
+                @click="goToMenu(`/mentordetail/${mento.user_id}`)">
                 멘토 상세보기
               </button>
             </div>
@@ -98,88 +100,47 @@ export default {
       btnText: "하드코딩임.멘토 등록 하기",
       mentoList: [
         {
+          user_image0: "",
           user_image:
-            "http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg",
+            "https://cdn.pixabay.com/photo/2013/07/13/12/07/avatar-159236_1280.png",
           user_nickname: "하드코딩임.evelo0702",
-          TITLE: "하드코딩임.파이썬을 도와주는 멘토링",
-          INTRO:
-            "하드코딩임.오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해서 더욱 좋은 개발자를 만들고싶습니다.",
-          DEPT_CODE: ["자바스크립트", "파이썬", "스프링", "뷰"],
-          DEPT_CODE3: [], // db에서 가져올 데이터 x
-          RATE: [5, 2, 3, 4, 5],
-          totalRate: 0, // db에서 가져올 데이터 x
-          showRate: 0 // db에서 가져올 데이터 x
-        },
-        {
-          user_image:
-            "http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg",
-          user_nickname: "하드코딩임.evelo0702",
-          TITLE: "하드코딩임.파이썬을 도와주는 멘토링",
-          INTRO:
-            "하드코딩임.오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해서 더욱 좋은 개발자를 만들고싶습니다.",
-          DEPT_CODE: ["자바스크립트", "파이썬", "스프링", "뷰"],
-          DEPT_CODE3: [], // db에서 가져올 데이터 x
-          RATE: [5, 2, 3, 4, 5],
-          totalRate: 0, // db에서 가져올 데이터 x
-          showRate: 0 // db에서 가져올 데이터 x
-        },
-        {
-          user_image:
-            "http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg",
-          user_nickname: "하드코딩임.evelo0702",
-          TITLE: "하드코딩임.파이썬을 도와주는 멘토링",
-          INTRO:
-            "하드코딩임.오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해서 더욱 좋은 개발자를 만들고싶습니다.",
-          DEPT_CODE: ["자바스크립트", "파이썬", "스프링", "뷰"],
-          DEPT_CODE3: [], // db에서 가져올 데이터 x
-          RATE: [5, 2, 3, 4, 5],
-          totalRate: 0, // db에서 가져올 데이터 x
-          showRate: 0 // db에서 가져올 데이터 x
-        },
-        {
-          user_image:
-            "http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg",
-          user_nickname: "하드코딩임.evelo0702",
-          TITLE: "하드코딩임.파이썬을 도와주는 멘토링",
-          INTRO:
-            "하드코딩임.오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해서 더욱 좋은 개발자를 만들고싶습니다.",
-          DEPT_CODE: ["자바스크립트", "파이썬", "스프링", "뷰"],
-          DEPT_CODE3: [], // db에서 가져올 데이터 x
-          RATE: [5, 2, 3, 4, 5],
-          totalRate: 0, // db에서 가져올 데이터 x
-          showRate: 0 // db에서 가져올 데이터 x
+          title: "하드코딩임.파이썬을 도와주는 멘토링",
+          mentoring_intro: "",
+          mentoring_intro0: "",
+          dept_code: ["자바스크립트", "파이썬", "스프링", "뷰"],
+          dept_code3: [], // db에서 가져올 데이터 x
+          rate: [5, 2, 3, 4, 5],
+          totalRate: 0,
+          rateCount: 0
         }
       ]
     };
   },
   setup() {},
-  created() {},
-  mounted() {
+  created() {
     this.getMentorList();
   },
+  mounted() {},
   unmounted() {},
   methods: {
     sendValue(data) {
       this.part = data;
     },
-    goToMenu(path, mentoUserId) {
+    goToMenu(path) {
       this.$router.push({ path: path });
       /**/
-      alert(mentoUserId); // 이 값을 MentorDetailView.vue 가 알게 하려면 어떻게 할까요 ? 프론트 처리부탁...
     },
     deptCodeFilter() {
       for (let i = 0; i < this.mentoList.length; i++) {
-        this.mentoList[i].DEPT_CODE3 = this.mentoList[i].DEPT_CODE.slice(0, 3);
+        this.mentoList[i].dept_code3 = this.mentoList[i].dept_code.slice(0, 3);
       }
     },
-    rateData() {
+    defaultImage() {
       for (let i = 0; i < this.mentoList.length; i++) {
-        for (let j = 0; j < this.mentoList[i].RATE.length; j++) {
-          this.mentoList[i].totalRate += this.mentoList[i].RATE[j];
+        if (this.mentoList[i].user_image == "") {
+          this.mentoList[i].user_image =
+            "https://cdn.pixabay.com/photo/2013/07/13/12/07/avatar-159236_1280.png";
         }
-        this.mentoList[i].showRate = (
-          this.mentoList[i].totalRate / this.mentoList[i].RATE.length
-        ).toFixed(1);
       }
     },
     async getMentorList() {
@@ -188,6 +149,8 @@ export default {
       });
       this.mentoList = this.mentoList.data;
       console.log(this.mentoList);
+      this.deptCodeFilter();
+      this.defaultImage();
     }
   }
 };
@@ -240,21 +203,40 @@ export default {
 .card-title {
   font-size: 20px;
 }
+div.text {
+  height: 70px;
+}
 .card-text {
   font-size: 13px;
-  height: 70px;
+  /* min-height: 80px; */
+  width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 div.imgCard {
   position: relative;
   left: 60px;
   margin-top: 30px;
 }
+.imgCard > img {
+  width: 150px;
+  height: 150px;
+  padding: 10px;
+}
+
 img.img-fluid.pfimg {
   width: 150px;
 }
 .pagination {
   position: relative;
   left: 550px;
+}
+.regbtn {
+  position: absolute;
+  right: 450px;
 }
 i.star {
   color: #1379d2;
