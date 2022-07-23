@@ -246,7 +246,7 @@
                   <li class="list-group-item">
                     신청분야
                     <button class="btn btn-primary">
-                      {{ app.applyDeptId }}
+                      {{ app.applyDeptCode }}
                     </button>
                   </li>
                   <li class="row list-group-item likeStackCode">
