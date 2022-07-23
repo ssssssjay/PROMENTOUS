@@ -150,48 +150,58 @@
               </div>
             </div>
           </div>
-          <!-- 참고링크 -->
-          <p class="row py-4 mb-0 mt-3">
+          <div class="row mb-5">
             <span class="col-2 text-start h3"><strong>참고링크</strong></span>
-            <span class="col-10 text-start h5" v-show="infoStatus">
-              <a
-                class="px-4 mx-0 text-start"
-                :href="Object.values(site)"
-                v-for="(site, index) in siteList"
-                :key="index"
-                target="_blank"
-                style="color: #1379d2"
-                ><strong>{{ Object.keys(site).join() }}</strong></a
-              >
-            </span>
-            <span class="col-4 px-0 pt-0" v-show="editStatus">
+            <div class="col partTo" v-show="editStatus">
               <input
                 type="text"
-                class="form-control text-start"
-                placeholder="사이트 제목을 입력해주세요!"
-                name=""
-                id=""
-                v-model="site.name" />
-            </span>
-            <span class="col-5 px-2 pt-0" v-show="editStatus">
+                class="form-control"
+                style="width: 200px"
+                placeholder="링크 이름"
+                v-model="URL.url_title" />
+
               <input
-                type="url"
-                class="form-control text-start"
-                placeholder="사이트 링크를 입력해주세요!"
-                name=""
-                id=""
-                v-model="site.link" />
-            </span>
-            <span class="col-1 text-center">
-              <button
-                type="button"
-                class="btn btn-outline-primary px-4"
-                @click="addSite"
-                v-show="editStatus">
-                +
+                type="text"
+                class="form-control"
+                style="width: 300px"
+                placeholder="링크 주소"
+                v-model="URL.url_address" />
+              <button type="button" class="btn btn-secondary" @click="addUrl()">
+                추가
               </button>
+              <div
+                class="row"
+                v-for="(URL, index) in URL_LIST"
+                :key="index"
+                v-show="editStatus">
+                <div class="col partTo">
+                  <p class="form-control mb-1">
+                    {{ URL_LIST[index].url_title }}
+                  </p>
+                  <p class="form-control mb-1" style="width: 300px">
+                    {{ URL_LIST[index].url_address }}
+                  </p>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="delURL(index)">
+                    X
+                  </button>
+                </div>
+              </div>
+            </div>
+            <span class="col-10 text-start h5" v-show="infoStatus">
+              <a
+                target="_blank"
+                class="px-4 mx-0 text-start"
+                style="color: #1379d2"
+                :href="`${URL_LIST[index].url_address}`"
+                :key="index"
+                v-for="(URL, index) in URL_LIST"
+                ><strong>{{ URL_LIST[index].url_title }}</strong></a
+              >
             </span>
-          </p>
+          </div>
         </div>
         <div class="mt-5">
           <hr />
@@ -211,6 +221,8 @@ export default {
 
   data() {
     return {
+      URL: { url_title: "", url_address: "" },
+      URL_LIST: [],
       /*김인호 백단작업중 추가 mentorUserId , mentorData */
       mentorUserId: 47, // <<<--- 라우터 푸시? 로 들어온 내가 보고있는 멘토의 user_id
       mentorData: {},
@@ -277,6 +289,22 @@ export default {
   },
   unmounted() {},
   methods: {
+    addUrl() {
+      if (this.URL.url_title !== "" && this.URL.url_address !== "") {
+        let obj0 = {
+          ["url_title"]: this.URL.url_title,
+          ["url_address"]: this.URL.url_address
+        };
+        this.URL_LIST.push(obj0);
+        this.URL.url_title = "";
+        this.URL.url_address = "";
+      } else if (this.URL.url_title === "" || this.URL.url_address === 0) {
+        alert("링크를 정확히 입력해주세요");
+      }
+    },
+    delURL(index) {
+      this.URL_LIST.splice(index, 1);
+    },
     changeApplyStatus() {
       [this.applyYes, this.applyNo] = [this.applyNo, this.applyYes];
     },
@@ -361,7 +389,19 @@ export default {
   border-radius: 0.5%;
   overflow: auto;
 }
-
+.partTo > input {
+  display: inline;
+  margin-right: 5px;
+}
+.col.partTo {
+  position: relative;
+  bottom: 5px;
+}
+p.form-control {
+  width: 200px;
+  display: inline-block;
+  margin-right: 5px;
+}
 .bi.bi-x-lg {
   position: absolute;
   top: 0.5rem;
