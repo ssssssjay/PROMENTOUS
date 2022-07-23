@@ -96,7 +96,10 @@ export default {
   data() {
     return {
       part: [],
-      searchData: "",
+      /*페이징처리 조건을 위한 parameters -  searchKeyWord / originDeptCode / selectedPage */
+      searchKeyWord: "",
+      originDeptCode: "",
+      selectedPage: 1,
       btnText: "하드코딩임.멘토 등록 하기",
       mentoList: [
         {
@@ -109,7 +112,9 @@ export default {
           mentoring_intro0: "",
           dept_code: ["자바스크립트", "파이썬", "스프링", "뷰"],
           dept_code3: [], // db에서 가져올 데이터 x
-          rate: [5, 2, 3, 4, 5],
+          rate: [
+            5, 2, 3, 4, 5
+          ] /*TODO rate 구조 재조정 됨. 변경또는 삭제필요!! */,
           totalRate: 0,
           rateCount: 0
         }
@@ -144,8 +149,10 @@ export default {
       }
     },
     async getMentorList() {
-      this.mentoList = await this.$post("/mentor/getMentorList", {
-        keyword: this.searchData
+      this.mentoList = await this.$post("/mentor/mentorList", {
+        searchKeyWord: this.searchData,
+        dept_code: this.originDeptCode,
+        selectedPage: this.selectedPage
       });
       this.mentoList = this.mentoList.data;
       console.log(this.mentoList);

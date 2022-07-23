@@ -6,7 +6,6 @@
         <p class="des">팀 상태 및 공유링크를 확인하고 팀원/멘토를 평가해요</p>
       </div>
     </section>
-    {{ this.applicantsList }}
     <!-- ---------------------------------------------------------------------------------------------- -->
     <!-- 상태선택박스 -->
     <!-- <div>MENTORINGTOTALPAGE ::: {{ this.mentoringTotalPageCount }}</div>
@@ -46,11 +45,8 @@
       <div>{{ this.projectList2[0] }}</div> -->
       <!-- <div>{{ this.teamTotalInfo.data }}</div> -->
 
-      <div>{{ this.teamTotalInfo.data.basicInfo }}</div>
-
       <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div> -->
       <hr />
-      <div>{{ this.teamMembers }}</div>
       <!--
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div> -->
 
@@ -605,17 +601,8 @@ export default {
         mentoring_page: "1"
       },
       params: {},
-      //김인호 test
-      paramsForTest: {
-        c2: "zz",
-        c3: "xx",
-        progress_method: "OFF",
-        status_code: "FIN",
-        main_area_code: "M08",
-        sub_area_code: "S125",
-        stack_code: "J02,R01"
-      },
-
+      /*저장용 saveParam OBJECT */
+      saveParam: {},
       teamTotalInfo: {},
       sessionUserId: "3",
       initUrl: "",
@@ -704,11 +691,23 @@ export default {
         this.teamStatusName = "활동종료";
       }
     },
-    saveTeamInfo() {
+    async saveTeamInfo() {
       this.teamTotalInfo.data.basicInfo.statusCode = this.teamStatus;
       this.teamTotalInfo.data.basicInfo.meetingUrl = this.urlAddress;
       this.teamTotalInfo.data.basicInfo.meetingUrlTitle = this.urlTitle;
       this.teamTotalInfo.data.basicInfo.warranty = this.deposit;
+      this.saveParam = {
+        /*변경 되었다면 변경된 것이/ 변경안되었다면 그대로! */
+        meeting_url: this.urlAddress,
+        meeting_url_title: this.urlTitle,
+        warranty: this.deposit,
+        status_code: this.teamStatus,
+        project_id: this.selectedProjectId
+      };
+      this.mentoring = await this.$post(
+        `/manage/saveTeamManageInfo`,
+        this.saveParam
+      );
     },
 
     approve(index) {
