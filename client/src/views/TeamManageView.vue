@@ -6,6 +6,7 @@
         <p class="des">팀 상태 및 공유링크를 확인하고 팀원/멘토를 평가해요</p>
       </div>
     </section>
+    {{ this.applicantsList }}
     <!-- ---------------------------------------------------------------------------------------------- -->
     <!-- 상태선택박스 -->
     <!-- <div>MENTORINGTOTALPAGE ::: {{ this.mentoringTotalPageCount }}</div>
@@ -48,7 +49,8 @@
       <div>{{ this.teamTotalInfo.data.basicInfo }}</div>
 
       <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div> -->
-      <!-- <div>{{ this.teamMembers }}</div> -->
+      <hr />
+      <div>{{ this.teamMembers }}</div>
       <!--
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div> -->
 
@@ -112,7 +114,7 @@
           <RegisterbtnLayout
             :btnText="btnText2"
             v-show="correctionMode"
-            @click="[watch(), changeStatus(), saveTeamManageInfo()]" />
+            @click="[watch(), saveTeamInfo(), changeStatusName()]" />
           <!--저장하기 -->
         </div>
 
@@ -166,11 +168,10 @@
               { value: 'FIN', label: '활동종료' }
             ]"
             v-show="correctionMode === true" />
-          {{ teamStatus }}
           <button
             class="mx-4 btn btn-primary"
             v-show="correctionMode === false">
-            {{ teamStatus }}
+            {{ teamStatusName }}
           </button>
         </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
@@ -216,9 +217,9 @@
         <!-- 지원자관리  -->
 
         <ApplicantProfileModal
-          ref="modal3"
+          ref="modal4"
           :content="modalContent"
-          :memberData="this.applicantsList[this.memberIndex]" />
+          :applicantData="this.applicantsList[this.memberIndex]" />
         <div class="p-2 mb-5 d-inline-flex bd-highlight">
           지원자관리
 
@@ -233,7 +234,7 @@
                   src="{{app.applicantImg}}"
                   class="card-img-top m-2"
                   alt="..."
-                  @click="[handleClick3(), transIndex(index)]" />
+                  @click="[handleClick4(), transIndex(index)]" />
 
                 <h5 class="card-title applicantNickname">
                   {{ app.applicantNickname }}
@@ -491,7 +492,7 @@ import { ref } from "vue";
 import TeamRatingModal from "@/components/TeamRatingModal.vue";
 import MentorRatingModal from "@/components/MentorRatingModal.vue";
 import TeamMemberProfileModal from "@/components/UserProfileModal.vue";
-import ApplicantProfileModal from "@/components/UserProfileModal.vue";
+import ApplicantProfileModal from "@/components/applicantProfileModal.vue";
 
 export default {
   name: "App",
@@ -508,7 +509,7 @@ export default {
   data() {
     return {
       //db작업 x 변수
-
+      teamStatusName: "",
       memberIndex: 0,
       teamRatingColor: "#ddee4d",
       mentorRatingColor: "#1379d2",
@@ -627,10 +628,13 @@ export default {
     const modal = ref(null);
     const modal2 = ref(null);
     const modal3 = ref(null);
+    const modal4 = ref(null);
     const modalContent = ref(["코멘트와 평점을 입력해주세요"]);
     const result = ref("");
     const result2 = ref("");
     const result3 = ref("");
+    const result4 = ref("");
+
     const handleClick = async () => {
       const ok = await modal.value.show();
       if (ok) {
@@ -655,18 +659,29 @@ export default {
         result3.value = "cancel";
       }
     };
+    const handleClick4 = async () => {
+      const ok = await modal4.value.show();
+      if (ok) {
+        result4.value = "ok";
+      } else {
+        result4.value = "cancel";
+      }
+    };
 
     return {
       modal,
       modal2,
       modal3,
+      modal4,
       modalContent,
       result,
       result2,
       result3,
+      result4,
       handleClick,
       handleClick2,
-      handleClick3
+      handleClick3,
+      handleClick4
     };
   },
   created() {},
@@ -678,20 +693,24 @@ export default {
   },
   unmounted() {},
   methods: {
-    changeStatus() {
-      this.teamTotalInfo.data.basicInfo.statusCode = this.teamStatus;
+    changeStatusName() {
+      if (this.teamStatus == "REC") {
+        this.teamStatusName == "모집중";
+      } else if (this.teamStatus == "ING") {
+        this.teamStatusName = "모집완료";
+      } else if (this.teamStatus == "ADD") {
+        this.teamStatusName = "추가모집";
+      } else if (this.teamStatus == "FIN") {
+        this.teamStatusName = "활동종료";
+      }
     },
-    // filterStatusCode() {
-    //   if (this.teamTotalInfo.data.basicInfo.statusCode == "REC") {
-    //     this.teamStatus = "모집중";
-    //   } else if (this.teamTotalInfo.data.basicInfo.statusCode == "ING") {
-    //     this.teamStatus = "모집완료";
-    //   } else if (this.teamTotalInfo.data.basicInfo.statusCode == "ADD") {
-    //     this.teamStatus = "추가모집";
-    //   } else if (this.teamTotalInfo.data.basicInfo.statusCode == "FIN") {
-    //     this.teamStatus = "활동종료";
-    //   }
-    // },
+    saveTeamInfo() {
+      this.teamTotalInfo.data.basicInfo.statusCode = this.teamStatus;
+      this.teamTotalInfo.data.basicInfo.meetingUrl = this.urlAddress;
+      this.teamTotalInfo.data.basicInfo.meetingUrlTitle = this.urlTitle;
+      this.teamTotalInfo.data.basicInfo.warranty = this.deposit;
+    },
+
     approve(index) {
       this.applicantsList[index].applyStatus = "ACC";
     },
@@ -758,7 +777,6 @@ export default {
       this.correctionMode = true;
     },
     watch() {
-      // alert("저장기능 + 저장한뒤 refresh 필요!");
       this.correctionMode = false;
     },
 
@@ -801,7 +819,7 @@ export default {
       );
       this.teamStatus = this.teamTotalInfo.data.basicInfo.statusCode;
       // 팀모임 URL
-      this.urlTitle = this.teamTotalInfo.data.basicInfo.meetingUrl;
+      this.urlTitle = this.teamTotalInfo.data.basicInfo.meetingUrlTitle;
       this.urlAddress = this.teamTotalInfo.data.basicInfo.meetingUrl;
       //보증금
       this.deposit = this.teamTotalInfo.data.basicInfo.warranty;

@@ -78,14 +78,14 @@
               src="../assets/profile.jpg"
               alt=""
               style="width: 120px; border-radius: 10%" />
-            <div class="mt-2 h4">
+            <!-- <div class="mt-2 h4">
               <strong
                 ><button class="btn btn-primary" @click="modalOn">
                   {{ this.$store.state.myNickname }}
                 </button></strong
               >
-              <!-- <strong>{{ mentor.nickname }}</strong> -->
-            </div>
+              <strong>{{ mentor.nickname }}</strong>
+            </div> -->
             <div>
               <button class="btn btn-outline-primary">
                 <i class="bi bi-star-fill pro_star_color"></i>
