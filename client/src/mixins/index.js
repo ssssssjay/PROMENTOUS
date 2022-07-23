@@ -11,9 +11,7 @@ export default {
   mounted() {},
   unmounted() {},
   methods: {
-    toTop(){
-      
-    },
+    toTop() {},
     functionA() {
       //     console.log("AXIOS에서 호출함");
     },
@@ -47,6 +45,11 @@ export default {
     },
     async $delete(url) {
       return await axios.delete(url).catch((e) => {
+        console.log(e);
+      });
+    },
+    async $patch(url, data) {
+      return await axios.patch(url, data).catch((e) => {
         console.log(e);
       });
     }
