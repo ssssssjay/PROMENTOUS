@@ -82,9 +82,7 @@
           </div>
         </div>
         <hr />
-
         <!-- 댓글 -->
-
         <div>
           <write-comment-view
             pageType="projectRecruit"
@@ -110,7 +108,7 @@
           </div>
           <!-- div 테두리 -->
           <div class="widget widget-box ps-3">
-            <div class="widget-title h4">
+            <div class="widget-title h4 mb-4">
               <span>리더 정보</span>
             </div>
             <div class="row">
@@ -127,10 +125,21 @@
             </div>
             <div class="ps-1">
               <p class="fs-5 mt-3">프로젝트 진행 이력</p>
-              <p>제목1 - qwerty</p>
-              <p>제목2 - qwerty</p>
+              <div
+                class="ps-2"
+                v-show="projectLeader.leaderHistory.length === 0">
+                완료한 프로젝트가 없습니다.
+              </div>
+              <div v-show="projectLeader.leaderHistory.length !== 0">
+                <p
+                  class="ps-2"
+                  v-for="history in projectLeader.leaderHistory"
+                  :key="history.project_id">
+                  - {{ history.title }}
+                </p>
+              </div>
             </div>
-            <div class="text-end">
+            <div class="text-end mt-3">
               <button type="button" class="btn btn-sm me-2 pro_button">
                 상세보기
               </button>
@@ -138,7 +147,7 @@
           </div>
 
           <div class="widget widget-box ps-3">
-            <div class="widget-title h4">
+            <div class="widget-title h4 mb-4">
               <span>분야별 모집 현황</span>
             </div>
             <ul class="list-unstyled ps-0">
@@ -168,8 +177,11 @@
           </div>
 
           <div class="widget widget-box ps-3">
-            <div class="widget-title h4">
+            <div class="widget-title h4 mb-4">
               <span>팀원 정보 보기</span>
+            </div>
+            <div v-show="Object.keys(currentMemberList).length === 0">
+              아직 참여중인 팀원이 없습니다.
             </div>
             <ul class="list-unstyled ps-0">
               <li
@@ -230,7 +242,8 @@ export default {
       refUrl: [],
       isRefUrl: true,
       projectLeader: {
-        user_nickname: ""
+        user_nickname: "",
+        leaderHistory: []
       },
       recruitData: [],
       recruitNumber: null, // 모집인원
