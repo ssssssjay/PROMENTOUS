@@ -21,21 +21,24 @@
           @click="goToMenu('../Recruitwrite')" />
       </div>
       <div
-        class="d-flex pt-5 mb-4 align-items-start justify-content-between section_second">
-        <RecruitSortLayout />
+        class="d-flex pt-5 mb-4 align-items-start justify-content-end section_second">
+        <!-- 우선은 정렬기능 비활성화 -->
+        <!-- <RecruitSortLayout /> -->
         <div class="d-flex">
           <StackSearchLayout @send-value="sendValue" />
-
-          <SearchAll />
+          <SearchAll @search-keyword="SearchKeyword" />
         </div>
       </div>
-      <CardList :projects="projects" />
+      <div v-if="projects[0] === undefined">
+        원하시는 조건에 맞는 모집 공고가 없습니다!!
+      </div>
+      <CardList v-else :projects="projects" />
       <PaginationLayout :page="page" @paging="paging" />
     </section>
   </div>
 </template>
 <script>
-import RecruitSortLayout from "../components/layouts/RecruitSortLayout.vue";
+// import RecruitSortLayout from "../components/layouts/RecruitSortLayout.vue";
 import RegionSortLayout from "@/components/layouts/RegionSortLayout.vue";
 import StackSearchLayout from "@/components/layouts/StackSearchLayout.vue";
 import SearchAll from "../components/SearchAll.vue";
@@ -45,7 +48,7 @@ import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
 import PaginationLayout from "@/components/layouts/PaginationLayout.vue";
 export default {
   components: {
-    RecruitSortLayout,
+    // RecruitSortLayout,
     RegionSortLayout,
     StackSearchLayout,
     SearchAll,
@@ -69,7 +72,8 @@ export default {
       projects: [],
       // 데이터가져올떄 param안에 넣을 정렬요소들. 기본값들은 하드코딩하고, 특수 상황에선 자식에서 emit으로 값을 변경할것이다.
       pageToMove: 1,
-      recruitStatus: "REC"
+      recruitStatus: "REC",
+      keyword: ""
     };
   },
   setup() {},
@@ -84,30 +88,40 @@ export default {
     },
     sendValue(data) {
       this.stacks = data;
+      this.getProjectsData();
     },
     SendLargeCity(data) {
       this.MAIN_AREA_CODE = data;
+      this.getProjectsData();
     },
     SendRestCity(data) {
       this.SUB_AREA_CODE = data;
+      this.getProjectsData();
+    },
+    SearchKeyword(data) {
+      this.keyword = data;
+      this.getProjectsData();
     },
     async getProjectsData() {
-      const response = await this.$post(
-        `http://localhost:3000/project/recruit/`,
-        {
-          param: {
-            page: this.pageToMove,
-            status: this.recruitStatus
-          }
+      const response = await this.$post(`/project/recruit/`, {
+        param: {
+          page: this.pageToMove,
+          status: this.recruitStatus,
+          stacks: this.stacks,
+          main_area: this.MAIN_AREA_CODE,
+          rest_area: this.SUB_AREA_CODE,
+          keyword: this.keyword
         }
-      );
+      });
       this.page = Math.ceil(Math.ceil(response.data.count[0].cnt / 8));
       this.projects = response.data.projectRecruitList;
       this.projects.forEach((project) => {
         project.exp_start_date = this.convertDate(project.exp_start_date);
         project.stack_code = this.convertStack(project.stack_code);
+        project.stack_code.pop();
         project.status_code = this.convertStatus(project.status_code);
       });
+      // console.log(response.data);
     },
     convertDate(raw_date) {
       return raw_date.substr(0, 10);
@@ -123,7 +137,6 @@ export default {
       }
     },
     statusSort(status) {
-      console.log(this.recruitStatus);
       this.recruitStatus = status;
       this.getProjectsData();
     },
