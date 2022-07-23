@@ -158,28 +158,28 @@
                 class="form-control"
                 style="width: 200px"
                 placeholder="링크 이름"
-                v-model="URL.url_title" />
+                v-model="url.url_title" />
 
               <input
                 type="text"
                 class="form-control"
                 style="width: 300px"
                 placeholder="링크 주소"
-                v-model="URL.url_address" />
+                v-model="url.url_address" />
               <button type="button" class="btn btn-secondary" @click="addUrl()">
                 추가
               </button>
               <div
                 class="row"
-                v-for="(URL, index) in URL_LIST"
+                v-for="(url, index) in url"
                 :key="index"
                 v-show="editStatus">
                 <div class="col partTo">
                   <p class="form-control mb-1">
-                    {{ URL_LIST[index].url_title }}
+                    {{ url_list[index].url_title }}
                   </p>
                   <p class="form-control mb-1" style="width: 300px">
-                    {{ URL_LIST[index].url_address }}
+                    {{ url_list[index].url_address }}
                   </p>
                   <button
                     type="button"
@@ -195,10 +195,10 @@
                 target="_blank"
                 class="px-4 mx-0 text-start"
                 style="color: #1379d2"
-                :href="`${URL_LIST[index].url_address}`"
+                :href="`${url_list[index].url_address}`"
                 :key="index"
-                v-for="(URL, index) in URL_LIST"
-                ><strong>{{ URL_LIST[index].url_title }}</strong></a
+                v-for="(url, index) in url_list"
+                ><strong>{{ url_list[index].url_title }}</strong></a
               >
             </span>
           </div>
@@ -221,8 +221,8 @@ export default {
 
   data() {
     return {
-      URL: { url_title: "", url_address: "" },
-      URL_LIST: [],
+      url: { url_title: "", url_address: "" },
+      url_list: [],
       /*김인호 백단작업중 추가 mentorUserId , mentorData */
       mentorUserId: 47, // <<<--- 라우터 푸시? 로 들어온 내가 보고있는 멘토의 user_id
       mentorData: {},
@@ -290,20 +290,20 @@ export default {
   unmounted() {},
   methods: {
     addUrl() {
-      if (this.URL.url_title !== "" && this.URL.url_address !== "") {
+      if (this.url.url_title !== "" && this.url.url_address !== "") {
         let obj0 = {
-          ["url_title"]: this.URL.url_title,
-          ["url_address"]: this.URL.url_address
+          ["url_title"]: this.url.url_title,
+          ["url_address"]: this.url.url_address
         };
-        this.URL_LIST.push(obj0);
-        this.URL.url_title = "";
-        this.URL.url_address = "";
-      } else if (this.URL.url_title === "" || this.URL.url_address === 0) {
+        this.url_list.push(obj0);
+        this.url.url_title = "";
+        this.url.url_address = "";
+      } else if (this.url.url_title === "" || this.url.url_address === 0) {
         alert("링크를 정확히 입력해주세요");
       }
     },
     delURL(index) {
-      this.URL_LIST.splice(index, 1);
+      this.url_list.splice(index, 1);
     },
     changeApplyStatus() {
       [this.applyYes, this.applyNo] = [this.applyNo, this.applyYes];
