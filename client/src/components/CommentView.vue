@@ -21,7 +21,6 @@
             <!-- 우측 영역 -->
             <div class="media-body">
               <div class="mar-btm">
-                <!-- 작성자 아이디 -> 닉네임으로 변ㄴ경..  -->
                 <a
                   href="#"
                   class="btn-link text-semibold media-heading box-inline a-black fs-5"
@@ -35,7 +34,6 @@
                 {{ comment.contents }}
               </p>
               <div class="pad-ver text-end pe-4">
-                <!-- 누르면 취소 버튼으로 바뀌게.. -->
                 <button
                   type="button"
                   class="btn pro_button btn-sm"
@@ -46,7 +44,11 @@
               <hr />
               <div class="mx-2 py-2" v-if="comment.isRecomment">
                 <!-- props로 원댓글의 id 넘겨줘야 함. -->
-                <write-comment-view />
+                <write-recomment-view
+                  :pageType="pageType"
+                  :projectId="projectId"
+                  :parentId="comment.reply_id"
+                  :targetId="comment.reply_id" />
                 <hr />
               </div>
               <div v-for="recomment in commentList" :key="recomment.reply_id">
@@ -61,32 +63,41 @@
                   /></a>
                   <div class="media-body">
                     <div class="mar-btm">
-                      <p class="row mb-0">
-                        <a
-                          href="#"
-                          class="btn-link text-semibold media-heading box-inline col-9 a-black fs-5"
-                          >{{ recomment.writer_nickname }}</a
-                        >
-                        <span class="col-3 text-end">
-                          <!-- 수정 여부에 따라 텍스트 필드  -->
-                          <button
-                            type="button"
-                            class="btn btn-link com_link_blue"
-                            @click="
-                              recomment.isRecomment = !recomment.isRecomment
-                            ">
-                            {{ recomment.isRecomment ? "수정완료" : "  수정" }}
-                          </button>
-                          |
-                          <button
-                            type="button"
-                            class="btn btn-link com_link_red"
-                            @click="deleteComment">
-                            삭제
-                          </button>
-                        </span>
-                      </p>
-                      <p class="text-muted text-sm">
+                      <div class="row mb-0">
+                        <div class="col text-start">
+                          <a
+                            href="#"
+                            class="btn-link text-semibold media-heading box-inline col-9 a-black fs-5">
+                            {{ recomment.writer_nickname }}
+                          </a>
+                          <p class="text-muted text-sm">
+                            {{ formatDate(recomment.created_datetime) }}
+                          </p>
+                        </div>
+                        <div class="col text-end">
+                          <span class="col-3 text-end">
+                            <!-- 수정 여부에 따라 텍스트 필드  -->
+                            <button
+                              type="button"
+                              class="btn btn-link com_link_blue"
+                              @click="
+                                recomment.isRecomment = !recomment.isRecomment
+                              ">
+                              {{
+                                recomment.isRecomment ? "수정완료" : "  수정"
+                              }}
+                            </button>
+                            |
+                            <button
+                              type="button"
+                              class="btn btn-link com_link_red"
+                              @click="deleteComment">
+                              삭제
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                      <p class="text-sm">
                         {{ recomment.insert_date }}
                       </p>
                     </div>
@@ -104,7 +115,10 @@
                     <hr />
                     <div class="mx-2 py-2" v-if="recomment.isRecomment">
                       <!-- props로 원댓글의 id 넘겨줘야 함. -->
-                      <write-comment-view />
+                      <write-recomment-view
+                        :pageType="pageType"
+                        :projectId="projectId"
+                        :parentId="comment.reply_id" />
                       <hr />
                     </div>
                   </div>
@@ -118,11 +132,10 @@
   </div>
 </template>
 <script>
-import WriteCommentView from "../components/WriteCommentView.vue";
+import WriteRecommentView from "../components/WriteRecommentView.vue";
 export default {
-  components: { WriteCommentView },
+  components: { WriteRecommentView },
   props: {
-    // 어떤 페이지냐에 따라 API 호출 주소 분기
     pageType: {
       type: String,
       default: ""
@@ -151,7 +164,6 @@ export default {
       this.commentList = await this.$get(
         `/comment/recruit/get/${this.projectId}`
       );
-      // await console.log(this.commentList);
     },
 
     deleteCheckAlert() {
@@ -181,10 +193,10 @@ export default {
       // 삭제를 누른 댓글의 Id를 가져오기.
     },
     formatDate(datetime) {
-      console.log(datetime);
+      // console.log(datetime);
       // TODO: 예외처리 코드 보완 필요
       if (!datetime) {
-        console.log("datetime undefined error 처리 필요");
+        // console.log("datetime undefined error 처리 필요");
         return "";
       }
       return datetime.substr(0, 16).replace("T", " ");

@@ -40,7 +40,6 @@
 export default {
   components: {},
   props: {
-    // 어떤 페이지냐에 따라 API 호출 주소 분기
     pageType: {
       type: String,
       default: ""
@@ -77,14 +76,12 @@ export default {
       if (data.commentText === "" || !data.commentText) {
         return;
       }
-      // 댓글 등록 시 화면 새로고침 or 댓글 보여주는 부분 새로고침 필요
-      // TODO: 대댓글인 경우 targetId, targetSeq 설정해주는 것 필요함.!
 
       const r = await this.$post(`/comment/register/${this.projectId}`, data);
       // TODO: 정상 등록 -> 댓글 부분 화면 갱신 필요
       if (r.status === 200) {
         document.getElementById("txtarea").value = "";
-        console.log("댓글 등록 성공");
+        this.$router.go();
       }
     }
   }
