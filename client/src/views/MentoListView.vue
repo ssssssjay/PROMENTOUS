@@ -11,6 +11,7 @@
     <!-- 카드리스트 -->
     <!-- ---------------------------------------------------------------------------------------------- -->
     <section class="container">
+      {{ this.mentoList }}
       <div class="Regbtn">
         <registerbtn-layout
           :btnText="btnText"
@@ -32,10 +33,11 @@
           <div class="row g-0">
             <div class="col-md-8">
               <div class="card-body">
-                <span class="mentoNickName">{{ mento.USER_NICKNAME }}</span>
+                <span class="mentoNickName">{{ mento.user_nickname }}</span>
                 <i class="bi bi-star-fill star"></i>
+                <!--   불필요한 프론트 과잉처리. 
                 <span class="mentoScore">{{ mento.showRate }}</span>
-                <span>({{ mento.RATE.length }})</span>
+                <span>({{ mento.RATE.length }})</span> -->
                 <p class="card-title">{{ mento.TITLE }}</p>
                 <p class="card-text">
                   {{ mento.INTRO }}
@@ -47,20 +49,22 @@
                   style="display: inline">
                   <button class="partName">{{ code }}</button>
                 </div>
+                <!--  보강 예정  ( 대문자 변수 해제 부탁드려요  )
                 <span v-show="mento.DEPT_CODE.length > 3"
                   >+{{ mento.DEPT_CODE.length - 3 }}</span
                 >
+                -->
               </div>
             </div>
             <div class="men_title col-md-4 imgCard">
               <img
-                v-bind:src="mento.USER_IMAGE"
+                v-bind:src="mento.user_image"
                 class="img-fluid rounded-start pfimg"
                 alt="..." />
 
               <button
                 class="btn btn-outline-dark mentoDetail"
-                @click="goToMenu('/mentordetail')">
+                @click="goToMenu('/mentordetail', mento.user_id)">
                 멘토 상세보기
               </button>
             </div>
@@ -91,15 +95,54 @@ export default {
     return {
       part: [],
       searchData: "",
-      btnText: "멘토 등록 하기",
+      btnText: "하드코딩임.멘토 등록 하기",
       mentoList: [
         {
-          USER_IMAGE:
+          user_image:
             "http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg",
-          USER_NICKNAME: "evelo0702",
-          TITLE: "파이썬을 도와주는 멘토링",
+          user_nickname: "하드코딩임.evelo0702",
+          TITLE: "하드코딩임.파이썬을 도와주는 멘토링",
           INTRO:
-            "오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해서 더욱 좋은 개발자를 만들고싶습니다.",
+            "하드코딩임.오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해서 더욱 좋은 개발자를 만들고싶습니다.",
+          DEPT_CODE: ["자바스크립트", "파이썬", "스프링", "뷰"],
+          DEPT_CODE3: [], // db에서 가져올 데이터 x
+          RATE: [5, 2, 3, 4, 5],
+          totalRate: 0, // db에서 가져올 데이터 x
+          showRate: 0 // db에서 가져올 데이터 x
+        },
+        {
+          user_image:
+            "http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg",
+          user_nickname: "하드코딩임.evelo0702",
+          TITLE: "하드코딩임.파이썬을 도와주는 멘토링",
+          INTRO:
+            "하드코딩임.오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해서 더욱 좋은 개발자를 만들고싶습니다.",
+          DEPT_CODE: ["자바스크립트", "파이썬", "스프링", "뷰"],
+          DEPT_CODE3: [], // db에서 가져올 데이터 x
+          RATE: [5, 2, 3, 4, 5],
+          totalRate: 0, // db에서 가져올 데이터 x
+          showRate: 0 // db에서 가져올 데이터 x
+        },
+        {
+          user_image:
+            "http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg",
+          user_nickname: "하드코딩임.evelo0702",
+          TITLE: "하드코딩임.파이썬을 도와주는 멘토링",
+          INTRO:
+            "하드코딩임.오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해서 더욱 좋은 개발자를 만들고싶습니다.",
+          DEPT_CODE: ["자바스크립트", "파이썬", "스프링", "뷰"],
+          DEPT_CODE3: [], // db에서 가져올 데이터 x
+          RATE: [5, 2, 3, 4, 5],
+          totalRate: 0, // db에서 가져올 데이터 x
+          showRate: 0 // db에서 가져올 데이터 x
+        },
+        {
+          user_image:
+            "http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg",
+          user_nickname: "하드코딩임.evelo0702",
+          TITLE: "하드코딩임.파이썬을 도와주는 멘토링",
+          INTRO:
+            "하드코딩임.오늘 내가 만든 프로그램이 누군가에게 도움을 줄 수 있다는 사실에서 동기를 얻습니다. 아이디어가 제 손을 통해 현실화되고, 그렇게 현실화된 프로덕트를 통해서 더욱 좋은 개발자를 만들고싶습니다.",
           DEPT_CODE: ["자바스크립트", "파이썬", "스프링", "뷰"],
           DEPT_CODE3: [], // db에서 가져올 데이터 x
           RATE: [5, 2, 3, 4, 5],
@@ -112,16 +155,17 @@ export default {
   setup() {},
   created() {},
   mounted() {
-    this.deptCodeFilter();
-    this.rateData();
+    this.getMentorList();
   },
   unmounted() {},
   methods: {
     sendValue(data) {
       this.part = data;
     },
-    goToMenu(path) {
+    goToMenu(path, mentoUserId) {
       this.$router.push({ path: path });
+      /**/
+      alert(mentoUserId); // 이 값을 MentorDetailView.vue 가 알게 하려면 어떻게 할까요 ? 프론트 처리부탁...
     },
     deptCodeFilter() {
       for (let i = 0; i < this.mentoList.length; i++) {
@@ -137,6 +181,13 @@ export default {
           this.mentoList[i].totalRate / this.mentoList[i].RATE.length
         ).toFixed(1);
       }
+    },
+    async getMentorList() {
+      this.mentoList = await this.$post("/mentor/getMentorList", {
+        keyword: this.searchData
+      });
+      this.mentoList = this.mentoList.data;
+      console.log(this.mentoList);
     }
   }
 };
