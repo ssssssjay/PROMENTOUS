@@ -37,16 +37,18 @@
             <hr />
           </div>
           <!-- 글 내용 -->
-          <div class="h4 pb-3 pt-3" style="text-align: left">
-            <p class="row">
-              <span class="text-muted col-2">프로젝트 진행 기간</span>
+          <div class="h4 pb-3 px-1" style="text-align: left">
+            <p class="row my-4">
+              <span class="text-muted col-2 pro_font_bold">| 진행 기간</span>
               <!-- TODO: 시작일, 종료일 DB 확인 필요.. 지금은 필드가 없다. -->
-              <span class="px-4 col-2">2022/07/01</span>
-              <span class="px-4 col-1">~</span>
-              <span class="px-4 col-2">2022/07/01</span>
+              <span class="ps-4 me-0 pe-0 col-2">2022/07/01</span>
+              ~
+              <span class="px-4 ms-5 col-2">2022/08/31</span>
             </p>
-            <p class="row">
-              <span class="text-muted col-2">진행한 프로젝트</span>
+            <p class="row my-4">
+              <span class="text-muted col-2 pro_font_bold"
+                >| 진행한 프로젝트</span
+              >
               <span class="px-4 col-9">
                 <router-link
                   :to="`/project/recruit/${project.project_id}`"
@@ -56,8 +58,8 @@
                 </router-link>
               </span>
             </p>
-            <p class="row">
-              <span class="text-muted col-2">결과물 링크</span>
+            <p class="row my-4">
+              <span class="text-muted col-2 pro_font_bold">| 결과물 링크</span>
               <span class="px-4 col-9">
                 <a
                   :href="`${review.url_address}`"
@@ -69,8 +71,10 @@
                 </a>
               </span>
             </p>
-            <p class="row">
-              <span class="text-muted col-2">사용 언어/스택</span>
+            <p class="row my-4">
+              <span class="text-muted col-2 pro_font_bold"
+                >| 사용 언어/스택</span
+              >
               <span class="px-4 col-10">
                 <span
                   class="badge pro_badge_color rounded-pill me-1"
@@ -81,7 +85,8 @@
               </span>
             </p>
             <div>
-              <div class="widget-box fs-4 py-4 px-5">
+              <!-- TODO: v-html 로 변경하기. -->
+              <div class="widget-box fs-4 py-4 px-5 mt-5">
                 {{ review.desc }}
               </div>
             </div>
