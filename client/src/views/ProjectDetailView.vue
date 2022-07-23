@@ -64,13 +64,16 @@
               <span class="text-muted col-2">참고링크</span>
               <span class="col-10">
                 <!-- TODO: 버튼 누르면 url.url_address 새창으로 열어주기 -->
-                <button
-                  type="button"
-                  class="btn btn-secondary btn-sm me-2"
-                  v-for="url in refUrl"
-                  :key="url.ref_url_id">
-                  {{ url.url_title }}
-                </button>
+                <span v-for="url in refUrl" :key="url.ref_url_id">
+                  <a
+                    target="_blank"
+                    :href="`${url.url_address}`"
+                    class="rev_router_link_color">
+                    <button type="button" class="btn btn-sm me-2 pro_button">
+                      {{ url.url_title }}
+                    </button>
+                  </a>
+                </span>
               </span>
             </p>
             <div class="py-5" v-if="status_code === FIN">
