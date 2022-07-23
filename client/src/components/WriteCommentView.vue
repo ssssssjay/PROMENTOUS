@@ -40,7 +40,6 @@
 export default {
   components: {},
   props: {
-    // 어떤 페이지냐에 따라 API 호출 주소 분기
     pageType: {
       type: String,
       default: ""
@@ -77,7 +76,6 @@ export default {
       if (data.commentText === "" || !data.commentText) {
         return;
       }
-      // TODO: 대댓글인 경우 targetId, targetSeq 설정해주는 것 필요함.!
 
       const r = await this.$post(`/comment/register/${this.projectId}`, data);
       // TODO: 정상 등록 -> 댓글 부분 화면 갱신 필요
