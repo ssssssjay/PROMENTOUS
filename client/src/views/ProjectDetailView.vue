@@ -176,49 +176,15 @@
               <span>팀원 정보 보기</span>
             </div>
             <ul class="list-unstyled ps-0">
-              <li class="row">
+              <li
+                class="row"
+                v-for="(members, part) in currentMemberList"
+                :key="part">
                 <div class="col-6">
-                  <p class="fs-6 text-muted mb-0">백엔드</p>
+                  <p class="fs-6 text-muted mb-0">{{ part }}</p>
                 </div>
-                <p class="row ps-4">
-                  <span class="col-7 pt-1">닉네임</span>
-                  <span class="col-5">
-                    <button type="button" class="btn btn-outline-dark btn-sm">
-                      상세보기
-                    </button>
-                  </span>
-                </p>
-                <p class="row ps-4">
-                  <span class="col-7 pt-1">닉네임</span>
-                  <span class="col-5">
-                    <button type="button" class="btn btn-outline-dark btn-sm">
-                      상세보기
-                    </button>
-                  </span>
-                </p>
-              </li>
-              <li class="row">
-                <div class="col-6">
-                  <p class="fs-6 text-muted mb-0">프론트엔드</p>
-                </div>
-                <p class="row ps-4">
-                  <span class="col-7 pt-1">닉네임</span>
-                  <span class="col-5">
-                    <button type="button" class="btn btn-outline-dark btn-sm">
-                      상세보기
-                    </button>
-                  </span>
-                </p>
-                <p class="row ps-4">
-                  <span class="col-7 pt-1">닉네임</span>
-                  <span class="col-5">
-                    <button type="button" class="btn btn-outline-dark btn-sm">
-                      상세보기
-                    </button>
-                  </span>
-                </p>
-                <p class="row ps-4">
-                  <span class="col-7 pt-1">닉네임</span>
+                <p class="row ps-4" v-for="member in members" :key="member">
+                  <span class="col-7 pt-1">{{ member.user_nickname }}</span>
                   <span class="col-5">
                     <button type="button" class="btn btn-outline-dark btn-sm">
                       상세보기
@@ -280,6 +246,7 @@ export default {
     this.getLeaderData();
     this.getRecruitData();
     this.getRefUrl();
+    this.getCurrentMembers();
   },
   methods: {
     formatDate(datetime) {
@@ -354,12 +321,12 @@ export default {
       // 모집 인원수
       this.recruitNumber = await this.getRecruitNumber();
     },
+    // 팀원 정보 보기
     async getCurrentMembers() {
-      this.projectLeader = await this.$get(
+      this.currentMemberList = await this.$get(
         `/project/recruit/${this.projectId}/currentMembers`
       );
     },
-
     async getRefUrl() {
       this.refUrl = await this.$get(
         `/project/recruit/${this.projectId}/ref_url`
