@@ -23,7 +23,7 @@
               <div class="mar-btm">
                 <a
                   href="#"
-                  class="btn-link text-semibold media-heading box-inline a-black fs-5"
+                  class="btn-link text-semibold media-heading box-inline pro_a_black fs-5"
                   >{{ comment.writer_nickname }}</a
                 >
                 <p class="text-muted text-sm">
@@ -67,7 +67,7 @@
                         <div class="col text-start">
                           <a
                             href="#"
-                            class="btn-link text-semibold media-heading box-inline col-9 a-black fs-5">
+                            class="btn-link text-semibold media-heading box-inline col-9 pro_a_black fs-5">
                             {{ recomment.writer_nickname }}
                           </a>
                           <p class="text-muted text-sm">
@@ -319,10 +319,5 @@ a.text-muted:focus {
 
 .mar-top {
   margin-top: 15px;
-}
-
-.a-black {
-  color: black;
-  text-decoration: none;
 }
 </style>

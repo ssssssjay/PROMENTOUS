@@ -56,28 +56,28 @@
             </p>
             <div>
               <span class="text-muted">프로젝트 소개</span>
-              <div class="widget-box fs-4 py-4 px-5">
-                {{ project.project_desc }}
-              </div>
+              <div
+                class="widget-box fs-4 py-4 px-5"
+                v-html="project.project_desc"></div>
             </div>
-            <p class="row">
+            <p class="row" v-if="isRefUrl">
               <span class="text-muted col-2">참고링크</span>
               <span class="col-10">
                 <!-- TODO: 버튼 누르면 url.url_address 새창으로 열어주기 -->
-                <button
-                  type="button"
-                  class="btn btn-secondary btn-sm me-2"
-                  v-for="url in refUrl"
-                  :key="url.ref_url_id">
-                  {{ url.url_title }}
-                </button>
+                <span v-for="url in refUrl" :key="url.ref_url_id">
+                  <a
+                    target="_blank"
+                    :href="`${url.url_address}`"
+                    class="rev_router_link_color">
+                    <button type="button" class="btn btn-sm me-2 pro_button">
+                      {{ url.url_title }}
+                    </button>
+                  </a>
+                </span>
               </span>
             </p>
-            <!-- <div>
-              <span class="text-muted">후기 모아보기</span>
-            </div> -->
-            <div class="py-5">
-              <review-carousel />
+            <div class="py-5" v-if="status_code === FIN">
+              <review-carousel :projectId="projectId" />
             </div>
           </div>
         </div>
@@ -265,6 +265,7 @@ export default {
         warranty: null
       },
       refUrl: [],
+      isRefUrl: true,
       projectLeader: {
         user_nickname: ""
       },
@@ -363,6 +364,9 @@ export default {
       this.refUrl = await this.$get(
         `/project/recruit/${this.projectId}/ref_url`
       );
+      if (this.refUrl.length === 0) {
+        this.isRefUrl = false;
+      }
     }
   }
 };
