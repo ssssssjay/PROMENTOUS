@@ -228,7 +228,7 @@
                 v-for="(app, index) in applicantsList">
                 <img
                   v-bind:src="app.userImage"
-                  class="card-img-top m-2"
+                  class="card-img-top m-2 userImage"
                   alt="..."
                   @click="[handleClick4(), transIndex(index)]" />
 
@@ -313,7 +313,7 @@
                 v-for="(mem, index) in teamMembers">
                 <img
                   v-bind:src="mem.userImage"
-                  class="card-img-top mt-2"
+                  class="card-img-top mt-2 userImage"
                   alt="..."
                   @click="[handleClick3(), transIndex(index)]" />
 
@@ -970,10 +970,11 @@ div.applicantList {
   flex-wrap: nowrap;
 }
 
-.mentoring {
-  /* max-width: 460px; */
+div.col.mentoring {
+  width: 470px;
   height: 160px;
   display: flex;
+  flex: 0 0 0%;
   background: white;
   margin: 10px;
   padding-left: 30px;
@@ -1002,16 +1003,16 @@ div.applicantList {
   font-size: 12px;
 }
 .mentoringStatus > span {
-  margin-right: 45px;
+  margin-right: 40px;
 }
 .mentoringStatus > span:nth-child(2) {
-  margin-right: 45px;
+  margin-right: 40px;
 }
 .mentoringStatus > span:nth-child(4) {
   margin-right: 40px;
 }
 .mentoringStatus > span:nth-child(5) {
-  margin-right: 45px;
+  margin-right: 40px;
 }
 
 .mentoringBtn {
@@ -1084,5 +1085,9 @@ p.form-control {
   position: absolute;
   width: 100px;
   left: -10px;
+}
+.userImage {
+  width: 200px;
+  height: 150px;
 }
 </style>
