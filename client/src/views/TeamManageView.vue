@@ -6,6 +6,7 @@
         <p class="des">팀 상태 및 공유링크를 확인하고 팀원/멘토를 평가해요</p>
       </div>
     </section>
+    {{ this.applicantsList }}
     <!-- ---------------------------------------------------------------------------------------------- -->
     <!-- 상태선택박스 -->
     <!-- <div>MENTORINGTOTALPAGE ::: {{ this.mentoringTotalPageCount }}</div>

@@ -11,12 +11,15 @@
     <!-- 카드리스트 -->
     <!-- ---------------------------------------------------------------------------------------------- -->
     <section class="container">
+      <hr />
+      {{ this.page }}
+      <hr />
       {{ this.mentoList }}
 
       <registerbtn-layout
         class="regbtn"
         :btnText="btnText"
-        @click="goToMenu('/mentorregister')" />
+        @click="checkMentorInfoExist()" />
 
       <div
         class="d-flex pt-5 mb-4 align-items-start justify-content-between section_second">
@@ -73,7 +76,7 @@
           </div>
         </div>
         <div class="pagination">
-          <PaginationLayout />
+          <PaginationLayout :page="page" @paging="paging" />
         </div>
       </div>
     </section>
@@ -100,7 +103,10 @@ export default {
       searchKeyWord: "",
       originDeptCode: "",
       selectedPage: 1,
-      btnText: "하드코딩임.멘토 등록 하기",
+      page: 1, // Math.floor => 버림 , Math.ceil => 올림
+      pageToMove: 1,
+      btnText: "멘토 등록 하기",
+      checkResult1: [],
       mentoList: [
         {
           user_image0: "",
@@ -152,12 +158,25 @@ export default {
       this.mentoList = await this.$post("/mentor/mentorList", {
         searchKeyWord: this.searchData,
         dept_code: this.originDeptCode,
-        selectedPage: this.selectedPage
+        selectedPage: this.pageToMove
       });
-      this.mentoList = this.mentoList.data;
       console.log(this.mentoList);
+      this.page = Math.ceil(Math.ceil(this.mentoList.data.count[0].count / 8));
+      /*2까지는 가져옵니다.  TOTAL 12개 결과에서 2 페지지까지는 떠야 하므로!*/
+      this.mentoList = this.mentoList.data.mentorList;
       this.deptCodeFilter();
       this.defaultImage();
+    },
+    /*멘토정보 등록하기로 이동 (멘토로 되고싶은사람) 직전 벨리데이션*/
+    async checkMentorInfoExist() {
+      this.checkResult1 = await this.$post("/mentor/checkMentorInfoExist", {
+        user_id: this.$store.state.user.user_id
+      });
+      if (this.checkResult1.data.length == 0) {
+        this.goToMenu("/mentorregister");
+      } else {
+        alert("이미 등록하셨습니다! ");
+      }
     }
   }
 };
