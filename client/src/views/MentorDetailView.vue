@@ -331,6 +331,8 @@ export default {
       this.reputations = this.mentorData.reputations;
       /*멘토링 이력  가져오기*/
       this.mentorings = this.mentorData.mentoringHistory;
+      /* 참고 링크 가져오기 */
+      this.url_list = this.mentorData.url_list;
     }
   }
 };
