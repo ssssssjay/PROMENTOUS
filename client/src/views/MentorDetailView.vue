@@ -19,6 +19,7 @@
         <!-- 상단 -->
         <div class="top">
           <p class="text-start text-muted">1999/11/13</p>
+          {{ mentorData }}
           <p class="row">
             <span class="col-9 h2"
               ><strong v-show="infoStatus">{{ title }}</strong>
@@ -210,28 +211,31 @@ export default {
 
   data() {
     return {
-      title: "'최강' 캡틴안산의 Vue 멘토링",
+      /*김인호 백단작업중 추가 mentorUserId , mentorData */
+      mentorUserId: 47, // <<<--- 라우터 푸시? 로 들어온 내가 보고있는 멘토의 user_id
+      mentorData: {},
+      title: "프론트하드코딩임..'최강' 캡틴안산의 Vue 멘토링",
       likePart: ["프론트엔드", "백엔드", "모바일"],
       mentor: { nickname: "joansdev", score: "4.5", scoreCount: "15" },
       reputations: [
         {
           score: "4",
           comment:
-            "이해했다고 말씀드려도, 정말 이해했는지 직접 확인해보고 넘어가주십니다. 그리고 또"
+            "프론트하드코딩임..이해했다고 말씀드려도, 정말 이해했는지 직접 확인해보고 넘어가주십니다. 그리고 또"
         },
         {
           score: "2.5",
-          comment: "자기주장이 많이 강한 편이신 것 같아요 ^^"
+          comment: "프론트하드코딩임..자기주장이 많이 강한 편이신 것 같아요 ^^"
         },
         {
           score: "5",
           comment:
-            "프로멘토우스를 통해 첫 개발 멘토링을 진행해봤는데, 성공적이었습니다. 인프런이나"
+            "프론트하드코딩임..프로멘토우스를 통해 첫 개발 멘토링을 진행해봤는데, 성공적이었습니다. 인프런이나"
         },
         {
           score: "4",
           comment:
-            "비용만 받고 야박하게 서비스를 진행하는 여타 멘토분들과는 다르게 한 개라도 더..."
+            "프론트하드코딩임..비용만 받고 야박하게 서비스를 진행하는 여타 멘토분들과는 다르게 한 개라도 더..."
         },
         {
           score: "4",
@@ -240,10 +244,10 @@ export default {
         }
       ],
       selfInfo:
-        "누구나 다루기 쉬운 Vue.js 입문의 리뉴얼 강의입니다. 입문자의 관점으로 더욱더 눈높이를 낮춰 프론트엔드 개발할 때 알고 있으면 좋은 지식들을 상세하게 설명하였습니다. Vue.js로 재밌게 웹 개발을 시작하실 수 있도록 알차게 내용을 구성하였으니, 관심 있으신 분들은 강의 소개 영상을 꼭 확인해보세요! 😁",
+        "프론트하드코딩임..누구나 다루기 쉬운 Vue.js 입문의 리뉴얼 강의입니다. 입문자의 관점으로 더욱더 눈높이를 낮춰 프론트엔드 개발할 때 알고 있으면 좋은 지식들을 상세하게 설명하였습니다. Vue.js로 재밌게 웹 개발을 시작하실 수 있도록 알차게 내용을 구성하였으니, 관심 있으신 분들은 강의 소개 영상을 꼭 확인해보세요! 😁",
       mentorings: [
         {
-          name: "찰리와 초콜릿기계 설계해보기",
+          name: "프론트하드코딩임..찰리와 초콜릿기계 설계해보기",
           href: "https://www.naver.com/"
         },
         { name: "쀼 프로젝트", href: "https://www.naver.com/" },
@@ -264,7 +268,9 @@ export default {
   },
   setup() {},
   created() {},
-  mounted() {},
+  mounted() {
+    this.mentorDetail();
+  },
   unmounted() {},
   methods: {
     changeApplyStatus() {
@@ -285,6 +291,24 @@ export default {
     },
     modalOff() {
       this.modalStatus = false;
+    },
+    //김인호 추가
+    async mentorDetail() {
+      //mentorUserId , mentorData
+      this.mentorData = await this.$post("/mentor/getMentorDetail", {
+        mentorId: this.mentorUserId
+      });
+      this.mentorData = this.mentorData.data;
+      /*멘토 기본정보들 front에 삽입 */
+      this.title = this.mentorData.basicInfo[0].mentoring_title;
+      this.mentor.nickname = this.mentorData.basicInfo[0].user_nickname;
+      this.mentor.score = this.mentorData.basicInfo[0].totalRate;
+      this.mentor.scoreCount = this.mentorData.basicInfo[0].rateCount;
+      this.selfInfo = this.mentorData.basicInfo[0].mentoring_intro;
+      /*멘토후기정보들 가져오기*/
+      this.reputations = this.mentorData.reputations;
+      /*멘토링 이력  가져오기*/
+      this.mentorings = this.mentorData.mentoringHistory;
     }
   }
 };
