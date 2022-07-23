@@ -73,10 +73,7 @@
                 </button>
               </span>
             </p>
-            <!-- <div>
-              <span class="text-muted">후기 모아보기</span>
-            </div> -->
-            <div class="py-5">
+            <div class="py-5" v-if="status_code === FIN">
               <review-carousel :projectId="projectId" />
             </div>
           </div>

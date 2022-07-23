@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-5">
+  <div class="mb-5" v-if="isReviewList">
     <div class="row">
       <div class="col-lg-10 mx-auto">
         <h2>후기 모아보기</h2>
@@ -72,7 +72,8 @@ export default {
   data() {
     return {
       firstReviewId: "",
-      reviewList: []
+      reviewList: [],
+      isReviewList: true
     };
   },
   setup() {},
@@ -91,6 +92,7 @@ export default {
         `/project/recruit/${this.projectId}/all_review`
       );
       if (!this.reviewList[0]) {
+        this.isReviewList = false;
         return;
       }
       this.firstReviewId = this.reviewList[0].review_id;
