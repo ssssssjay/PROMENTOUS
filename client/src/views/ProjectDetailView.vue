@@ -142,28 +142,24 @@
               <span>분야별 모집 현황</span>
             </div>
             <ul class="list-unstyled ps-0">
-              <li class="row">
+              <li class="row" v-for="recruit in recruitData" :key="recruit">
                 <div class="col-6">
-                  <p class="fs-5 mb-0">백엔드</p>
-                  <p class="fs-6 text-muted ps-1">24명 지원</p>
-                  <!-- <p>24명 지원</p> -->
+                  <p class="fs-5 mb-0">{{ recruit.apply_dept_code }}</p>
+                  <p class="fs-6 text-muted ps-1">
+                    {{ recruit.total_count }}명 지원
+                  </p>
                 </div>
-                <span class="col-2">1/3</span>
+                <span class="col-2"
+                  >{{ recruit.acc_count }}/{{ recruit.to }}</span
+                >
                 <span class="col-4">
-                  <button type="button" class="btn btn-sm me-1 pro_button">
-                    지원
-                  </button>
-                </span>
-              </li>
-              <li class="row">
-                <div class="col-6">
-                  <p class="fs-5 mb-0">프론트엔드</p>
-                  <p class="fs-6 text-muted ps-1">16명 지원</p>
-                  <!-- <p>24명 지원</p> -->
-                </div>
-                <span class="col-2">2/3</span>
-                <span class="col-4">
-                  <button type="button" class="btn btn-sm me-1 pro_button">
+                  <button
+                    type="button"
+                    class="btn btn-sm me-1 pro_button"
+                    :disabled="
+                      project.status_code === `FIN` ||
+                      recruit.acc_count === recruit.to
+                    ">
                     지원
                   </button>
                 </span>
