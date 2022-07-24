@@ -257,7 +257,9 @@ export default {
       },
       recruitData: [],
       recruitNumber: null, // 모집인원
-      currentMemberList: []
+      currentMemberList: [],
+      /*지원가능여부 FLAG  */
+      applyAbleFlag: false
     };
   },
   created() {
@@ -268,6 +270,8 @@ export default {
     this.getRecruitData();
     this.getRefUrl();
     this.getCurrentMembers();
+    this.checkApplyAble();
+    
   },
   methods: {
     formatDate(datetime) {
@@ -355,7 +359,82 @@ export default {
       if (this.refUrl.length === 0) {
         this.isRefUrl = false;
       }
+    },
+    async checkApplyAble() {
+      /* eslint-disable */ 
+        let data = {};
+        data.project_id = this.projectId;
+        data.user_id = this.$store.state.user.user_id;
+
+      let result  = await this.$post(
+        `/project/recruit/checkApplyAble`,
+        data
+      ); 
+      console.log(result);
+      console.log(result.data[0].flag);
+      if(result.data[0].flag == null){
+      this.applyAbleFlag = true;
+      }
+    },
+    /*TODO 주의!!  지원 버튼속에 apply_dept_id 를 알고있어야합니다!  */
+    //사용방식
+    //this.projectApplyNew(apply_dept_id/* 지원분야ID를 알아야합니다! */);
+    async projectApplyNew(apply_dept_id ) {
+      /* eslint-disable */
+      if(this.applyAbleFlag){ 
+        console.log("지원 가능")
+      let flag = confirm("지원하시겠습니까? ");
+          if(flag){
+            let data = {};            
+            data.applicant_id = this.$store.state.user.user_id;
+            data.project_id = this.projectId;
+            data.apply_dept_id = this.applyDeptId ;
+          let result = await this.$post(
+            `/project/recruit/projectApplyNew`,
+            data
+          );
+          console.log("지원결과");
+          console.log(result);
+          }else{
+            return;
+          }
+      }else{
+        console.log("지원 가능");
+        return;
+      }
     }
+    //       /* eslint-disable */
+    //   let flag = confirm("저장하시겠습니까? ");
+    //   if(flag){
+    //   let data = {};
+    //   let project_id = this.selectedProjectId;
+    //   // this.params.selectedPage = this.selectedMentoringPage;
+    //   //입력 없이 등록 버튼 누르는 경우 예외처리
+    //   // 댓글 입력 없이 등록 버튼 누르는 경우 예외처리
+    //   data.project = {};
+    //   data.project_status = {};
+    //   data.project.meeting_url = this.urlAddress;
+    //   data.project.meeting_url_title = this.urlTitle;
+    //   data.project.status_code = this.teamStatus;
+    //   data.project.warranty = this.deposit;
+    //   data.project_status.project_id = project_id;
+    //   data.project_status.project_status = this.teamStatus;
+    //   data.project_status.changer = this.$store.state.user.user_id;
+
+    //   // saveTeamManageInfo
+    //   const r = await this.$patch(
+    //     // TODO: axios.defaults.baseURL로 변경
+    //     `/manage/saveTeamManageInfo/${project_id}`,
+    //     data
+    //   );
+    //   if (r.status === 200) {
+    //     this.$router.go();/* refresh  */
+    //     }
+    //   console.log(this.r);
+    // }else{
+    //   return;
+    // }
+    //   // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
   }
 };
 </script>
