@@ -83,18 +83,18 @@
   </div>
 </template>
 <script>
-// import PaginationLayout from "@/components/layouts/PaginationLayout.vue";
+import PaginationLayout from "@/components/layouts/PaginationLayout.vue";
 import PartSearchLayout from "@/components/layouts/PartSearchLayout.vue";
 import SearchAll from "@/components/SearchAll.vue";
 import RecruitSortLayout from "@/components/layouts/RecruitSortLayout.vue";
 import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
-// PaginationLayout
 export default {
   components: {
     PartSearchLayout,
     SearchAll,
     RecruitSortLayout,
-    RegisterbtnLayout
+    RegisterbtnLayout,
+    PaginationLayout
   },
   data() {
     return {
@@ -177,6 +177,10 @@ export default {
       } else {
         alert("이미 등록하셨습니다! ");
       }
+    },
+    paging(data) {
+      this.pageToMove = data;
+      this.getMentorList();
     }
   }
 };

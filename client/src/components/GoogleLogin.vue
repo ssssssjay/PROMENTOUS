@@ -46,7 +46,12 @@ export default {
       // console.log(loginUser);
       console.log(this.$store.state.user);
       // 페이지를 마이페이지로 이동시킨다
-      this.$router.push("/myPageInfo");
+      const path = `/myPageInfo/${loginUser.data[0].user_id}`;
+      this.$router.push({
+        path: path,
+        name: "MyPageView",
+        params: { userId: loginUser.data[0].user_id }
+      });
       // location.href = "http://localhost:8080/myPageinfo";
       // 모달영역을 지원준다
       this.$emit("onClickClose");

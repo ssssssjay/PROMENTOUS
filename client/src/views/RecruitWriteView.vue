@@ -127,7 +127,11 @@
             <label for="region" class="col-sm-2 col-form-label me-5"
               >진행 지역</label
             >
-            <RegionSortLayout class="col ms-5" style="display: inline" />
+            <RegionSortLayout
+              class="col ms-5"
+              style="display: inline"
+              @send-LargeCity="SendLargeCity"
+              @send-RestCity="SendRestCity" />
           </div>
         </div>
         <div class="row mb-5">
@@ -232,26 +236,6 @@
   </div>
 </template>
 <script>
-/*
-{
-  param: {
-    "project_id":, x 오토인크리먼트로 알아서
-    "leader_user":, ㅇ this.$store.state.blahblah...
-    "title":, ㅇ
-    "exp_start_date":, ㅇ
-    "exp_period":, ㅇ INT
-    "progress_method":, ㅇ enum('ON','OFF')
-    "main_area_code":, ㅇ 널값허용
-    "sub_area_code":, ㅇ 널값허용
-    "stack_code":, ㅇ "T01,R01,P01"
-    "project_contact":, ㅇ "url"
-    "project_desc":, ㅇ "thml tag..."
-    "warranty":, ㅇ INT
-  }
-}
-
-*/
-
 import "@vuepic/vue-datepicker/dist/main.css";
 import RegionSortLayout from "@/components/layouts/RegionSortLayout.vue";
 import StackSearchLayout from "@/components/layouts/StackSearchLayout.vue";
@@ -289,7 +273,9 @@ export default {
       CONTENTS:
         "<h1>1. 프로젝트 주제</h1> <h3>    -프로젝트 내용, 시작 동기 등에 관해 적어주세요!</h3><br><br><h1>2. 모임 방식/ 진행 방법</h1> <h3>    -모임을 1주일에 몇 번 정도 진행할 지 적어주세요!</h3><br><h3>    -모임 진행을 희망하는 요일을 적어주세요!</h3><br><h3>    -모임 진행 방식에 대해 상세히 적어주세요!</h3><br><br><h1>3. 그 외 자유 작성 사항</h1>",
       //  "1. 프로젝트 주제  2. 모임 방식/ 진행 방법 3.그 외 자유 작성 사항"
-      PROJECT_DESC: ""
+      PROJECT_DESC: "",
+      MAIN_AREA_CODE: "",
+      SUB_AREA_CODE: ""
     };
   },
   setup() {},
@@ -357,8 +343,15 @@ export default {
       this.LEADER_DEPT_NAME = "";
       this.PartAdd = "x";
     },
+    SendLargeCity(data) {
+      this.MAIN_AREA_CODE = data;
+    },
+    SendRestCity(data) {
+      this.SUB_AREA_CODE = data;
+    },
     // 온라인 요청과 오프라인 요청을 나누어서 보내준다. 우선 아래는 온라인
     async insertProject() {
+      let response = [];
       if (
         this.LEADER_DEPT_NAME === "" ||
         this.PROJECT_TITLE === "" ||
@@ -367,40 +360,60 @@ export default {
         this.DEPT_LIST === [] ||
         this.PROGRESS_METHOD === "" ||
         this.WARRANTY === "" ||
-        this.STACKS === [] ||
+        this.STACKS === "" ||
         this.MEETING_URL === ""
       ) {
         this.$swal("작성하지 않은 부분이 있어요!");
-      } else {
-        const response = await this.$post(
+      } else if (this.PROGRESS_METHOD === "ON") {
+        response = await this.$post(
           `http://localhost:3000/project/recruit/insertPost`,
           {
             param: {
               leader_user: this.$store.state.user.user_id,
               title: this.PROJECT_TITLE,
               exp_start_date: this.EXP_START_DATE,
-              // exp_start_date: "2022-07-18 00:00:00",
               exp_period: parseInt(this.EXP_PERIOD),
               progress_method: this.PROGRESS_METHOD,
               stack_code: this.STACKS.join(),
               project_contact: this.MEETING_URL,
               project_desc: this.PROJECT_DESC,
-              warranty: parseInt(this.WARRANTY)
+              warranty: parseInt(this.WARRANTY),
+              leader_dept: this.LEADER_DEPT_NAME
             }
           }
         );
         console.log(response);
-        const postId = response.data.insertId;
-        for (let i = 0; i < this.URL_LIST.length; i++) {
-          this.URL_LIST[i].post_category = "RCB";
-          this.URL_LIST[i].post_id = postId;
-        }
-        for (let i = 0; i < this.DEPT_LIST.length; i++) {
-          this.DEPT_LIST[i].project_id = postId;
-        }
-        await this.insertAdditional();
-        this.$router.push("/project/recruit");
+      } else {
+        response = await this.$post(
+          `http://localhost:3000/project/recruit/insertPost`,
+          {
+            param: {
+              leader_user: this.$store.state.user.user_id,
+              title: this.PROJECT_TITLE,
+              exp_start_date: this.EXP_START_DATE,
+              exp_period: parseInt(this.EXP_PERIOD),
+              progress_method: this.PROGRESS_METHOD,
+              main_area_code: this.MAIN_AREA_CODE,
+              sub_area_code: this.SUB_AREA_CODE,
+              stack_code: this.STACKS.join(),
+              project_contact: this.MEETING_URL,
+              project_desc: this.PROJECT_DESC,
+              warranty: parseInt(this.WARRANTY),
+              leader_dept: this.LEADER_DEPT_NAME
+            }
+          }
+        );
       }
+      const postId = response.data.insertId;
+      for (let i = 0; i < this.URL_LIST.length; i++) {
+        this.URL_LIST[i].post_category = "RCB";
+        this.URL_LIST[i].post_id = postId;
+      }
+      for (let i = 0; i < this.DEPT_LIST.length; i++) {
+        this.DEPT_LIST[i].project_id = postId;
+      }
+      await this.insertAdditional();
+      this.$router.push("/project/recruit");
     },
     async insertAdditional() {
       const response = await this.$post(
