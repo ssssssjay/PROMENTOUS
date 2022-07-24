@@ -64,7 +64,7 @@ const routes = [
       )
   },
   {
-    path: "/mypageinfo",
+    path: "/mypageinfo/:userId",
     name: "MyPageView",
     // route level code-splittingd
     // this generates a separate chunk (about.[hash].js) for this route
