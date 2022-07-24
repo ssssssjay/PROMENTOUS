@@ -1,6 +1,7 @@
 <template>
   <div>
     <section class="project_list">
+      {{ this.projects }}
       <div class="card" v-for="(project, i) in projects" :key="i">
         <!-- TODO: 밑의 goToDetail안의 인자는 API 연결이후 project.project_id로 변경해야할 듯 -->
         <section class="card-body" @click="goToDetail(project.project_id)">
@@ -54,8 +55,12 @@ export default {
   data() {
     return {};
   },
-  setup() {},
-  created() {},
+  setup() {
+    // props.projects = this.d;
+  },
+  created() {
+    // passProjects();
+  },
   mounted() {},
   unmounted() {},
   methods: {
@@ -68,6 +73,9 @@ export default {
         params: { projectId: id }
       });
     }
+    // passProjects(data) {
+    //   const d = data;
+    // }
   }
 };
 </script>

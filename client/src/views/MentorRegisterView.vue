@@ -130,7 +130,9 @@
     <div class="mt-5">
       <hr />
       <p class="text-end">
-        <button type="button" class="btn btn-primary btn-lg">신청하기</button>
+        <button type="button" class="btn btn-primary btn-lg" @click="passData">
+          신청하기
+        </button>
       </p>
     </div>
   </div>
@@ -178,6 +180,18 @@ export default {
       this.linkList.push(obj);
       alert("링크 정보가 추가되었습니다.");
     }
+    // async passData() {
+    //   const response = await this.$post("", {
+    //     param: {
+    //       title: this.mentorTitle,
+    //       email: this.mentoEmail,
+    //       payPerTime: this.payPerTime,
+    //       parts: this.partList,
+    //       link: this.linkList,
+    //       info: this.mentorInfo
+    //     }
+    //   });
+    // }
   }
 };
 </script>

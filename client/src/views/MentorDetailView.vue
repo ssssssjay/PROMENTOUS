@@ -30,7 +30,10 @@
                 style="width: 400px"
                 v-model="title"
                 v-show="editStatus" />
-              <button class="btn btn-outline-dark mx-4 px-4" v-show="applyYes">
+              <button
+                class="btn btn-outline-dark mx-4 px-4"
+                v-show="applyYes"
+                @click="goToApply('/mentoringapply')">
                 <strong>신청하기!</strong>
               </button>
               <button
@@ -213,6 +216,7 @@ export default {
       title: "'최강' 캡틴안산의 Vue 멘토링",
       likePart: ["프론트엔드", "백엔드", "모바일"],
       mentor: { nickname: "joansdev", score: "4.5", scoreCount: "15" },
+      mentorInfoId: "1",
       reputations: [
         {
           score: "4",
@@ -244,7 +248,7 @@ export default {
       mentorings: [
         {
           name: "찰리와 초콜릿기계 설계해보기",
-          href: "https://www.naver.com/"
+          href: "http://localhost:8080/project/recruit/10"
         },
         { name: "쀼 프로젝트", href: "https://www.naver.com/" },
         { name: "업무자동화 프로그램 개발", href: "https://www.naver.com/" },
@@ -257,8 +261,10 @@ export default {
       siteList: [],
       infoStatus: true,
       editStatus: false,
+      //applyYes가 true면 프로젝트 활성화(신청 가능) // applyYes & applyNo는 항상 반대값
       applyYes: true,
       applyNo: false,
+      applyYn: "Y",
       modalStatus: false
     };
   },
@@ -269,6 +275,11 @@ export default {
   methods: {
     changeApplyStatus() {
       [this.applyYes, this.applyNo] = [this.applyNo, this.applyYes];
+      if (this.applyYn == "Y") {
+        this.applyYn = "N";
+      } else {
+        this.applyYn = "Y";
+      }
     },
     changeStatus() {
       [this.infoStatus, this.editStatus] = [this.editStatus, this.infoStatus];
@@ -285,6 +296,22 @@ export default {
     },
     modalOff() {
       this.modalStatus = false;
+    },
+    // passData() {
+    //   const response = this.$post("", {
+    //     param: {
+    //       title: this.title,
+    //       applyYn: this.applyYn,
+    //       nickname: this.mentor.nickname,
+    //       score: this.mentor.score,
+    //       scoreCount: this.mentor.scoreCount,
+    //       info: this.selfInfo,
+    //       siteLink: this.siteLink
+    //     }
+    //   });
+    // },
+    goToApply(path) {
+      this.$router.push({ path: path });
     }
   }
 };

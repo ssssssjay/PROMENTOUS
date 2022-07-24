@@ -48,7 +48,9 @@
       <div class="row mt-5">
         <p class="col-2 text-start h4"><strong>프로젝트 리스트</strong></p>
         <p class="col-10 text-end">
-          <a href="../project/recruit">프로젝트 더보기</a>
+          <a href="../project/recruit"
+            ><button class="btn btn-outline-primary">프로젝트 더보기</button></a
+          >
         </p>
         <hr />
       </div>
@@ -104,7 +106,9 @@
       <div class="row mt-5">
         <p class="col-2 text-start h4"><strong>멘토 리스트</strong></p>
         <p class="col-10 text-end">
-          <a href="../mentolist">멘토 더보기</a>
+          <a href="../mentolist"
+            ><button class="btn btn-outline-primary">멘토 더보기</button></a
+          >
         </p>
         <hr />
       </div>
@@ -367,6 +371,16 @@ export default {
         }
       ]
     };
+  },
+  created() {
+    this.getData();
+  },
+  methods: {
+    async getData() {
+      const response = await this.$get("http://localhost:3000/project/recruit");
+      console.log(response);
+      this.$emit("passProjects", this.response);
+    }
   }
 };
 </script>
