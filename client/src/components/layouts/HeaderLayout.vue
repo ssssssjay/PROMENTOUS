@@ -100,6 +100,7 @@
             <img
               :src="user.user_image"
               class="dropProfile bi bi-person-workspace"
+              style="border-radius: 50%"
               @click="viewProfile" />
             <transition name="slide-up">
               <div class="login dropdown-menu show mt-2" v-if="clickProfile">
@@ -119,7 +120,7 @@
                   <a
                     class="myPage"
                     :class="{ active: $route.path == '/myPageinfo' }"
-                    @click="goToMenu('/myPageinfo')"
+                    @click="goToMenu(`/myPageinfo/${user.user_id}`)"
                     ><i class="bi bi-gear me-2 mb-2"></i>마이페이지</a
                   >
                   <a
