@@ -175,9 +175,11 @@
                   <button
                     type="button"
                     class="btn btn-sm me-1 pro_button"
+                    @click="projectApplyNew(apply_dept_id)"
                     :disabled="
                       project.status_code === `FIN` ||
-                      recruit.acc_count === recruit.to
+                      recruit.acc_count === recruit.to ||
+                      !applyAbleFlag
                     ">
                     지원
                   </button>
@@ -271,7 +273,6 @@ export default {
     this.getRefUrl();
     this.getCurrentMembers();
     this.checkApplyAble();
-    
   },
   methods: {
     formatDate(datetime) {
@@ -360,45 +361,40 @@ export default {
         this.isRefUrl = false;
       }
     },
+    // 지원 가능여부 확인
     async checkApplyAble() {
-      /* eslint-disable */ 
-        let data = {};
-        data.project_id = this.projectId;
-        data.user_id = this.$store.state.user.user_id;
+      /* eslint-disable */
+      let data = {};
+      data.project_id = this.projectId;
+      data.user_id = this.$store.state.user.user_id;
 
-      let result  = await this.$post(
-        `/project/recruit/checkApplyAble`,
-        data
-      ); 
-      console.log(result);
-      console.log(result.data[0].flag);
-      if(result.data[0].flag == null){
-      this.applyAbleFlag = true;
+      let result = await this.$post(`/project/recruit/checkApplyAble`, data);
+      if (result.data[0].flag == null) {
+        this.applyAbleFlag = true;
       }
     },
-    /*TODO 주의!!  지원 버튼속에 apply_dept_id 를 알고있어야합니다!  */
-    //사용방식
-    //this.projectApplyNew(apply_dept_id/* 지원분야ID를 알아야합니다! */);
-    async projectApplyNew(apply_dept_id ) {
+    // 프로젝트 지원
+    async projectApplyNew(apply_dept_id) {
       /* eslint-disable */
-      if(this.applyAbleFlag){ 
-        console.log("지원 가능")
-      let flag = confirm("지원하시겠습니까? ");
-          if(flag){
-            let data = {};            
-            data.applicant_id = this.$store.state.user.user_id;
-            data.project_id = this.projectId;
-            data.apply_dept_id = this.applyDeptId ;
+      if (this.applyAbleFlag) {
+        console.log("지원 가능");
+        let flag = confirm("지원하시겠습니까? ");
+        if (flag) {
+          let data = {};
+          data.applicant_id = this.$store.state.user.user_id;
+          data.project_id = this.projectId;
+          data.apply_dept_id = this.applyDeptId;
           let result = await this.$post(
             `/project/recruit/projectApplyNew`,
             data
           );
-          console.log("지원결과");
-          console.log(result);
-          }else{
-            return;
+          if (result.status === 200) {
+            this.$router.go();
           }
-      }else{
+        } else {
+          return;
+        }
+      } else {
         console.log("지원 가능");
         return;
       }
