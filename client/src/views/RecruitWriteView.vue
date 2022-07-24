@@ -22,12 +22,11 @@
             >시작 예정일</label
           >
           <div class="col-sm-3">
-            <Datepicker
-              v-model="EXP_START_DATE"
-              locale="kst"
-              class="datepicker"
-              id="inputStartDate" />
-            {{ EXP_START_DATE }}
+            <input
+              type="datetime-local"
+              name=""
+              id=""
+              v-model="EXP_START_DATE" />
           </div>
 
           <label for="onoff" class="col-sm-2 col-form-label">진행기간</label>
@@ -223,7 +222,6 @@
         </div>
         <div class="row mb-5">
           <text-editor :contents="CONTENTS" @send-EditorData="sendEditorData" />
-          {{ PROJECT_DESC }}
         </div>
       </form>
       <registerbtn-layout
@@ -254,7 +252,6 @@
 
 */
 
-import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import RegionSortLayout from "@/components/layouts/RegionSortLayout.vue";
 import StackSearchLayout from "@/components/layouts/StackSearchLayout.vue";
@@ -263,7 +260,6 @@ import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
 export default {
   name: "app",
   components: {
-    Datepicker,
     RegionSortLayout,
     StackSearchLayout,
     TextEditor,
@@ -382,8 +378,8 @@ export default {
             param: {
               leader_user: this.$store.state.user.user_id,
               title: this.PROJECT_TITLE,
-              // exp_start_date: this.EXP_START_DATE,
-              exp_start_date: "2022-07-18 00:00:00",
+              exp_start_date: this.EXP_START_DATE,
+              // exp_start_date: "2022-07-18 00:00:00",
               exp_period: parseInt(this.EXP_PERIOD),
               progress_method: this.PROGRESS_METHOD,
               stack_code: this.STACKS.join(),

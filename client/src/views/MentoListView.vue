@@ -11,10 +11,10 @@
     <!-- 카드리스트 -->
     <!-- ---------------------------------------------------------------------------------------------- -->
     <section class="container">
-      <hr />
+      <!-- <hr />
       {{ this.page }}
       <hr />
-      {{ this.mentoList }}
+      {{ this.mentoList }} -->
 
       <registerbtn-layout
         class="regbtn"
@@ -192,8 +192,8 @@ export default {
   color: white;
   font-weight: 900;
 }
-.Regbtn {
-  text-align: end;
+.regbtn {
+  float: right;
 }
 
 .mentoPart {
@@ -260,10 +260,10 @@ img.img-fluid.pfimg {
   position: relative;
   left: 550px;
 }
-.regbtn {
+/* .regbtn {
   position: absolute;
   right: 450px;
-}
+} */
 i.star {
   color: #1379d2;
   margin-right: 6px;
