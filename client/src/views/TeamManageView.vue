@@ -809,11 +809,13 @@ export default {
       
     },
     filterApplicant() {
+      let temp = [];
       for (let i = 0; i < this.applicants.length; i++) {
         if (this.applicants[i].applyStatus == "NEW") {
-          this.applicantsList.push(this.applicants[i]);
+           temp.push(this.applicants[i]);
         }
       }
+      this.applicantsList = temp;
     },
     filterFinishMentoring() {
       this.FinishMentoring = [];
