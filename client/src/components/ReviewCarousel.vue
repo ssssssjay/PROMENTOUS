@@ -28,11 +28,12 @@
               :class="{ active: review.review_id == firstReviewId }">
               <a
                 href="#"
-                class="btn-link text-semibold media-heading box-inline pro_a_black fs-3">
+                :title="review.title"
+                class="btn-link text-semibold media-heading box-inline pro_a_black fs-3 pro_ellipsis">
                 {{ review.title }}
               </a>
-              <!-- TODO: css ellipsis -->
-              <p class="d-block mt-4 fs-5">
+              <!-- TODO: css ellipsis 라인 수 제한 줘야함.-->
+              <p :title="review.desc" class="d-block mt-4 fs-5 pro_ellipsis">
                 {{ review.desc }}
               </p>
             </div>
