@@ -17,7 +17,7 @@
                 {{ recruitStatus }}
               </span>
             </div>
-            <span class="fs-2 col-8 pro_title_ellipsis pb-2">
+            <span :title="project.title" class="fs-2 col-8 pro_ellipsis pb-2">
               <strong>
                 {{ project.title }}
               </strong>
@@ -129,7 +129,11 @@
                   alt="리더 정보 사진" />
               </div>
               <div class="col">
-                <p class="fs-4">{{ projectLeader.user_nickname }}</p>
+                <p
+                  :title="projectLeader.user_nickname"
+                  class="fs-4 pro_ellipsis">
+                  {{ projectLeader.user_nickname }}
+                </p>
                 <p><i class="bi bi-star-fill pro_star_color"></i> 4.5/5 (23)</p>
               </div>
             </div>
@@ -142,7 +146,8 @@
               </div>
               <div v-show="projectLeader.leaderHistory.length !== 0">
                 <p
-                  class="ps-2"
+                  class="ps-2 pro_ellipsis"
+                  :title="history.title"
                   v-for="history in projectLeader.leaderHistory"
                   :key="history.project_id">
                   - {{ history.title }}
@@ -163,7 +168,11 @@
             <ul class="list-unstyled ps-0">
               <li class="row" v-for="recruit in recruitData" :key="recruit">
                 <div class="col-6">
-                  <p class="fs-5 mb-0">{{ recruit.apply_dept_code }}</p>
+                  <p
+                    class="fs-5 mb-0 pro_ellipsis"
+                    :title="recruit.apply_dept_code">
+                    {{ recruit.apply_dept_code }}
+                  </p>
                   <p class="fs-6 text-muted ps-1">
                     {{ recruit.total_count }}명 지원
                   </p>
