@@ -729,11 +729,42 @@ export default {
       }
       // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
     },
-    approve(index) {
-      this.applicantsList[index].applyStatus = "ACC";
+    async approve(index) {
+      this.applicantsList[index].applyStatus = "ACC";      
+      let data = {};
+      data.applicant_id = this.applicantsList[index].applicantId;
+      data.project_id = this.applicantsList[index].projectId;
+      data.apply_dept_id = this.applicantsList[index].applyDeptId ;
+      data.apply_status =this.applicantsList[index].applyStatus;
+      console.log(data)
+      let r = await this.$post(
+            `/project/recruit/projectApplyAccept`,
+            data
+          );
+      console.log("승인결과");
+      console.log(r);
+      if (r.status === 200) {
+      this.$router.go();/* refresh  */
+      }
     },
-    reject(index) {
-      this.applicantsList[index].applyStatus = "REJ";
+ 
+    async reject(index) {
+      this.applicantsList[index].applyStatus = "REJ";      
+      let data = {};
+      data.applicant_id = this.applicantsList[index].applicantId;
+      data.project_id = this.applicantsList[index].projectId;
+      data.apply_dept_id = this.applicantsList[index].applyDeptId ;
+      data.apply_status =this.applicantsList[index].applyStatus;
+      console.log(data)
+      let r = await this.$post(
+            `/project/recruit/projectApplyReject`,
+            data
+          );
+      console.log("거절결과");
+      console.log(r);
+      if (r.status === 200) {
+      this.$router.go();/* refresh  */
+      }
     },
     transIndex(index) {
       this.memberIndex = index;
