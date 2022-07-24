@@ -693,24 +693,39 @@ export default {
       }
     },
     async saveTeamInfo() {
-      this.teamTotalInfo.data.basicInfo.statusCode = this.teamStatus;
-      this.teamTotalInfo.data.basicInfo.meetingUrl = this.urlAddress;
-      this.teamTotalInfo.data.basicInfo.meetingUrlTitle = this.urlTitle;
-      this.teamTotalInfo.data.basicInfo.warranty = this.deposit;
-      this.saveParam = {
-        /*변경 되었다면 변경된 것이/ 변경안되었다면 그대로! */
-        meeting_url: this.urlAddress,
-        meeting_url_title: this.urlTitle,
-        warranty: this.deposit,
-        status_code: this.teamStatus,
-        project_id: this.selectedProjectId
-      };
-      this.mentoring = await this.$post(
-        `/manage/saveTeamManageInfo`,
-        this.saveParam
-      );
-    },
+      /* eslint-disable */
+      let flag = confirm("저장하시겠습니까? ");
+      if(flag){
+      let data = {};
+      let project_id = this.selectedProjectId;
+      // this.params.selectedPage = this.selectedMentoringPage;
+      //입력 없이 등록 버튼 누르는 경우 예외처리
+      // 댓글 입력 없이 등록 버튼 누르는 경우 예외처리
+      data.project = {};
+      data.project_status = {};
+      data.project.meeting_url = this.urlAddress;
+      data.project.meeting_url_title = this.urlTitle;
+      data.project.status_code = this.teamStatus;
+      data.project.warranty = this.deposit;
+      data.project_status.project_id = project_id;
+      data.project_status.project_status = this.teamStatus;
+      data.project_status.changer = this.$store.state.user.user_id;
 
+      // saveTeamManageInfo
+      const r = await this.$patch(
+        // TODO: axios.defaults.baseURL로 변경
+        `/manage/saveTeamManageInfo/${project_id}`,
+        data
+      );
+      if (r.status === 200) {
+        this.$router.go();/* refresh  */
+        }
+      console.log(this.r);
+    }else{
+      return;
+    }
+      // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
+    },
     approve(index) {
       this.applicantsList[index].applyStatus = "ACC";
     },
@@ -847,25 +862,8 @@ export default {
       //멘토링페이지정보
       this.mentoringTotalPageCount =
         this.teamTotalInfo.data.mentoringTotalPageCount.totalCount;
-      //멘토정보 최초 앞 4개만 가져옴 + 필터링 동작필요!  (배열)
       this.mentoring = this.teamTotalInfo.data.mentorings;
       this.filterFinishMentoring();
-    },
-    // 저장 버튼 클릭 시 DATA UPDATE   + TODO : PAGE1초기화 필요!
-    async saveTeamManageInfo() {
-      this.params.project_id = this.selectedProjectId;
-      // this.params.selectedPage = this.selectedMentoringPage;
-      this.params.meeting_url = this.urlAddress;
-      this.params.meeting_url_title = this.urlTitle;
-      this.params.status_code = this.teamStatus;
-      this.params.warranty = this.deposit;
-      // saveTeamManageInfo
-      this.result = await this.$post(
-        // TODO: axios.defaults.baseURL로 변경
-        `/manage/saveTeamManageInfo`,
-        this.params
-      );
-      // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
     }
   }
 };

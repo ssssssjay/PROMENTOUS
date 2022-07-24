@@ -4,6 +4,7 @@
       <h2 class="text-start mt-5"><strong>멘토 등록 신청</strong></h2>
       저장용데이터{{ saveParam }}
       <hr />
+      링크 {{ linkList }}
     </div>
 
     <!-- 작성폼 -->
@@ -155,22 +156,25 @@ export default {
 
       link: { name: "", href: "" },
       linkList: [],
+      urlList: [],
       mentorInfo: "",
       parts: [
         { partCode: "1", name: "프론트엔드" },
         { partCode: "2", name: "백엔드" },
         { partCode: "3", name: "풀스택" },
         { partCode: "4", name: "디자인" },
-        { partCode: "5", name: "UI/ UX" },
+        { partCode: "5", name: "UI/UX" },
         { partCode: "6", name: "기획" },
         { partCode: "7", name: "PM" },
         { partCode: "8", name: "데이터베이스" },
-        { partCode: "9", name: "알고리즘,자료구조" },
-        { partCode: "10", name: "퍼블리싱" },
-        { partCode: "11", name: "데브옵스" },
-        { partCode: "12", name: "데이터사이언스" }
+        { partCode: "9", name: "알고리즘/자료구조" },
+        { partCode: "10", name: "데브옵스" },
+        { partCode: "11", name: "데이터사이언스" }
       ],
-      saveParam: {}
+      saveParam: {
+        mentor_info: {},
+        ref_url: {}
+      }
     };
   },
   setup() {},
@@ -179,26 +183,46 @@ export default {
   unmounted() {},
   methods: {
     addLink() {
+      /* eslint-disable */
       let obj = {
         [this.link.name]: this.link.href
       };
+      let obj2 = {
+        url_title : this.link.name  ,
+        url_address :this.link.href
+      }
       this.linkList.push(obj);
+      this.urlList.push(obj2);
       alert("링크 정보가 추가되었습니다.");
+      this.link.name= "" ; 
+      this.link.href= "";
     },
     async saveMentorInfo() {
-      let flag = confirm("저장?");
+      /* eslint-disable */
+      let flag = confirm("멘토 등록하시겠습니까?");
       if (flag) {
-        alert("y");
-        this.saveParam.user_id = this.$store.state.user.user_id;
+        this.saveParam.mentor_info.user_id = this.$store.state.user.user_id;
         /*멘토링 분야 이거 처리가 중요! */
-        this.saveParam.mentoring_dept_code = this.partList;
-        this.saveParam.mentoring_title = this.mentorTitle;
-        this.saveParam.mentoring_intro = this.mentorInfo;
-        this.saveParam.mentor_email = this.mentoEmail;
-        this.saveParam.mentoring_price = this.payPerTime;
-        this.saveParam.mentoring_time = this.timePerTime;
-
-        console.log(this.saveParam);
+        this.saveParam.mentor_info.mentoring_dept_code = this.partList;
+        this.saveParam.mentor_info.mentoring_title = this.mentorTitle;
+        this.saveParam.mentor_info.mentoring_intro = this.mentorInfo;
+        this.saveParam.mentor_info.mentor_email = this.mentoEmail;
+        this.saveParam.mentor_info.mentoring_price = this.payPerTime;
+        this.saveParam.mentor_info.mentoring_time = this.timePerTime;
+        this.saveParam.ref_url = this.urlList;
+        //console.log(this.saveParam);
+              // saveTeamManageInfo
+      const r = await this.$post(
+        // TODO: axios.defaults.baseURL로 변경
+        `/mentor/registerMentorInfo`,
+        this.saveParam
+      );
+      if (r.status === 200) {
+        //성공 후 다시 멘토리스트 화면으로 돌아가기
+         this.$router.push("/mentolist");
+        }
+      console.log(this.r);
+      
       } else {
         alert("n");
       }
