@@ -13,7 +13,7 @@
         <!-- 상단 -->
         <div class="top">
           <p class="text-start text-muted">1999/11/13</p>
-          {{ mentorData }}
+          <!-- {{ mentorData }} -->
           <p class="row">
             <span class="col-9 h2"
               ><strong v-show="infoStatus">{{ title }}</strong>
@@ -69,7 +69,7 @@
         <div class="row mt-5">
           <div class="col-2 text-center">
             <img
-              src="../assets/profile.jpg"
+              v-bind:src="mentor.image"
               alt=""
               style="width: 120px; border-radius: 10%" />
             <div class="mt-2 h4">
@@ -324,6 +324,8 @@ export default {
       this.mentor.nickname = this.mentorData.basicInfo[0].user_nickname;
       this.mentor.score = this.mentorData.basicInfo[0].totalRate;
       this.mentor.scoreCount = this.mentorData.basicInfo[0].rateCount;
+      this.mentor.image = this.mentorData.basicInfo[0].user_image;
+
       this.selfInfo = this.mentorData.basicInfo[0].mentoring_intro;
       /*멘토 DEPT 코드 자연어 가져오기 */
       this.likePart = this.mentorData.basicInfo[0].mentoring_dept_code;

@@ -3,12 +3,9 @@
     <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
       <div class="container">
         <div class="logo">
-          <router-link
-            class="navbar-brand mainLogo"
-            :class="{ active: $route.path == '/home' }"
-            to="/home"
-            >PROMENTOUS</router-link
-          >
+          <a class="navbar-brand mainLogo">PROMENTOUS</a>
+          <!-- :class="{ active: $route.path == '/home' }"
+            to="/home" -->
         </div>
         <div class="col text-end me-5">
           <!-- <div class="col-lg-6 h-100 text-center text-lg-start my-auto"> -->

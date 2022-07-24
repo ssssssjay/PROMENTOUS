@@ -5,8 +5,14 @@
         <h1 class="title">팀 관리</h1>
         <p class="des">팀 상태 및 공유링크를 확인하고 팀원/멘토를 평가해요</p>
       </div>
+      <!-- {{ this.applicantsList }}
+      {{ this.teamMembers }}
+      <div>{{ this.projectList }}</div> -->
     </section>
-    {{ this.applicantsList }}
+    <!-- {{ this.applicantsList }}
+    {{ this.teamMembers }}
+    <hr />
+    {{ user }} -->
     <!-- ---------------------------------------------------------------------------------------------- -->
     <!-- 상태선택박스 -->
     <!-- <div>MENTORINGTOTALPAGE ::: {{ this.mentoringTotalPageCount }}</div>
@@ -35,7 +41,7 @@
       <div><br /></div>
       <div><br /></div>
       <div>프로젝트리스트</div>
-      <div>{{ this.projectList }}</div>
+
       <div>{{ typeof this.projectList }}</div>
       <div>{{ this.projectList[0] }}</div>
       <div><br /></div>
@@ -47,7 +53,6 @@
       <!-- <div>{{ this.teamTotalInfo.data }}</div> -->
 
       <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div> -->
-      <hr />
       <!--
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div> -->
 
@@ -68,7 +73,6 @@
               ]"
               @clear="deselected"
               :key="componentKey" />
-
             <select
               name=""
               id=""
@@ -165,6 +169,7 @@
               { value: 'FIN', label: '활동종료' }
             ]"
             v-show="correctionMode === true" />
+
           <button
             class="mx-4 btn btn-primary"
             v-show="correctionMode === false">
@@ -368,7 +373,7 @@
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 멘토링  -->
 
-        <div class="p-2 mb-5 d-inline-flex bd-highlight">
+        <!-- <div class="p-2 mb-5 d-inline-flex bd-highlight">
           <div class="mentoringText">
             멘토링
             <div class="mentorRating">
@@ -457,15 +462,7 @@
                   </button>
                 </div>
               </div>
-              <!-- <nav style="height: 30px">
-                <ul class="pagination pagination-sm justify-content-center">
-                  <li class="page-item active" aria-current="page">
-                    <span class="page-link">1</span>
-                  </li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                </ul>
-              </nav> -->
+
 
               <MentorRatingModal
                 ref="modal2"
@@ -474,9 +471,8 @@
                 :colors="mentorRatingColor" />
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
-      <PaginationLayout :page="page" @paging="paging" />
     </section>
   </div>
 </template>
@@ -487,7 +483,7 @@ import TeamStatus from "@vueform/multiselect";
 import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
 import { ref } from "vue";
 import TeamRatingModal from "@/components/TeamRatingModal.vue";
-import MentorRatingModal from "@/components/MentorRatingModal.vue";
+// import MentorRatingModal from "@/components/MentorRatingModal.vue";
 import TeamMemberProfileModal from "@/components/UserProfileModal.vue";
 import ApplicantProfileModal from "@/components/applicantProfileModal.vue";
 
@@ -499,9 +495,13 @@ export default {
     TeamStatus,
     RegisterbtnLayout,
     TeamRatingModal,
-    MentorRatingModal,
     TeamMemberProfileModal,
     ApplicantProfileModal
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
   },
   data() {
     return {
@@ -554,6 +554,7 @@ export default {
       recruitingUrl: "",
       applicants: [
         {
+          userImage: "",
           applyAdminId: "", // 무얼 위한 변수인지??
           applicantId: "",
           applicantNickName: "",
@@ -566,8 +567,9 @@ export default {
       ],
       teamMembers: [
         {
+          userImage: "",
           memberId: "",
-          memberNickName: "aa",
+          userNickname: "aa",
           memberEmail: "evelo0702@gmail.com",
           userSocialUrl: [
             {
@@ -675,6 +677,7 @@ export default {
   created() {},
   beforeMount() {
     this.managePageInit();
+    // this.sessionUserId = this.user.user_id;
   },
   mounted() {
     // this.filterStatusCode();
@@ -683,7 +686,7 @@ export default {
   methods: {
     changeStatusName() {
       if (this.teamStatus == "REC") {
-        this.teamStatusName == "모집중";
+        this.teamStatusName = "모집중";
       } else if (this.teamStatus == "ING") {
         this.teamStatusName = "모집완료";
       } else if (this.teamStatus == "ADD") {
@@ -695,35 +698,35 @@ export default {
     async saveTeamInfo() {
       /* eslint-disable */
       let flag = confirm("저장하시겠습니까? ");
-      if(flag){
-      let data = {};
-      let project_id = this.selectedProjectId;
-      // this.params.selectedPage = this.selectedMentoringPage;
-      //입력 없이 등록 버튼 누르는 경우 예외처리
-      // 댓글 입력 없이 등록 버튼 누르는 경우 예외처리
-      data.project = {};
-      data.project_status = {};
-      data.project.meeting_url = this.urlAddress;
-      data.project.meeting_url_title = this.urlTitle;
-      data.project.status_code = this.teamStatus;
-      data.project.warranty = this.deposit;
-      data.project_status.project_id = project_id;
-      data.project_status.project_status = this.teamStatus;
-      data.project_status.changer = this.$store.state.user.user_id;
+      if (flag) {
+        let data = {};
+        let project_id = this.selectedProjectId;
+        // this.params.selectedPage = this.selectedMentoringPage;
+        //입력 없이 등록 버튼 누르는 경우 예외처리
+        // 댓글 입력 없이 등록 버튼 누르는 경우 예외처리
+        data.project = {};
+        data.project_status = {};
+        data.project.meeting_url = this.urlAddress;
+        data.project.meeting_url_title = this.urlTitle;
+        data.project.status_code = this.teamStatus;
+        data.project.warranty = this.deposit;
+        data.project_status.project_id = project_id;
+        data.project_status.project_status = this.teamStatus;
+        data.project_status.changer = this.$store.state.user.user_id;
 
-      // saveTeamManageInfo
-      const r = await this.$patch(
-        // TODO: axios.defaults.baseURL로 변경
-        `/manage/saveTeamManageInfo/${project_id}`,
-        data
-      );
-      if (r.status === 200) {
-        this.$router.go();/* refresh  */
+        // saveTeamManageInfo
+        const r = await this.$patch(
+          // TODO: axios.defaults.baseURL로 변경
+          `/manage/saveTeamManageInfo/${project_id}`,
+          data
+        );
+        if (r.status === 200) {
+          this.$router.go(); /* refresh  */
         }
-      console.log(this.r);
-    }else{
-      return;
-    }
+        console.log(this.r);
+      } else {
+        return;
+      }
       // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
     },
     approve(index) {
