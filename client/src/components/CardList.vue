@@ -75,6 +75,7 @@ export default {
   methods: {
     // 카드 클릭시 id를 파라미터로 전달하고 해당 상세글로 이동
     goToDetail(id) {
+      window.scrollTo(0, 0);
       const path = `/project/recruit/${id}`;
       this.$router.push({
         path: path,
