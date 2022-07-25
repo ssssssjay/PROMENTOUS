@@ -120,7 +120,7 @@ export default {
   },
   beforeMount() {
     this.pageUrl = window.document.location.href;
-    this.reviewId = 1; // TODO: 추후 변경: this.reviewId = this.$route.params.projectId;
+    this.reviewId = this.$route.params.reviewId;
     this.getReviewData();
   },
   mounted() {},

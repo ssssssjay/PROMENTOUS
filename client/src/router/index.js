@@ -53,7 +53,7 @@ const routes = [
       )
   },
   {
-    path: "/reviewdetail",
+    path: "/project/review/:reviewId",
     name: "reviewdetail",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
