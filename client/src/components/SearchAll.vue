@@ -1,7 +1,7 @@
 <template>
   <div class="search_all">
     <div class="d-inline-flex">
-      <form @submit.prevent="onSubmitSearchAll">
+      <form @submit.prevent="onSubmitSearchAll" @keyup="test">
         <input
           v-model="searchAll"
           class="searchAllInput"
@@ -25,6 +25,11 @@ export default {
   mounted() {},
   unmounted() {},
   methods: {
+    test(e) {
+      if (e.keyCode === 8 && this.searchAll === "") {
+        this.$emit("search-keyword", this.searchAll);
+      }
+    },
     onSubmitSearchAll() {
       if (this.searchAll === "") {
         alert("단어를 입력하셔야 합니다!!!");
