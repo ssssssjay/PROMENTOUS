@@ -71,7 +71,7 @@
               > -->
               <a
                 class="btn btn-sm btn-outline-dark"
-                @click="goToDetail(review.project_id)"
+                @click="goToDetail(review.review_id)"
                 >모집 공고 보러가기</a
               >
             </div>
@@ -145,11 +145,11 @@ export default {
     },
     goToDetail(id) {
       window.scrollTo(0, 0);
-      const path = `/project/recruit/${id}`;
+      const path = `/project/review/${id}`;
       this.$router.push({
         path: path,
-        name: "projectdetail",
-        params: { projectId: id }
+        name: "reviewdetail",
+        params: { reviewId: id }
       });
     },
     onClick(e) {
