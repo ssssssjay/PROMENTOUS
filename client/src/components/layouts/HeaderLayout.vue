@@ -192,6 +192,7 @@ export default {
     },
     onClickLogout() {
       this.$store.commit("user", {});
+      this.$router.push("/home");
     },
     viewProfile() {
       this.clickProfile = !this.clickProfile;
