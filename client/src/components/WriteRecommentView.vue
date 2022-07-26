@@ -27,7 +27,7 @@
         <div class="text-end col">
           <button
             type="button"
-            class="btn btn-outline-dark btn-sm"
+            class="btn btn-sm pro_button"
             @click="registerRecomment">
             등록
           </button>

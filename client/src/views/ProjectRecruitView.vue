@@ -29,11 +29,11 @@
           <SearchAll @search-keyword="SearchKeyword" />
         </div>
       </div>
-      <div v-if="projects[0] === undefined">
+      <div v-if="projects[0] === undefined" class="project-empty">
         원하시는 조건에 맞는 모집 공고가 없습니다!!
       </div>
       <CardList v-else :projects="projects" />
-      <PaginationLayout :page="page" @paging="paging" />
+      <PaginationLayout :page="page" @paging="paging" class="pagination" />
     </section>
   </div>
 </template>
@@ -68,10 +68,9 @@ export default {
       SUB_AREA_CODE: "",
       stacks: [],
       btnText: "모집글 작성",
-      page: 1, // Math.floor => 버림 , Math.ceil => 올림
+      page: 1, // 총 페이지
       projects: [],
-      // 데이터가져올떄 param안에 넣을 정렬요소들. 기본값들은 하드코딩하고, 특수 상황에선 자식에서 emit으로 값을 변경할것이다.
-      pageToMove: 1,
+      pageToMove: 1, // 이동할 페이지
       recruitStatus: "REC",
       keyword: ""
     };
@@ -121,7 +120,7 @@ export default {
         project.stack_code.pop();
         project.status_code = this.convertStatus(project.status_code);
       });
-      // console.log(response.data);
+      console.log(response.data);
     },
     convertDate(raw_date) {
       return raw_date.substr(0, 10);
@@ -217,5 +216,15 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+}
+.project-empty {
+  padding: 24px 0 0 12px;
+  font-size: 24px;
+  font-weight: bold;
 }
 </style>

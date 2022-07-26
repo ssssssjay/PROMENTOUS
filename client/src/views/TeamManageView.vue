@@ -9,8 +9,8 @@
       {{ this.teamMembers }}
       <div>{{ this.projectList }}</div> -->
     </section>
+    <hr />
     <!-- {{ this.applicantsList }}
-    {{ this.teamMembers }}
     <hr />
     {{ user }} -->
     <!-- ---------------------------------------------------------------------------------------------- -->
@@ -19,8 +19,7 @@
     <div>MENTORING 현재선택한PAGE ::: {{ this.selectedMentoringPage }}</div>
     <hr />
     <div>{{ this.applicants[0] }}</div>
-    <hr />
-    {{ this.applicantsList }}
+    
     <hr />
     {{ this.applicantsList[0] }}
     <div>{{ this.teamStatusList }}</div>
@@ -39,17 +38,18 @@
       <div>{{ this.teamStatusList }}</div>
       <div><br /></div>
       <div><br /></div>
-      <div><br /></div>
+      <div><br /></div>-->
+      {{ this.teamMembers }}
       <div>프로젝트리스트</div>
 
-      <div>{{ typeof this.projectList }}</div>
+      <!--<div>{{ typeof this.projectList }}</div>
       <div>{{ this.projectList[0] }}</div>
       <div><br /></div>
       <div><br /></div>
       <div>프로젝트리스트2</div>
       <div>{{ this.projectList2 }}</div>
       <div>{{ typeof this.projectList2 }}</div>
-      <div>{{ this.projectList2[0] }}</div> -->
+      <div>{{ this.projectList2[0] }}</div>-->
       <!-- <div>{{ this.teamTotalInfo.data }}</div> -->
 
       <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div> -->
@@ -517,8 +517,7 @@ export default {
       FinishMemberRating: [],
       actualStartDate: "Fri Jul 01 2022 18:33:00 GMT+0900 (한국 표준시)",
       selectedStatus: "",
-      selectedProjectId: "",
-      projectId: "",
+
       datetime: "2011-08-03tdst324324234234",
       correctionMode: true,
       projectList2: [],
@@ -596,9 +595,7 @@ export default {
         }
       ],
       //paging 처리 위한 object
-
       mentoringTotalPageCount: 0,
-      selectedMentoringPage: 1, //default 1 페이지
       projectInfoParams: {
         project_id: "3",
         mentoring_page: "1"
@@ -607,11 +604,11 @@ export default {
       /*저장용 saveParam OBJECT */
       saveParam: {},
       teamTotalInfo: {},
-      sessionUserId: "3",
+      sessionUserId: "65",
       initUrl: "",
-      componentKey: 0
-
-      //
+      componentKey: 0,
+      selectedProjectId: "",
+      projectId: ""
     };
   },
   setup() {
@@ -675,12 +672,10 @@ export default {
     };
   },
   created() {},
-  beforeMount() {
-    this.managePageInit();
-    // this.sessionUserId = this.user.user_id;
-  },
-  mounted() {
+  beforeMount() {},
+  mounted() {/* eslint-disable */
     // this.filterStatusCode();
+        this.managePageInit();
   },
   unmounted() {},
   methods: {
@@ -713,7 +708,8 @@ export default {
         data.project_status.project_id = project_id;
         data.project_status.project_status = this.teamStatus;
         data.project_status.changer = this.$store.state.user.user_id;
-
+        console.log("async saveTeamInfo() {")
+        console.log(data)
         // saveTeamManageInfo
         const r = await this.$patch(
           // TODO: axios.defaults.baseURL로 변경
@@ -721,7 +717,7 @@ export default {
           data
         );
         if (r.status === 200) {
-          this.$router.go(); /* refresh  */
+          this.projectIdSelect() /* refresh  */
         }
         console.log(this.r);
       } else {
@@ -734,7 +730,7 @@ export default {
       let data = {};
       data.applicant_id = this.applicantsList[index].applicantId;
       data.project_id = this.applicantsList[index].projectId;
-      data.apply_dept_id = this.applicantsList[index].applyDeptId ;
+      data.apply_dept_id = this.applicantsList[index].applyDeptId;
       data.apply_status =this.applicantsList[index].applyStatus;
       console.log(data)
       let r = await this.$post(
@@ -744,7 +740,7 @@ export default {
       console.log("승인결과");
       console.log(r);
       if (r.status === 200) {
-      this.$router.go();/* refresh  */
+         this.projectIdSelect() /* refresh  */
       }
     },
  
@@ -780,21 +776,46 @@ export default {
       this.teamStatusList = await this.$get(
         `/common/getTeamStatusListForTeamManage`
       );
+ 
       // 내 SESSIONID기준으로  팀 리스트끌고오기
       this.initUrl = `/manage/getTeamListForManage/`;
       this.initUrl += this.sessionUserId;
-      this.projectList = await this.$get(this.initUrl, this.projectInfoParams);
+      console.log(this.initUrl)
+      console.log("=====")
+      console.log("=====")
+      console.log("=====")
+      console.log(this.projectInfoParams)
+      let temp = await this.$get(this.initUrl, {});
       // 가져온 리스트 첫번째 값으로 팀정보 다끌고오기
-      this.selectedProjectId = this.projectList[0].projectId;
-      this.selectedStatus = this.projectList[0].statusName;
+      console.log(typeof temp);
+      this.projectList = [];
+      if(typeof temp == "object"){
+        console.log("trueeeeeeeeeeeeee")
+        this.projectList.push(temp)
+      }
+
+      console.log("1")
+      console.log(this.projectList )
+      this.selectedProjectId = this.projectList.projectId;
+      this.selectedStatus = this.projectList.statusName;
+      console.log("2")
+      console.log(this.selectedProjectId )
+      this.projectInfoParams.project_id = this.selectedProjectId;
+      // this.selectedStatus
+      console.log("3")
+      console.log(this.selectedStatus )
       this.projectIdSelect(); /* 팀개요 정보 다가져옴. */
+
+      
     },
     filterApplicant() {
+      let temp = [];
       for (let i = 0; i < this.applicants.length; i++) {
         if (this.applicants[i].applyStatus == "NEW") {
-          this.applicantsList.push(this.applicants[i]);
+           temp.push(this.applicants[i]);
         }
       }
+      this.applicantsList = temp;
     },
     filterFinishMentoring() {
       this.FinishMentoring = [];
@@ -809,9 +830,17 @@ export default {
     },
     filterFinishMemberRating() {
       this.FinishMemberRating = [];
+
+      console.log(this.teamMembers.length)
       for (let i = 0; i < this.teamMembers.length; i++) {
-        if (this.teamMembers[i].rating[0].rated == "no") {
+      console.log("============================")
+        console.log(this.teamMembers[i].rating)
+        if(this.teamMembers[i].rating.rated != ""){
+        if (this.teamMembers[i].rating.rated == "no") {
           this.FinishMemberRating.push(this.teamMembers[i]);
+        }
+        }else{
+          this.FinishMemberRating.push([])
         }
       }
     },
@@ -859,13 +888,22 @@ export default {
 
     // 선택 하는 순간에 해당 project 정보 teamTotalInfo 끌어옴
     async projectIdSelect() {
+      console.log("selected >> this.selectedProjectId")
+      console.log(this.selectedProjectId)
       this.projectInfoParams.project_id = this.selectedProjectId;
       // teamTotalInfo .
+      console.log(this.projectInfoParams)
+      console.log(this.projectInfoParams.project_id )
       this.teamTotalInfo = await this.$post(
         // TODO: axios.defaults.baseURL로 변경
         `/manage/getProjectInfo`,
         this.projectInfoParams
       );
+      console.log("---------------------------------------")
+      console.log("---------------------------------------")
+      console.log("---------------------------------------")
+      console.log(this.teamTotalInfo)
+
       this.teamStatus = this.teamTotalInfo.data.basicInfo.statusCode;
       // 팀모임 URL
       this.urlTitle = this.teamTotalInfo.data.basicInfo.meetingUrlTitle;
@@ -876,28 +914,46 @@ export default {
       //지원자정보 (배열)
       this.applicants = this.teamTotalInfo.data.applicants;
       for (let q = 0; q < this.applicants.length; q++) {
+        if(this.applicants[q].likeStackCode != null){
         let str = this.applicants[q].likeStackCode.slice(
           0,
           this.applicants[q].likeStackCode.length - 1
         );
+        console.log("--------------------------")
+        console.log(str)
         this.applicants[q].likeStackCode = str.split(",");
+        }else{
+        this.applicants[q].likeStackCode = [];
+        }
       }
       this.filterApplicant();
       //멤버정보 (배열)
-      this.teamMembers = this.teamTotalInfo.data.members;
+      let array =[];
+      if(typeof this.teamTotalInfo.data.members == "object"){
+        for (let index = 0; index < this.teamTotalInfo.data.members.length; index++) {
+          const element = this.teamTotalInfo.data.members[index];
+          
+        array.push(this.teamTotalInfo.data.members[index])
+        }
+        this.teamMembers = array;
+      }
+      this.teamMembers =  this.teamTotalInfo.data.members;
+
       for (let q = 0; q < this.teamMembers.length; q++) {
-        let str = this.teamMembers[q].likeStackCode.slice(
+        let str ="";
+        if(this.teamMembers[q].likeStackCode != null){
+          str = this.teamMembers[q].likeStackCode.slice(
           0,
           this.teamMembers[q].likeStackCode.length - 1
         );
+        }else{
+          str = "";
+        }
         this.teamMembers[q].likeStackCode = str.split(",");
       }
-      this.filterFinishMemberRating();
-      //멘토링페이지정보
-      this.mentoringTotalPageCount =
-        this.teamTotalInfo.data.mentoringTotalPageCount.totalCount;
+      // this.filterFinishMemberRating();
       this.mentoring = this.teamTotalInfo.data.mentorings;
-      this.filterFinishMentoring();
+       this.filterFinishMentoring();
     }
   }
 };
