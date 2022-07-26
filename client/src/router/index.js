@@ -64,7 +64,7 @@ const routes = [
       )
   },
   {
-    path: "/mypageinfo",
+    path: "/mypageinfo/:userId",
     name: "MyPageView",
     // route level code-splittingd
     // this generates a separate chunk (about.[hash].js) for this route
@@ -128,11 +128,24 @@ const routes = [
         /* webpackChunkName: "mypage" */ "../components/MentoringApply.vue"
       )
   },
+  // {
+  //   path: "/mentordetail",
+  //   name: "MentorDetail",
+  //   component: () =>
+  //     import(
+  //       /* webpackChunkName: "mentorDetail" */ "../views/MentorDetailView.vue"
+  //     )
+  // },
   {
-    path: "/mentordetail",
+    path: "/mentordetail/:mentorUserId",
     name: "MentorDetail",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "mypage" */ "../views/MentorDetailView.vue")
+      import(
+        /* webpackChunkName: "mentorDetail" */ "../views/MentorDetailView.vue"
+      )
   }
 ];
 

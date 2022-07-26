@@ -20,22 +20,49 @@
             </a>
             <!-- 우측 영역 -->
             <div class="media-body">
-              <div class="mar-btm">
-                <!-- 작성자 아이디 -> 닉네임으로 변ㄴ경..  -->
-                <a
-                  href="#"
-                  class="btn-link text-semibold media-heading box-inline a-black fs-5"
-                  >{{ comment.writer_nickname }}</a
-                >
-                <p class="text-muted text-sm">
-                  {{ formatDate(comment.created_datetime) }}
-                </p>
+              <div class="mar-btm row mb-0">
+                <div class="col text-start">
+                  <a
+                    href="#"
+                    class="btn-link text-semibold media-heading box-inline pro_a_black fs-5"
+                    >{{ comment.writer_nickname }}</a
+                  >
+                  <p class="text-muted text-sm">
+                    {{ formatDate(comment.created_datetime) }}
+                  </p>
+                </div>
+                <!-- 수정/삭제 : 본인이 쓴 댓글만 -->
+                <div class="col text-end" v-if="comment.writer_id === userId">
+                  <span class="col-3 text-end">
+                    <button
+                      type="button"
+                      class="btn btn-link com_link_blue"
+                      @click="
+                        editComment(comment.isEdit);
+                        comment.isEdit = !comment.isEdit;
+                      ">
+                      {{ comment.isEdit ? "수정완료" : "  수정" }}
+                    </button>
+                    |
+                    <button
+                      type="button"
+                      class="btn btn-link com_link_red"
+                      @click="deleteCheckAlert(comment.reply_id)">
+                      삭제
+                    </button>
+                  </span>
+                </div>
               </div>
-              <p>
+              <p v-show="!comment.isEdit">
                 {{ comment.contents }}
               </p>
+              <p v-show="comment.isEdit">
+                <edit-comment-view
+                  :commentId="comment.reply_id"
+                  :contents="comment.contents"
+                  @updateComment="updateComment" />
+              </p>
               <div class="pad-ver text-end pe-4">
-                <!-- 누르면 취소 버튼으로 바뀌게.. -->
                 <button
                   type="button"
                   class="btn pro_button btn-sm"
@@ -45,8 +72,11 @@
               </div>
               <hr />
               <div class="mx-2 py-2" v-if="comment.isRecomment">
-                <!-- props로 원댓글의 id 넘겨줘야 함. -->
-                <write-comment-view />
+                <write-recomment-view
+                  :pageType="pageType"
+                  :projectId="projectId"
+                  :parentId="comment.reply_id"
+                  :targetId="comment.reply_id" />
                 <hr />
               </div>
               <div v-for="recomment in commentList" :key="recomment.reply_id">
@@ -61,37 +91,53 @@
                   /></a>
                   <div class="media-body">
                     <div class="mar-btm">
-                      <p class="row mb-0">
-                        <a
-                          href="#"
-                          class="btn-link text-semibold media-heading box-inline col-9 a-black fs-5"
-                          >{{ recomment.writer_nickname }}</a
-                        >
-                        <span class="col-3 text-end">
-                          <!-- 수정 여부에 따라 텍스트 필드  -->
-                          <button
-                            type="button"
-                            class="btn btn-link com_link_blue"
-                            @click="
-                              recomment.isRecomment = !recomment.isRecomment
-                            ">
-                            {{ recomment.isRecomment ? "수정완료" : "  수정" }}
-                          </button>
-                          |
-                          <button
-                            type="button"
-                            class="btn btn-link com_link_red"
-                            @click="deleteComment">
-                            삭제
-                          </button>
-                        </span>
-                      </p>
-                      <p class="text-muted text-sm">
+                      <div class="row mb-0">
+                        <div class="col text-start">
+                          <a
+                            href="#"
+                            class="btn-link text-semibold media-heading box-inline col-9 pro_a_black fs-5">
+                            {{ recomment.writer_nickname }}
+                          </a>
+                          <p class="text-muted text-sm">
+                            {{ formatDate(recomment.created_datetime) }}
+                          </p>
+                        </div>
+                        <!-- 수정/삭제 : 본인이 쓴 댓글만 -->
+                        <div
+                          class="col text-end"
+                          v-if="recomment.writer_id === userId">
+                          <span class="col-3 text-end">
+                            <button
+                              type="button"
+                              class="btn btn-link com_link_blue"
+                              @click="
+                                editComment(recomment.isEdit);
+                                recomment.isEdit = !recomment.isEdit;
+                              ">
+                              {{ recomment.isEdit ? "수정완료" : "  수정" }}
+                            </button>
+                            |
+                            <button
+                              type="button"
+                              class="btn btn-link com_link_red"
+                              @click="deleteCheckAlert(recomment.reply_id)">
+                              삭제
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                      <p class="text-sm">
                         {{ recomment.insert_date }}
                       </p>
                     </div>
-                    <p>
+                    <p v-show="!recomment.isEdit">
                       {{ recomment.contents }}
+                    </p>
+                    <p v-show="recomment.isEdit">
+                      <edit-comment-view
+                        :commentId="recomment.reply_id"
+                        :contents="recomment.contents"
+                        @updateComment="updateComment" />
                     </p>
                     <div class="pad-ver text-end pe-4">
                       <button
@@ -103,8 +149,10 @@
                     </div>
                     <hr />
                     <div class="mx-2 py-2" v-if="recomment.isRecomment">
-                      <!-- props로 원댓글의 id 넘겨줘야 함. -->
-                      <write-comment-view />
+                      <write-recomment-view
+                        :pageType="pageType"
+                        :projectId="projectId"
+                        :parentId="comment.reply_id" />
                       <hr />
                     </div>
                   </div>
@@ -118,11 +166,11 @@
   </div>
 </template>
 <script>
-import WriteCommentView from "../components/WriteCommentView.vue";
+import WriteRecommentView from "../components/WriteRecommentView.vue";
+import EditCommentView from "../components/EditCommentView.vue";
 export default {
-  components: { WriteCommentView },
+  components: { WriteRecommentView, EditCommentView },
   props: {
-    // 어떤 페이지냐에 따라 API 호출 주소 분기
     pageType: {
       type: String,
       default: ""
@@ -135,26 +183,50 @@ export default {
   data() {
     return {
       isRecomment: false,
-      commentList: []
+      commentList: [],
+      isEdit: false,
+      editId: null,
+      editText: "",
+      userId: ""
     };
   },
   setup() {},
   created() {
     this.getCommentList();
   },
-  mounted() {},
+  mounted() {
+    this.userId = this.$store.state.user.user_id;
+  },
   unmounted() {},
   methods: {
     async getCommentList() {
       let data = {};
-      data.pageType = data.pageType = "projectRecruit"; // TODO: 수정 필요
+      data.pageType = this.pageType;
       this.commentList = await this.$get(
         `/comment/recruit/get/${this.projectId}`
       );
-      // await console.log(this.commentList);
+    },
+    // 댓글 수정
+    async editComment(isEdit) {
+      if (!isEdit) {
+        return;
+      }
+      let data = {};
+      data.pageType = this.pageType;
+      data.contents = this.editText;
+      const r = await this.$patch(`/comment/edit/${this.editId}`, data);
+      if (r.status === 200) {
+        document.getElementById("retxtarea").value = "";
+        this.$router.go();
+      }
     },
 
-    deleteCheckAlert() {
+    updateComment(commentData) {
+      this.editId = commentData.id;
+      this.editText = commentData.text;
+    },
+
+    deleteCheckAlert(commentId) {
       this.$swal({
         title: "정말 삭제하시겠습니까?",
         text: "삭제한 댓글은 되돌릴 수 없습니다.",
@@ -166,6 +238,7 @@ export default {
         cancelButtonText: "취소"
       }).then((result) => {
         if (result.isConfirmed) {
+          this.deleteComment(commentId);
           this.$swal({
             title: "삭제 완료",
             text: "댓글이 삭제되었습니다.",
@@ -174,17 +247,24 @@ export default {
         }
       });
     },
-
-    deleteComment() {
-      this.deleteCheckAlert();
-      // 여기서 댓글 삭제 구현
-      // 삭제를 누른 댓글의 Id를 가져오기.
+    async deleteComment(commentId) {
+      const r = await this.$delete(
+        `/comment/delete/${this.pageType}/${commentId}`
+      );
+      if (r.status === 200) {
+        // 콜백함수 안에서 this 호출 시 새로운 object이기 떄문에 미리 선언
+        // 참고: https://stackoverflow.com/questions/69666397/typeerror-cannot-read-properties-of-undefined-reading-router-vuejs
+        const self = this;
+        setTimeout(function () {
+          self.$router.go();
+        }, 1000);
+      }
     },
     formatDate(datetime) {
-      console.log(datetime);
+      // console.log(datetime);
       // TODO: 예외처리 코드 보완 필요
       if (!datetime) {
-        console.log("datetime undefined error 처리 필요");
+        // console.log("datetime undefined error 처리 필요");
         return "";
       }
       return datetime.substr(0, 16).replace("T", " ");
@@ -307,10 +387,5 @@ a.text-muted:focus {
 
 .mar-top {
   margin-top: 15px;
-}
-
-.a-black {
-  color: black;
-  text-decoration: none;
 }
 </style>

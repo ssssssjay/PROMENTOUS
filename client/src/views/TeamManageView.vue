@@ -5,7 +5,14 @@
         <h1 class="title">팀 관리</h1>
         <p class="des">팀 상태 및 공유링크를 확인하고 팀원/멘토를 평가해요</p>
       </div>
+      <!-- {{ this.applicantsList }}
+      {{ this.teamMembers }}
+      <div>{{ this.projectList }}</div> -->
     </section>
+    <!-- {{ this.applicantsList }}
+    {{ this.teamMembers }}
+    <hr />
+    {{ user }} -->
     <!-- ---------------------------------------------------------------------------------------------- -->
     <!-- 상태선택박스 -->
     <!-- <div>MENTORINGTOTALPAGE ::: {{ this.mentoringTotalPageCount }}</div>
@@ -34,7 +41,7 @@
       <div><br /></div>
       <div><br /></div>
       <div>프로젝트리스트</div>
-      <div>{{ this.projectList }}</div>
+
       <div>{{ typeof this.projectList }}</div>
       <div>{{ this.projectList[0] }}</div>
       <div><br /></div>
@@ -45,10 +52,7 @@
       <div>{{ this.projectList2[0] }}</div> -->
       <!-- <div>{{ this.teamTotalInfo.data }}</div> -->
 
-      <div>{{ this.teamTotalInfo.data.basicInfo }}</div>
-
       <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div> -->
-      <!-- <div>{{ this.teamMembers }}</div> -->
       <!--
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div> -->
 
@@ -69,7 +73,6 @@
               ]"
               @clear="deselected"
               :key="componentKey" />
-
             <select
               name=""
               id=""
@@ -112,7 +115,7 @@
           <RegisterbtnLayout
             :btnText="btnText2"
             v-show="correctionMode"
-            @click="[watch(), changeStatus(), saveTeamManageInfo()]" />
+            @click="[watch(), saveTeamInfo(), changeStatusName()]" />
           <!--저장하기 -->
         </div>
 
@@ -166,11 +169,11 @@
               { value: 'FIN', label: '활동종료' }
             ]"
             v-show="correctionMode === true" />
-          {{ teamStatus }}
+
           <button
             class="mx-4 btn btn-primary"
             v-show="correctionMode === false">
-            {{ teamStatus }}
+            {{ teamStatusName }}
           </button>
         </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
@@ -216,9 +219,9 @@
         <!-- 지원자관리  -->
 
         <ApplicantProfileModal
-          ref="modal3"
+          ref="modal4"
           :content="modalContent"
-          :memberData="this.applicantsList[this.memberIndex]" />
+          :applicantData="this.applicantsList[this.memberIndex]" />
         <div class="p-2 mb-5 d-inline-flex bd-highlight">
           지원자관리
 
@@ -230,10 +233,10 @@
                 :key="index"
                 v-for="(app, index) in applicantsList">
                 <img
-                  src="{{app.applicantImg}}"
-                  class="card-img-top m-2"
+                  v-bind:src="app.userImage"
+                  class="card-img-top m-2 userImage"
                   alt="..."
-                  @click="[handleClick3(), transIndex(index)]" />
+                  @click="[handleClick4(), transIndex(index)]" />
 
                 <h5 class="card-title applicantNickname">
                   {{ app.applicantNickname }}
@@ -249,7 +252,7 @@
                   <li class="list-group-item">
                     신청분야
                     <button class="btn btn-primary">
-                      {{ app.applyDeptId }}
+                      {{ app.applyDeptCode }}
                     </button>
                   </li>
                   <li class="row list-group-item likeStackCode">
@@ -316,7 +319,7 @@
                 v-for="(mem, index) in teamMembers">
                 <img
                   v-bind:src="mem.userImage"
-                  class="card-img-top mt-2"
+                  class="card-img-top mt-2 userImage"
                   alt="..."
                   @click="[handleClick3(), transIndex(index)]" />
 
@@ -370,7 +373,7 @@
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 멘토링  -->
 
-        <div class="p-2 mb-5 d-inline-flex bd-highlight">
+        <!-- <div class="p-2 mb-5 d-inline-flex bd-highlight">
           <div class="mentoringText">
             멘토링
             <div class="mentorRating">
@@ -459,15 +462,7 @@
                   </button>
                 </div>
               </div>
-              <!-- <nav style="height: 30px">
-                <ul class="pagination pagination-sm justify-content-center">
-                  <li class="page-item active" aria-current="page">
-                    <span class="page-link">1</span>
-                  </li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                </ul>
-              </nav> -->
+
 
               <MentorRatingModal
                 ref="modal2"
@@ -476,9 +471,8 @@
                 :colors="mentorRatingColor" />
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
-      <PaginationLayout :page="page" @paging="paging" />
     </section>
   </div>
 </template>
@@ -489,9 +483,9 @@ import TeamStatus from "@vueform/multiselect";
 import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
 import { ref } from "vue";
 import TeamRatingModal from "@/components/TeamRatingModal.vue";
-import MentorRatingModal from "@/components/MentorRatingModal.vue";
+// import MentorRatingModal from "@/components/MentorRatingModal.vue";
 import TeamMemberProfileModal from "@/components/UserProfileModal.vue";
-import ApplicantProfileModal from "@/components/UserProfileModal.vue";
+import ApplicantProfileModal from "@/components/applicantProfileModal.vue";
 
 export default {
   name: "App",
@@ -501,14 +495,18 @@ export default {
     TeamStatus,
     RegisterbtnLayout,
     TeamRatingModal,
-    MentorRatingModal,
     TeamMemberProfileModal,
     ApplicantProfileModal
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
   },
   data() {
     return {
       //db작업 x 변수
-
+      teamStatusName: "",
       memberIndex: 0,
       teamRatingColor: "#ddee4d",
       mentorRatingColor: "#1379d2",
@@ -556,6 +554,7 @@ export default {
       recruitingUrl: "",
       applicants: [
         {
+          userImage: "",
           applyAdminId: "", // 무얼 위한 변수인지??
           applicantId: "",
           applicantNickName: "",
@@ -568,8 +567,9 @@ export default {
       ],
       teamMembers: [
         {
+          userImage: "",
           memberId: "",
-          memberNickName: "aa",
+          userNickname: "aa",
           memberEmail: "evelo0702@gmail.com",
           userSocialUrl: [
             {
@@ -604,17 +604,8 @@ export default {
         mentoring_page: "1"
       },
       params: {},
-      //김인호 test
-      paramsForTest: {
-        c2: "zz",
-        c3: "xx",
-        progress_method: "OFF",
-        status_code: "FIN",
-        main_area_code: "M08",
-        sub_area_code: "S125",
-        stack_code: "J02,R01"
-      },
-
+      /*저장용 saveParam OBJECT */
+      saveParam: {},
       teamTotalInfo: {},
       sessionUserId: "3",
       initUrl: "",
@@ -627,10 +618,13 @@ export default {
     const modal = ref(null);
     const modal2 = ref(null);
     const modal3 = ref(null);
+    const modal4 = ref(null);
     const modalContent = ref(["코멘트와 평점을 입력해주세요"]);
     const result = ref("");
     const result2 = ref("");
     const result3 = ref("");
+    const result4 = ref("");
+
     const handleClick = async () => {
       const ok = await modal.value.show();
       if (ok) {
@@ -655,48 +649,122 @@ export default {
         result3.value = "cancel";
       }
     };
+    const handleClick4 = async () => {
+      const ok = await modal4.value.show();
+      if (ok) {
+        result4.value = "ok";
+      } else {
+        result4.value = "cancel";
+      }
+    };
 
     return {
       modal,
       modal2,
       modal3,
+      modal4,
       modalContent,
       result,
       result2,
       result3,
+      result4,
       handleClick,
       handleClick2,
-      handleClick3
+      handleClick3,
+      handleClick4
     };
   },
   created() {},
   beforeMount() {
     this.managePageInit();
+    // this.sessionUserId = this.user.user_id;
   },
   mounted() {
     // this.filterStatusCode();
   },
   unmounted() {},
   methods: {
-    changeStatus() {
-      this.teamTotalInfo.data.basicInfo.statusCode = this.teamStatus;
+    changeStatusName() {
+      if (this.teamStatus == "REC") {
+        this.teamStatusName = "모집중";
+      } else if (this.teamStatus == "ING") {
+        this.teamStatusName = "모집완료";
+      } else if (this.teamStatus == "ADD") {
+        this.teamStatusName = "추가모집";
+      } else if (this.teamStatus == "FIN") {
+        this.teamStatusName = "활동종료";
+      }
     },
-    // filterStatusCode() {
-    //   if (this.teamTotalInfo.data.basicInfo.statusCode == "REC") {
-    //     this.teamStatus = "모집중";
-    //   } else if (this.teamTotalInfo.data.basicInfo.statusCode == "ING") {
-    //     this.teamStatus = "모집완료";
-    //   } else if (this.teamTotalInfo.data.basicInfo.statusCode == "ADD") {
-    //     this.teamStatus = "추가모집";
-    //   } else if (this.teamTotalInfo.data.basicInfo.statusCode == "FIN") {
-    //     this.teamStatus = "활동종료";
-    //   }
-    // },
-    approve(index) {
-      this.applicantsList[index].applyStatus = "ACC";
+    async saveTeamInfo() {
+      /* eslint-disable */
+      let flag = confirm("저장하시겠습니까? ");
+      if (flag) {
+        let data = {};
+        let project_id = this.selectedProjectId;
+        // this.params.selectedPage = this.selectedMentoringPage;
+        //입력 없이 등록 버튼 누르는 경우 예외처리
+        // 댓글 입력 없이 등록 버튼 누르는 경우 예외처리
+        data.project = {};
+        data.project_status = {};
+        data.project.meeting_url = this.urlAddress;
+        data.project.meeting_url_title = this.urlTitle;
+        data.project.status_code = this.teamStatus;
+        data.project.warranty = this.deposit;
+        data.project_status.project_id = project_id;
+        data.project_status.project_status = this.teamStatus;
+        data.project_status.changer = this.$store.state.user.user_id;
+
+        // saveTeamManageInfo
+        const r = await this.$patch(
+          // TODO: axios.defaults.baseURL로 변경
+          `/manage/saveTeamManageInfo/${project_id}`,
+          data
+        );
+        if (r.status === 200) {
+          this.$router.go(); /* refresh  */
+        }
+        console.log(this.r);
+      } else {
+        return;
+      }
+      // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
     },
-    reject(index) {
-      this.applicantsList[index].applyStatus = "REJ";
+    async approve(index) {
+      this.applicantsList[index].applyStatus = "ACC";      
+      let data = {};
+      data.applicant_id = this.applicantsList[index].applicantId;
+      data.project_id = this.applicantsList[index].projectId;
+      data.apply_dept_id = this.applicantsList[index].applyDeptId ;
+      data.apply_status =this.applicantsList[index].applyStatus;
+      console.log(data)
+      let r = await this.$post(
+            `/project/recruit/projectApplyAccept`,
+            data
+          );
+      console.log("승인결과");
+      console.log(r);
+      if (r.status === 200) {
+      this.$router.go();/* refresh  */
+      }
+    },
+ 
+    async reject(index) {
+      this.applicantsList[index].applyStatus = "REJ";      
+      let data = {};
+      data.applicant_id = this.applicantsList[index].applicantId;
+      data.project_id = this.applicantsList[index].projectId;
+      data.apply_dept_id = this.applicantsList[index].applyDeptId ;
+      data.apply_status =this.applicantsList[index].applyStatus;
+      console.log(data)
+      let r = await this.$post(
+            `/project/recruit/projectApplyReject`,
+            data
+          );
+      console.log("거절결과");
+      console.log(r);
+      if (r.status === 200) {
+      this.$router.go();/* refresh  */
+      }
     },
     transIndex(index) {
       this.memberIndex = index;
@@ -758,7 +826,6 @@ export default {
       this.correctionMode = true;
     },
     watch() {
-      // alert("저장기능 + 저장한뒤 refresh 필요!");
       this.correctionMode = false;
     },
 
@@ -801,7 +868,7 @@ export default {
       );
       this.teamStatus = this.teamTotalInfo.data.basicInfo.statusCode;
       // 팀모임 URL
-      this.urlTitle = this.teamTotalInfo.data.basicInfo.meetingUrl;
+      this.urlTitle = this.teamTotalInfo.data.basicInfo.meetingUrlTitle;
       this.urlAddress = this.teamTotalInfo.data.basicInfo.meetingUrl;
       //보증금
       this.deposit = this.teamTotalInfo.data.basicInfo.warranty;
@@ -829,25 +896,8 @@ export default {
       //멘토링페이지정보
       this.mentoringTotalPageCount =
         this.teamTotalInfo.data.mentoringTotalPageCount.totalCount;
-      //멘토정보 최초 앞 4개만 가져옴 + 필터링 동작필요!  (배열)
       this.mentoring = this.teamTotalInfo.data.mentorings;
       this.filterFinishMentoring();
-    },
-    // 저장 버튼 클릭 시 DATA UPDATE   + TODO : PAGE1초기화 필요!
-    async saveTeamManageInfo() {
-      this.params.project_id = this.selectedProjectId;
-      // this.params.selectedPage = this.selectedMentoringPage;
-      this.params.meeting_url = this.urlAddress;
-      this.params.meeting_url_title = this.urlTitle;
-      this.params.status_code = this.teamStatus;
-      this.params.warranty = this.deposit;
-      // saveTeamManageInfo
-      this.result = await this.$post(
-        // TODO: axios.defaults.baseURL로 변경
-        `/manage/saveTeamManageInfo`,
-        this.params
-      );
-      // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
     }
   }
 };
@@ -953,10 +1003,11 @@ div.applicantList {
   flex-wrap: nowrap;
 }
 
-.mentoring {
-  /* max-width: 460px; */
+div.col.mentoring {
+  width: 470px;
   height: 160px;
   display: flex;
+  flex: 0 0 0%;
   background: white;
   margin: 10px;
   padding-left: 30px;
@@ -985,16 +1036,16 @@ div.applicantList {
   font-size: 12px;
 }
 .mentoringStatus > span {
-  margin-right: 45px;
+  margin-right: 40px;
 }
 .mentoringStatus > span:nth-child(2) {
-  margin-right: 45px;
+  margin-right: 40px;
 }
 .mentoringStatus > span:nth-child(4) {
   margin-right: 40px;
 }
 .mentoringStatus > span:nth-child(5) {
-  margin-right: 45px;
+  margin-right: 40px;
 }
 
 .mentoringBtn {
@@ -1067,5 +1118,9 @@ p.form-control {
   position: absolute;
   width: 100px;
   left: -10px;
+}
+.userImage {
+  width: 200px;
+  height: 150px;
 }
 </style>

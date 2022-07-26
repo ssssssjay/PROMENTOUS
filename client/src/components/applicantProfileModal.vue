@@ -5,21 +5,21 @@
       <div class="row mt-5">
         <div class="col-2 text-center">
           <img
-            v-bind:src="memberData.userImage"
+            v-bind:src="applicantData.userImage"
             alt=""
             style="width: 120px; border-radius: 10%" />
           <div class="mt-2 h4">
-            {{ memberData.userNickname }}
+            {{ applicantData.userNickname }}
           </div>
-          <div>
+          <!-- <div>
             <i class="bi bi-star-fill pro_star_color"></i>
-            {{ averageRate }} ({{ memberData.rating.length }})
-          </div>
+            {{ averageRate }} ({{ applicantData.rating.length }})
+          </div> -->
         </div>
 
         <div class="col-6 text-start px-4">
           <p class="h2"><strong>자기소개</strong></p>
-          <p class="h5" :key="i" v-html="this.memberData.userIntro"></p>
+          <p class="h5" :key="i" v-html="this.applicantData.userIntro"></p>
         </div>
       </div>
       <!-- 평판 부분 -->
@@ -34,13 +34,13 @@
             data-bs-offset="0"
             class="scrollspy-example"
             tabindex="0">
-            <h4
+            <!-- <h4
               id="list-item-1"
               :key="i"
-              v-for="(rate, i) in memberData.rating">
+              v-for="(rate, i) in applicantData.rating">
               <i class="bi bi-star-fill pro_star_color"></i> {{ rate.score }}
               <span>{{ rate.comment }}</span>
-            </h4>
+            </h4> -->
           </div>
         </div>
         <hr />
@@ -52,7 +52,7 @@
           <div class="col-8 h4 text-start">
             <button
               class="btn m-1 btn-primary Stack"
-              v-for="(stack, index) in memberData.likeStackCode"
+              v-for="(stack, index) in applicantData.likeStackCode"
               :key="index">
               {{ stack }}
             </button>
@@ -63,7 +63,7 @@
           <div class="col-8 h4 text-start">
             <button
               class="btn m-1 btn-primary Stack"
-              v-for="(Dept, index) in memberData.likeDeptCode"
+              v-for="(Dept, index) in applicantData.likeDeptCode"
               :key="index">
               {{ Dept }}
             </button>
@@ -131,7 +131,7 @@ export default {
   name: "UserProfileModal2",
   components: { Modal },
   props: {
-    memberData: Object
+    applicantData: Object
   },
   data() {
     return {
@@ -178,8 +178,8 @@ export default {
   unmounted() {},
   methods: {
     // rateAverage() {
-    //   for (let i = 0; i < this.memberData.rating.length; i++) {
-    //     this.averageRate += this.memberData.rating[i].score;
+    //   for (let i = 0; i < this.applicantData.rating.length; i++) {
+    //     this.averageRate += this.applicantData.rating[i].score;
     //   }
     // }
   }

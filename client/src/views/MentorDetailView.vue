@@ -1,12 +1,6 @@
 <template>
   <!-- 유저 프로필 모달 영역 -->
   <div>
-    <div class="modal-container" v-if="modalStatus">
-      <div class="modal-conten">
-        <UserProfileModalVue></UserProfileModalVue>
-        <i class="bi bi-x-lg" @click="modalOff"></i>
-      </div>
-    </div>
     <!-- 배너 -->
     <div>
       <section class="banner">
@@ -19,6 +13,7 @@
         <!-- 상단 -->
         <div class="top">
           <p class="text-start text-muted">1999/11/13</p>
+          <!-- {{ mentorData }} -->
           <p class="row">
             <span class="col-9 h2"
               ><strong v-show="infoStatus">{{ title }}</strong>
@@ -77,16 +72,11 @@
         <div class="row mt-5">
           <div class="col-2 text-center">
             <img
-              src="../assets/profile.jpg"
+              v-bind:src="mentor.image"
               alt=""
               style="width: 120px; border-radius: 10%" />
             <div class="mt-2 h4">
-              <strong
-                ><button class="btn btn-primary" @click="modalOn">
-                  {{ this.$store.state.myNickname }}
-                </button></strong
-              >
-              <!-- <strong>{{ mentor.nickname }}</strong> -->
+              <strong>{{ mentor.nickname }}</strong>
             </div>
             <div>
               <button class="btn btn-outline-primary">
@@ -152,48 +142,58 @@
               </div>
             </div>
           </div>
-          <!-- 참고링크 -->
-          <p class="row py-4 mb-0 mt-3">
+          <div class="row mb-5">
             <span class="col-2 text-start h3"><strong>참고링크</strong></span>
-            <span class="col-10 text-start h5" v-show="infoStatus">
-              <a
-                class="px-4 mx-0 text-start"
-                :href="Object.values(site)"
-                v-for="(site, index) in siteList"
-                :key="index"
-                target="_blank"
-                style="color: #1379d2"
-                ><strong>{{ Object.keys(site).join() }}</strong></a
-              >
-            </span>
-            <span class="col-4 px-0 pt-0" v-show="editStatus">
+            <div class="col partTo" v-show="editStatus">
               <input
                 type="text"
-                class="form-control text-start"
-                placeholder="사이트 제목을 입력해주세요!"
-                name=""
-                id=""
-                v-model="site.name" />
-            </span>
-            <span class="col-5 px-2 pt-0" v-show="editStatus">
+                class="form-control"
+                style="width: 200px"
+                placeholder="링크 이름"
+                v-model="url.url_title" />
+
               <input
-                type="url"
-                class="form-control text-start"
-                placeholder="사이트 링크를 입력해주세요!"
-                name=""
-                id=""
-                v-model="site.link" />
-            </span>
-            <span class="col-1 text-center">
-              <button
-                type="button"
-                class="btn btn-outline-primary px-4"
-                @click="addSite"
-                v-show="editStatus">
-                +
+                type="text"
+                class="form-control"
+                style="width: 300px"
+                placeholder="링크 주소"
+                v-model="url.url_address" />
+              <button type="button" class="btn btn-secondary" @click="addUrl()">
+                추가
               </button>
+              <div
+                class="row"
+                v-for="(url, index) in url_list"
+                :key="index"
+                v-show="editStatus">
+                <div class="col partTo">
+                  <p class="form-control mb-1">
+                    {{ url_list[index].url_title }}
+                  </p>
+                  <p class="form-control mb-1" style="width: 300px">
+                    {{ url_list[index].url_address }}
+                  </p>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="delURL(index)">
+                    X
+                  </button>
+                </div>
+              </div>
+            </div>
+            <span class="col-10 text-start h5" v-show="infoStatus">
+              <a
+                target="_blank"
+                class="px-4 mx-0 text-start"
+                style="color: #1379d2"
+                :href="`${url_list[index].url_address}`"
+                :key="index"
+                v-for="(url, index) in url_list"
+                ><strong>{{ url_list[index].url_title }}</strong></a
+              >
             </span>
-          </p>
+          </div>
         </div>
         <div class="mt-5">
           <hr />
@@ -207,13 +207,17 @@
 
 <script>
 import CommentView from "@/components/CommentView.vue";
-import UserProfileModalVue from "@/components/UserProfileModal.vue";
 export default {
-  components: { CommentView, UserProfileModalVue },
+  components: { CommentView },
 
   data() {
     return {
-      title: "'최강' 캡틴안산의 Vue 멘토링",
+      url: { url_title: "", url_address: "" },
+      url_list: [],
+      /*김인호 백단작업중 추가 mentorUserId , mentorData */
+      mentorUserId: 47, // <<<--- 라우터 푸시? 로 들어온 내가 보고있는 멘토의 user_id
+      mentorData: {},
+      title: "프론트하드코딩임..'최강' 캡틴안산의 Vue 멘토링",
       likePart: ["프론트엔드", "백엔드", "모바일"],
       mentor: { nickname: "joansdev", score: "4.5", scoreCount: "15" },
       mentorInfoId: "1",
@@ -221,21 +225,21 @@ export default {
         {
           score: "4",
           comment:
-            "이해했다고 말씀드려도, 정말 이해했는지 직접 확인해보고 넘어가주십니다. 그리고 또"
+            "프론트하드코딩임..이해했다고 말씀드려도, 정말 이해했는지 직접 확인해보고 넘어가주십니다. 그리고 또"
         },
         {
           score: "2.5",
-          comment: "자기주장이 많이 강한 편이신 것 같아요 ^^"
+          comment: "프론트하드코딩임..자기주장이 많이 강한 편이신 것 같아요 ^^"
         },
         {
           score: "5",
           comment:
-            "프로멘토우스를 통해 첫 개발 멘토링을 진행해봤는데, 성공적이었습니다. 인프런이나"
+            "프론트하드코딩임..프로멘토우스를 통해 첫 개발 멘토링을 진행해봤는데, 성공적이었습니다. 인프런이나"
         },
         {
           score: "4",
           comment:
-            "비용만 받고 야박하게 서비스를 진행하는 여타 멘토분들과는 다르게 한 개라도 더..."
+            "프론트하드코딩임..비용만 받고 야박하게 서비스를 진행하는 여타 멘토분들과는 다르게 한 개라도 더..."
         },
         {
           score: "4",
@@ -244,7 +248,7 @@ export default {
         }
       ],
       selfInfo:
-        "누구나 다루기 쉬운 Vue.js 입문의 리뉴얼 강의입니다. 입문자의 관점으로 더욱더 눈높이를 낮춰 프론트엔드 개발할 때 알고 있으면 좋은 지식들을 상세하게 설명하였습니다. Vue.js로 재밌게 웹 개발을 시작하실 수 있도록 알차게 내용을 구성하였으니, 관심 있으신 분들은 강의 소개 영상을 꼭 확인해보세요! 😁",
+        "프론트하드코딩임..누구나 다루기 쉬운 Vue.js 입문의 리뉴얼 강의입니다. 입문자의 관점으로 더욱더 눈높이를 낮춰 프론트엔드 개발할 때 알고 있으면 좋은 지식들을 상세하게 설명하였습니다. Vue.js로 재밌게 웹 개발을 시작하실 수 있도록 알차게 내용을 구성하였으니, 관심 있으신 분들은 강의 소개 영상을 꼭 확인해보세요! 😁",
       mentorings: [
         {
           name: "찰리와 초콜릿기계 설계해보기",
@@ -257,7 +261,7 @@ export default {
         { name: "업무자동화 프로그램 개발", href: "https://www.naver.com/" }
       ],
 
-      site: { name: "", link: "" }, // site: {name:'GitHub', link:'www.github.com'}
+      site: { name: "111", link: "22" }, // site: {name:'GitHub', link:'www.github.com'}
       siteList: [],
       infoStatus: true,
       editStatus: false,
@@ -269,10 +273,32 @@ export default {
     };
   },
   setup() {},
-  created() {},
-  mounted() {},
+
+  created() {
+    /*요걸 통해서 router 때 받아온 mentorUserId 값 해석함!*/
+    this.mentorUserId = this.$route.params.mentorUserId;
+  },
+  mounted() {
+    this.mentorDetail();
+  },
   unmounted() {},
   methods: {
+    addUrl() {
+      if (this.url.url_title !== "" && this.url.url_address !== "") {
+        let obj0 = {
+          ["url_title"]: this.url.url_title,
+          ["url_address"]: this.url.url_address
+        };
+        this.url_list.push(obj0);
+        this.url.url_title = "";
+        this.url.url_address = "";
+      } else if (this.url.url_title === "" || this.url.url_address === 0) {
+        alert("링크를 정확히 입력해주세요");
+      }
+    },
+    delURL(index) {
+      this.url_list.splice(index, 1);
+    },
     changeApplyStatus() {
       [this.applyYes, this.applyNo] = [this.applyNo, this.applyYes];
       if (this.applyYn == "Y") {
@@ -297,21 +323,29 @@ export default {
     modalOff() {
       this.modalStatus = false;
     },
-    // passData() {
-    //   const response = this.$post("", {
-    //     param: {
-    //       title: this.title,
-    //       applyYn: this.applyYn,
-    //       nickname: this.mentor.nickname,
-    //       score: this.mentor.score,
-    //       scoreCount: this.mentor.scoreCount,
-    //       info: this.selfInfo,
-    //       siteLink: this.siteLink
-    //     }
-    //   });
-    // },
-    goToApply(path) {
-      this.$router.push({ path: path });
+    //김인호 추가
+    async mentorDetail() {
+      //mentorUserId , mentorData
+      this.mentorData = await this.$post("/mentor/getMentorDetail", {
+        mentorId: this.mentorUserId
+      });
+      this.mentorData = this.mentorData.data;
+      /*멘토 기본정보들 front에 삽입 */
+      this.title = this.mentorData.basicInfo[0].mentoring_title;
+      this.mentor.nickname = this.mentorData.basicInfo[0].user_nickname;
+      this.mentor.score = this.mentorData.basicInfo[0].totalRate;
+      this.mentor.scoreCount = this.mentorData.basicInfo[0].rateCount;
+      this.mentor.image = this.mentorData.basicInfo[0].user_image;
+
+      this.selfInfo = this.mentorData.basicInfo[0].mentoring_intro;
+      /*멘토 DEPT 코드 자연어 가져오기 */
+      this.likePart = this.mentorData.basicInfo[0].mentoring_dept_code;
+      /*멘토후기정보들 가져오기*/
+      this.reputations = this.mentorData.reputations;
+      /*멘토링 이력  가져오기*/
+      this.mentorings = this.mentorData.mentoringHistory;
+      /* 참고 링크 가져오기 */
+      this.url_list = this.mentorData.url_list;
     }
   }
 };
@@ -358,7 +392,19 @@ export default {
   border-radius: 0.5%;
   overflow: auto;
 }
-
+.partTo > input {
+  display: inline;
+  margin-right: 5px;
+}
+.col.partTo {
+  position: relative;
+  bottom: 5px;
+}
+p.form-control {
+  width: 200px;
+  display: inline-block;
+  margin-right: 5px;
+}
 .bi.bi-x-lg {
   position: absolute;
   top: 0.5rem;

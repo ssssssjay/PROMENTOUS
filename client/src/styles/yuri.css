@@ -4,6 +4,12 @@
   background-color: rgba(73, 192, 208, 0.8);
 }
 
+.pro_badge_color_disabled {
+  --bs-bg-opacity: 1;
+  color: white;
+  background-color: #949494;
+}
+
 .pro_button {
   --bs-bg-opacity: 1;
   color: white;
@@ -48,4 +54,21 @@
 .com_link_blue:focus,
 .com_link_red:focus {
   box-shadow: none;
+}
+
+.pro_a_black {
+  color: black;
+  text-decoration: none;
+}
+
+.pro_title_ellipsis {
+  /* width:70px;
+  padding:0 5px; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pro_font_bold {
+  font-weight: bold;
 }

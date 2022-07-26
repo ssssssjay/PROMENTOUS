@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-5">
+  <div class="mb-5" v-if="isReviewList">
     <div class="row">
       <div class="col-lg-10 mx-auto">
         <h2>후기 모아보기</h2>
@@ -10,35 +10,30 @@
           <!-- Carousel indicators -->
           <div class="carousel-indicators">
             <button
+              v-for="(review, idx) in reviewList"
+              :key="idx"
               type="button"
               data-bs-target="#myCarousel"
-              data-bs-slide-to="0"
+              :data-bs-slide-to="idx"
               class="active"
               aria-current="true"
-              aria-label="Slide 1"></button>
-            <button
-              type="button"
-              data-bs-target="#myCarousel"
-              data-bs-slide-to="1"
-              aria-label="Slide 2"></button>
-            <button
-              type="button"
-              data-bs-target="#myCarousel"
-              data-bs-slide-to="2"
-              aria-label="Slide 3"></button>
+              aria-label="`Slide ${idx + 1}`"></button>
           </div>
           <!-- Wrapper for carousel items -->
           <div class="carousel-inner">
             <div
               class="carousel-item"
               v-for="review in reviewList"
-              :key="review.id"
-              :class="{ active: review.id == '1' }">
-              <p class="d-block fs-4">
+              :key="review.review_id"
+              :class="{ active: review.review_id == firstReviewId }">
+              <a
+                href="#"
+                class="btn-link text-semibold media-heading box-inline pro_a_black fs-3">
                 {{ review.title }}
-              </p>
-              <p class="d-block">
-                {{ review.content }}
+              </a>
+              <!-- TODO: css ellipsis -->
+              <p class="d-block mt-4 fs-5">
+                {{ review.desc }}
               </p>
             </div>
           </div>
@@ -50,6 +45,7 @@
             data-bs-target="#myCarousel"
             data-bs-slide="prev">
             <i class="bi bi-chevron-left"></i>
+            <span class="visually-hidden">Previous</span>
           </button>
           <button
             class="carousel-control-next"
@@ -57,6 +53,7 @@
             data-bs-target="#myCarousel"
             data-bs-slide="next">
             <i class="bi bi-chevron-right"></i>
+            <span class="visually-hidden">Next</span>
           </button>
         </div>
       </div>
@@ -66,56 +63,48 @@
 <script>
 export default {
   components: {},
+  props: {
+    projectId: {
+      type: String,
+      default: null
+    }
+  },
   data() {
     return {
-      reviewList: [
-        {
-          id: 1,
-          title: "XX 프로젝트 참여 후기",
-          content:
-            "후기 내용111. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eusem tempor, varius quam at, luctus dui. Mauris magna metus,dapibus nec turpis vel, semper malesuada ante. Idac bibendumscelerisque non non purus. Suspendisse varius nibh non aliquet.",
-          insert_date: "2022/06/05 13:01",
-          writer: "떡볶이"
-        },
-        {
-          id: 2,
-          title: "OO 프로젝트 참여 후기",
-          content:
-            "후기 내용222. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eusem tempor, varius quam at, luctus dui. Mauris magna metus,dapibus nec turpis vel, semper malesuada ante. Idac bibendumscelerisque non non purus. Suspendisse varius nibh non aliquet.",
-          insert_date: "2022/06/05 13:01",
-          writer: "오뎅"
-        },
-        {
-          id: 3,
-          title: "ABCD 프로젝트 참여 후기",
-          content:
-            "후기 내용333. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eusem tempor, varius quam at, luctus dui. Mauris magna metus,dapibus nec turpis vel, semper malesuada ante. Idac bibendumscelerisque non non purus. Suspendisse varius nibh non aliquet.",
-          insert_date: "2022/06/05 13:01",
-          writer: "순대"
-        }
-      ]
+      firstReviewId: "",
+      reviewList: [],
+      isReviewList: true
     };
   },
   setup() {},
-  created() {},
-  mounted() {
-    // 캐러셀 item 넘어가는 시간 간격 옵션 추가
-    let firstCarouselItem = document.querySelector(".carousel-item");
-    firstCarouselItem.setAttribute("data-bs-interval", 7000);
+  created() {
+    this.getAllReview();
   },
-  unmounted() {},
-  methods: {}
+  mounted() {},
+  unmounted() {
+    // 캐러셀 item 넘어가는 시간 간격 옵션 추가 -> error 나서 지움
+    // let firstCarouselItem = document.querySelector(".carousel-item");
+    // firstCarouselItem.setAttribute("data-bs-interval", 7000);
+  },
+  methods: {
+    async getAllReview() {
+      this.reviewList = await this.$get(
+        `/project/recruit/${this.projectId}/all_review`
+      );
+      if (!this.reviewList[0]) {
+        this.isReviewList = false;
+        return;
+      }
+      this.firstReviewId = this.reviewList[0].review_id;
+    }
+  }
 };
 </script>
 <style scoped>
-/* body {
-  font-family: "Open Sans", sans-serif;
-} */
 h2 {
   color: #333;
   text-align: center;
   text-transform: uppercase;
-  font-family: "Roboto", sans-serif;
   font-weight: bold;
   position: relative;
   margin: 30px 0 60px;

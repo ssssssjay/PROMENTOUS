@@ -11,8 +11,8 @@
           <div class="row mt-4">
             <div class="col-2 text-center">
               <img
-                src="../assets/profile.jpg"
-                alt=""
+                :src="user.user_image"
+                alt="프로필사진"
                 style="width: 130px; border-radius: 15px" />
             </div>
             <div class="col-10">
@@ -330,8 +330,12 @@ export default {
     };
   },
   setup() {},
-  created() {},
-  mounted() {},
+  created() {
+    this.userId = this.$route.params.userId;
+  },
+  mounted() {
+    this.getUserData();
+  },
   unmounted() {},
   methods: {
     addStack() {
@@ -395,6 +399,19 @@ export default {
         }
       });
       console.log(response);
+    },
+    async getUserData() {
+      const response = await this.$get(`/user/${this.userId}`);
+      // console.log(response);
+      this.user.nickname = response.user_nickname;
+      this.user.selfInfo = response.user_intro;
+      this.user.login = response.user_account;
+      this.user.googleAccount = response.user_account;
+      this.user.user_image = response.user_image;
+      this.user.score = response.userRateAVG;
+      this.user.scoreCount = response.userRateCount;
+      this.user.mentoScore = response.mentorRateAVG;
+      this.user.mentoScoreCount = response.mentorRateAVG;
     }
   }
 };

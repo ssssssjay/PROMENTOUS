@@ -27,10 +27,10 @@ export default {
   methods: {
     onSubmitSearchAll() {
       if (this.searchAll === "") {
-        console.log("단어를 입력하셔야 합니다!!!");
+        alert("단어를 입력하셔야 합니다!!!");
         return;
       }
-      console.log(this.searchAll);
+      this.$emit("search-keyword", this.searchAll);
     }
   }
 };
