@@ -1,6 +1,6 @@
 <template>
   <div>
-    <StackSearch
+    <!-- <StackSearch
       v-model="value"
       class="stack_search"
       placeholder="언어/스택으로
@@ -8,6 +8,17 @@
       mode="tags"
       :close-on-select="false"
       :searchable="true"
+      :create-option="true"
+      :options="options"
+      @click="transValue" /> -->
+    <StackSearch
+      v-model="value"
+      class="stack_search"
+      placeholder="언어/스택으로
+    검색해보세요"
+      mode="single"
+      :close-on-select="true"
+      :searchable="false"
       :create-option="true"
       :options="options"
       @click="transValue" />
@@ -65,7 +76,7 @@ import StackSearch from "@vueform/multiselect";
 <style src="@vueform/multiselect/themes/default.css"></style>
 <style scoped>
 .stack_search {
-  width: 500px;
+  min-width: 264px;
 }
 </style>
 <style>
@@ -75,11 +86,19 @@ import StackSearch from "@vueform/multiselect";
 .multiselect-tag {
   background: var(--ms-tag-bg, #1379d2);
 }
-.multiselect-group-label.is-selected {
+/* .multiselect-group-label.is-selected {
   background: var(--ms-group-label-bg-selected, #1379d2);
   color: var(--ms-group-label-color-selected, #fff);
 }
 .multiselect-group-label.is-selected.is-pointed {
+  background: var(--ms-group-label-bg-selected-pointed, #1379d2);
+  color: var(--ms-group-label-color-selected-pointed, #fff);
+} */
+.multiselect-option.is-selected {
+  background: var(--ms-group-label-bg-selected, #1379d2);
+  color: var(--ms-group-label-color-selected, #fff);
+}
+.multiselect-option.is-selected.is-pointed {
   background: var(--ms-group-label-bg-selected-pointed, #1379d2);
   color: var(--ms-group-label-color-selected-pointed, #fff);
 }
