@@ -39,8 +39,6 @@
       <div><br /></div>
       <div><br /></div>
       <div><br /></div>-->
-      {{ this.teamMembers }}
-      <div>프로젝트리스트</div>
 
       <!--<div>{{ typeof this.projectList }}</div>
       <div>{{ this.projectList[0] }}</div>
@@ -519,7 +517,7 @@ export default {
       selectedStatus: "",
 
       datetime: "2011-08-03tdst324324234234",
-      correctionMode: true,
+      correctionMode: false,
       projectList2: [],
       projectList: [
         {
@@ -597,14 +595,14 @@ export default {
       //paging 처리 위한 object
       mentoringTotalPageCount: 0,
       projectInfoParams: {
-        project_id: "3",
-        mentoring_page: "1"
+        project_id: "", //"1",
+        mentoring_page: "" //"1"
       },
       params: {},
       /*저장용 saveParam OBJECT */
       saveParam: {},
       teamTotalInfo: {},
-      sessionUserId: "65",
+      sessionUserId: "",
       initUrl: "",
       componentKey: 0,
       selectedProjectId: "",
@@ -671,11 +669,17 @@ export default {
       handleClick4
     };
   },
-  created() {},
+  created() {
+    /* 로그인 한 계정 USERID 심어주는 부분! 여기에 3, 22,20 등을 넣어서
+    확인하고픈 userId 처리가능합니다. */
+    this.sessionUserId = this.user.user_id;
+    //user from computed()
+    //this.sessionUserId = 3;
+  },
   beforeMount() {},
-  mounted() {/* eslint-disable */
+  mounted() {
     // this.filterStatusCode();
-        this.managePageInit();
+    this.managePageInit();
   },
   unmounted() {},
   methods: {
@@ -708,8 +712,6 @@ export default {
         data.project_status.project_id = project_id;
         data.project_status.project_status = this.teamStatus;
         data.project_status.changer = this.$store.state.user.user_id;
-        console.log("async saveTeamInfo() {")
-        console.log(data)
         // saveTeamManageInfo
         const r = await this.$patch(
           // TODO: axios.defaults.baseURL로 변경
@@ -717,7 +719,7 @@ export default {
           data
         );
         if (r.status === 200) {
-          this.projectIdSelect() /* refresh  */
+          this.projectIdSelect(); /* refresh  */
         }
         console.log(this.r);
       } else {
@@ -726,40 +728,33 @@ export default {
       // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
     },
     async approve(index) {
-      this.applicantsList[index].applyStatus = "ACC";      
+      this.applicantsList[index].applyStatus = "ACC";
       let data = {};
       data.applicant_id = this.applicantsList[index].applicantId;
       data.project_id = this.applicantsList[index].projectId;
       data.apply_dept_id = this.applicantsList[index].applyDeptId;
-      data.apply_status =this.applicantsList[index].applyStatus;
-      console.log(data)
-      let r = await this.$post(
-            `/project/recruit/projectApplyAccept`,
-            data
-          );
+      data.apply_status = this.applicantsList[index].applyStatus;
+      console.log(data);
+      let r = await this.$post(`/project/recruit/projectApplyAccept`, data);
       console.log("승인결과");
       console.log(r);
       if (r.status === 200) {
-         this.projectIdSelect() /* refresh  */
+        this.projectIdSelect(); /* refresh  */
       }
     },
- 
+
     async reject(index) {
-      this.applicantsList[index].applyStatus = "REJ";      
+      this.applicantsList[index].applyStatus = "REJ";
       let data = {};
       data.applicant_id = this.applicantsList[index].applicantId;
       data.project_id = this.applicantsList[index].projectId;
-      data.apply_dept_id = this.applicantsList[index].applyDeptId ;
-      data.apply_status =this.applicantsList[index].applyStatus;
-      console.log(data)
-      let r = await this.$post(
-            `/project/recruit/projectApplyReject`,
-            data
-          );
-      console.log("거절결과");
+      data.apply_dept_id = this.applicantsList[index].applyDeptId;
+      data.apply_status = this.applicantsList[index].applyStatus;
+      let r = await this.$post(`/project/recruit/projectApplyReject`, data);
+      console.log("거절 선택result");
       console.log(r);
       if (r.status === 200) {
-      this.$router.go();/* refresh  */
+        this.projectIdSelect(); /* refresh  */
       }
     },
     transIndex(index) {
@@ -771,48 +766,37 @@ export default {
     modalOff() {
       this.modalStatus = false;
     },
+    /*managePageInit  페이지 최초 실행 시  동작하는 로직  */
     async managePageInit() {
       // 팀STATUS 필드 셀렉박스용
       this.teamStatusList = await this.$get(
-        `/common/getTeamStatusListForTeamManage`
+        `/common/getTeamStatusListForTeamManage/`
       );
- 
+
       // 내 SESSIONID기준으로  팀 리스트끌고오기
       this.initUrl = `/manage/getTeamListForManage/`;
       this.initUrl += this.sessionUserId;
-      console.log(this.initUrl)
-      console.log("=====")
-      console.log("=====")
-      console.log("=====")
-      console.log(this.projectInfoParams)
       let temp = await this.$get(this.initUrl, {});
-      // 가져온 리스트 첫번째 값으로 팀정보 다끌고오기
-      console.log(typeof temp);
+      // 내연관 팀들 배열 중에서
+      // 첫번째 값(DEFAULT) 으로 팀정보 다끌고오기위한 처리
       this.projectList = [];
-      if(typeof temp == "object"){
-        console.log("trueeeeeeeeeeeeee")
-        this.projectList.push(temp)
+      if (temp.length == 1) {
+        this.projectList = temp;
+      } else {
+        temp.forEach((element) => {
+          this.projectList.push(element);
+        });
       }
-
-      console.log("1")
-      console.log(this.projectList )
-      this.selectedProjectId = this.projectList.projectId;
-      this.selectedStatus = this.projectList.statusName;
-      console.log("2")
-      console.log(this.selectedProjectId )
+      this.selectedProjectId = this.projectList[0].projectId;
+      this.selectedStatus = this.projectList[0].statusName;
       this.projectInfoParams.project_id = this.selectedProjectId;
-      // this.selectedStatus
-      console.log("3")
-      console.log(this.selectedStatus )
       this.projectIdSelect(); /* 팀개요 정보 다가져옴. */
-
-      
     },
     filterApplicant() {
       let temp = [];
       for (let i = 0; i < this.applicants.length; i++) {
         if (this.applicants[i].applyStatus == "NEW") {
-           temp.push(this.applicants[i]);
+          temp.push(this.applicants[i]);
         }
       }
       this.applicantsList = temp;
@@ -831,16 +815,16 @@ export default {
     filterFinishMemberRating() {
       this.FinishMemberRating = [];
 
-      console.log(this.teamMembers.length)
+      console.log(this.teamMembers.length);
       for (let i = 0; i < this.teamMembers.length; i++) {
-      console.log("============================")
-        console.log(this.teamMembers[i].rating)
-        if(this.teamMembers[i].rating.rated != ""){
-        if (this.teamMembers[i].rating.rated == "no") {
-          this.FinishMemberRating.push(this.teamMembers[i]);
-        }
-        }else{
-          this.FinishMemberRating.push([])
+        console.log("============================");
+        console.log(this.teamMembers[i].rating);
+        if (this.teamMembers[i].rating.rated != "") {
+          if (this.teamMembers[i].rating.rated == "no") {
+            this.FinishMemberRating.push(this.teamMembers[i]);
+          }
+        } else {
+          this.FinishMemberRating.push([]);
         }
       }
     },
@@ -888,22 +872,17 @@ export default {
 
     // 선택 하는 순간에 해당 project 정보 teamTotalInfo 끌어옴
     async projectIdSelect() {
-      console.log("selected >> this.selectedProjectId")
-      console.log(this.selectedProjectId)
+      console.log(this.selectedProjectId);
       this.projectInfoParams.project_id = this.selectedProjectId;
       // teamTotalInfo .
-      console.log(this.projectInfoParams)
-      console.log(this.projectInfoParams.project_id )
+      console.log(this.projectInfoParams);
+      console.log(this.projectInfoParams.project_id);
       this.teamTotalInfo = await this.$post(
         // TODO: axios.defaults.baseURL로 변경
         `/manage/getProjectInfo`,
         this.projectInfoParams
       );
-      console.log("---------------------------------------")
-      console.log("---------------------------------------")
-      console.log("---------------------------------------")
-      console.log(this.teamTotalInfo)
-
+      /*TODO 데이터 가져온 이후 처리 - 필드 별 메서드화 진행TRY */
       this.teamStatus = this.teamTotalInfo.data.basicInfo.statusCode;
       // 팀모임 URL
       this.urlTitle = this.teamTotalInfo.data.basicInfo.meetingUrlTitle;
@@ -914,46 +893,50 @@ export default {
       //지원자정보 (배열)
       this.applicants = this.teamTotalInfo.data.applicants;
       for (let q = 0; q < this.applicants.length; q++) {
-        if(this.applicants[q].likeStackCode != null){
-        let str = this.applicants[q].likeStackCode.slice(
-          0,
-          this.applicants[q].likeStackCode.length - 1
-        );
-        console.log("--------------------------")
-        console.log(str)
-        this.applicants[q].likeStackCode = str.split(",");
-        }else{
-        this.applicants[q].likeStackCode = [];
+        if (this.applicants[q].likeStackCode != null) {
+          let str = this.applicants[q].likeStackCode.slice(
+            0,
+            this.applicants[q].likeStackCode.length - 1
+          );
+          console.log("--------------------------");
+          console.log(str);
+          this.applicants[q].likeStackCode = str.split(",");
+        } else {
+          this.applicants[q].likeStackCode = [];
         }
       }
       this.filterApplicant();
       //멤버정보 (배열)
-      let array =[];
-      if(typeof this.teamTotalInfo.data.members == "object"){
-        for (let index = 0; index < this.teamTotalInfo.data.members.length; index++) {
+      let array = [];
+      if (typeof this.teamTotalInfo.data.members == "object") {
+        for (
+          let index = 0;
+          index < this.teamTotalInfo.data.members.length;
+          index++
+        ) {
           const element = this.teamTotalInfo.data.members[index];
-          
-        array.push(this.teamTotalInfo.data.members[index])
+
+          array.push(this.teamTotalInfo.data.members[index]);
         }
         this.teamMembers = array;
       }
-      this.teamMembers =  this.teamTotalInfo.data.members;
+      this.teamMembers = this.teamTotalInfo.data.members;
 
       for (let q = 0; q < this.teamMembers.length; q++) {
-        let str ="";
-        if(this.teamMembers[q].likeStackCode != null){
+        let str = "";
+        if (this.teamMembers[q].likeStackCode != null) {
           str = this.teamMembers[q].likeStackCode.slice(
-          0,
-          this.teamMembers[q].likeStackCode.length - 1
-        );
-        }else{
+            0,
+            this.teamMembers[q].likeStackCode.length - 1
+          );
+        } else {
           str = "";
         }
         this.teamMembers[q].likeStackCode = str.split(",");
       }
       // this.filterFinishMemberRating();
       this.mentoring = this.teamTotalInfo.data.mentorings;
-       this.filterFinishMentoring();
+      this.filterFinishMentoring();
     }
   }
 };
