@@ -29,12 +29,13 @@
       <!-- <div>{{ this.teamTotalInfo.data }}</div>
       <hr />
       <div>{{ this.applicants }}</div>
-      <hr />
-      {{ this.teamMembers }}
+      
       {{ teamStatus }}
       {{ teamStatusName }} -->
 
       <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div> -->
+      <hr />
+      {{ this.teamMembers }}
       <!--
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div> -->
 
@@ -756,6 +757,8 @@ export default {
     },
     /*managePageInit  페이지 최초 실행 시  동작하는 로직  */
     async managePageInit() {
+      console.log("=========SESSION USERID ==========");
+      console.log(this.sessionUserId);
       // 팀STATUS 필드 셀렉박스용
       this.teamStatusList = await this.$get(
         `/common/getTeamStatusListForTeamManage/`
@@ -765,20 +768,32 @@ export default {
       this.initUrl = `/manage/getTeamListForManage/`;
       this.initUrl += this.sessionUserId;
       let temp = await this.$get(this.initUrl, {});
+      console.log(temp == null);
+      console.log(temp == {});
+      console.log(typeof temp);
+      console.log("=========initUrl 팀 리스트끌고오기 ==========");
+      console.log(this.initUrl);
+      console.log("=========가져온결과 temp==========");
+      console.log(temp);
       // 내연관 팀들 배열 중에서
       // 첫번째 값(DEFAULT) 으로 팀정보 다끌고오기위한 처리
       this.projectList = [];
-      if (temp.length == 1) {
-        this.projectList = temp;
-      } else {
-        temp.forEach((element) => {
-          this.projectList.push(element);
-        });
+      try {
+        if (temp.length == 1) {
+          this.projectList = temp;
+        } else {
+          temp.forEach((element) => {
+            this.projectList.push(element);
+          });
+        }
+
+        this.selectedProjectId = this.projectList[0].projectId;
+        this.selectedStatus = this.projectList[0].statusName;
+        this.projectInfoParams.project_id = this.selectedProjectId;
+        this.projectIdSelect(); /* 팀개요 정보 다가져옴. */
+      } catch (e) {
+        this.exitTeamManage(e);
       }
-      this.selectedProjectId = this.projectList[0].projectId;
-      this.selectedStatus = this.projectList[0].statusName;
-      this.projectInfoParams.project_id = this.selectedProjectId;
-      this.projectIdSelect(); /* 팀개요 정보 다가져옴. */
     },
     filterApplicant() {
       let temp = [];
@@ -927,6 +942,13 @@ export default {
       this.mentoring = this.teamTotalInfo.data.mentorings;
       this.filterFinishMentoring();
     }
+  },
+  /*팀개요화면에서 튕겨나가기 */
+  exitTeamManage(e) {
+    console.log("exitTeamManage 실행");
+    console.log(e);
+    alert("자신에게 해당되는 프로젝트가 없습니다. 메인 화면으로 이동합니다. ");
+    // TODO : ROUTER PUSH  to main(?)
   }
 };
 </script>
