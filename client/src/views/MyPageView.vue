@@ -163,6 +163,7 @@
                     <p class="form-control mb-1">
                       {{ URL_LIST[index].address }}
                     </p>
+
                     <button
                       type="button"
                       class="btn btn-secondary"

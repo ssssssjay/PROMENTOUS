@@ -1,5 +1,22 @@
 <template>
   <div class="container mt-5">
+    <!-- {{ this.projectLeader }}
+    <hr />
+    {{ this.currentMemberList }}
+    <hr />
+    {{ leaderStack }}
+    <hr />
+    {{ partIndex }} // {{ memberIndex }}
+    <hr />
+    {{ memberValue }}
+    <hr />
+    {{ leaderCheck }} -->
+    <ProfileModal
+      ref="modal"
+      :leaderStack="this.leaderStack"
+      :leaderData="this.projectLeader"
+      :memberData="this.memberValue"
+      :leaderCheck="this.leaderCheck" />
     <div class="row">
       <!-- 페이지 좌측 -->
       <div class="col-lg-9 pe-xl-1-9 mb-1-9 mb-lg-0">
@@ -155,7 +172,10 @@
               </div>
             </div>
             <div class="text-end mt-3">
-              <button type="button" class="btn btn-sm me-2 pro_button">
+              <button
+                type="button"
+                class="btn btn-sm me-2 pro_button"
+                @click="[leaderModal(), handleClick()]">
                 상세보기
               </button>
             </div>
@@ -212,16 +232,32 @@
             <ul class="list-unstyled ps-0">
               <li
                 class="row pe-0"
-                v-for="(members, part) in currentMemberList"
+                v-for="(members, part, index) in currentMemberList"
                 :key="part">
                 <div class="col-6">
-                  <p class="fs-6 text-muted mb-0">{{ part }}</p>
+                  <p class="fs-6 text-muted mb-0">{{ part }}{{ index }}</p>
                 </div>
-                <p class="row ps-4" v-for="member in members" :key="member">
-                  <span class="col-7 pt-1">{{ member.user_nickname }}</span>
+                <p
+                  class="row ps-4"
+                  v-for="(member, index0) in members"
+                  :key="member">
+                  <span class="col-7 pt-1"
+                    >{{ member.user_nickname }}{{ index0 }}</span
+                  >
                   <span class="col-5 p-0">
                     <!-- TODO: 여기를 아이콘으로 바꾸는게 나을 것 같기도.. -->
-                    <button type="button" class="btn btn-sm me-1 pro_button">
+                    <button
+                      type="button"
+                      class="btn btn-sm me-1 pro_button"
+                      @click="
+                        [
+                          handleClick(),
+                          transPart(index),
+                          transIndex(index0),
+                          saveMemberValues(),
+                          memberModal()
+                        ]
+                      ">
                       상세정보
                     </button>
                   </span>
@@ -240,6 +276,8 @@ import CommentView from "@/components/CommentView.vue";
 import ReviewCarousel from "@/components/ReviewCarousel.vue";
 import WriteCommentView from "../components/WriteCommentView.vue";
 import CopyToClipboard from "../components/CopyToClipboard.vue";
+import ProfileModal from "../components/DetailPageProfileModal.vue";
+import { ref } from "vue";
 
 export default {
   name: "ProjectDetailView",
@@ -247,10 +285,17 @@ export default {
     CommentView,
     ReviewCarousel,
     WriteCommentView,
-    CopyToClipboard
+    CopyToClipboard,
+    ProfileModal
   },
+
   data() {
     return {
+      leaderCheck: true,
+      memberIndex: 0,
+      partIndex: 0,
+      memberValue: {},
+      leaderStack: [],
       warrantyText: "",
       projectId: null,
       recruitStatus: "모집중",
@@ -288,7 +333,52 @@ export default {
     this.getCurrentMembers();
     this.checkApplyAble();
   },
+  setup() {
+    const modal = ref(null);
+    const result = ref("");
+    const handleClick = async () => {
+      const ok = await modal.value.show();
+      if (ok) {
+        result.value = "ok";
+      } else {
+        result.value = "cancel";
+      }
+    };
+    return {
+      modal,
+      result,
+      handleClick
+    };
+  },
   methods: {
+    memberModal() {
+      this.leaderCheck = false;
+    },
+    leaderModal() {
+      this.leaderCheck = true;
+    },
+    transIndex(value) {
+      this.memberIndex = value;
+    },
+    transPart(value) {
+      this.partIndex = value;
+    },
+    saveMemberValues() {
+      if (
+        Object.values(this.currentMemberList)[this.partIndex][
+          this.memberIndex
+        ] != null
+      ) {
+        this.memberValue = Object.values(this.currentMemberList)[
+          this.partIndex
+        ][this.memberIndex];
+      }
+    },
+    toArray() {
+      if (this.projectLeader.like_stack_code != "") {
+        this.leaderStack = this.projectLeader.like_stack_code.split(",");
+      }
+    },
     formatDate(datetime) {
       // TODO: 예외처리 코드 보완 필요
       if (!datetime) {
@@ -351,6 +441,7 @@ export default {
       this.projectLeader = await this.$get(
         `/project/recruit/${this.projectId}/leader`
       );
+      this.toArray();
     },
     // 모집 인원
     async getRecruitData() {

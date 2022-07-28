@@ -11,10 +11,10 @@
           <div class="mt-2 h4">
             {{ memberData.userNickname }}
           </div>
-          <div>
+          <!-- <div>
             <i class="bi bi-star-fill pro_star_color"></i>
             {{ averageRate }} ({{ memberData.rating.length }})
-          </div>
+          </div> -->
         </div>
 
         <div class="col-6 text-start px-4">
@@ -23,7 +23,7 @@
         </div>
       </div>
       <!-- 평판 부분 -->
-      <div class="row mt-5">
+      <!-- <div class="row mt-5">
         <hr />
         <br />
         <div class="col-2 h4 text-center"><strong>최근 평판</strong></div>
@@ -44,7 +44,7 @@
           </div>
         </div>
         <hr />
-      </div>
+      </div> -->
       <!-- 관심 정보 -->
       <div class="info mt-5">
         <div class="row">
@@ -74,17 +74,20 @@
         </div>
       </div>
       <!-- 활동 기록d -->
-      <!-- <div class="log mt-5">
+      <div class="log mt-5">
         <div class="row">
           <div class="col-2 h4 text-center">
             <strong>진행한 프로젝트</strong>
           </div>
           <div class="col text-start px-4 h5">
-            <div class="mb-3" v-for="(project, i) in projects" :key="i">
+            <div
+              class="mb-3"
+              v-for="(project, i) in memberData.project"
+              :key="i">
               <a
-                :href="project.href"
+                :href="project.address"
                 style="text-decoration: none; color: #1379d2"
-                ><strong>{{ project.name }}</strong></a
+                ><strong>{{ project.title }}</strong></a
               >
             </div>
           </div>
@@ -94,29 +97,25 @@
             <strong>작성한 후기글</strong>
           </div>
           <div class="col text-start px-4 h5">
-            <div class="mb-3" v-for="(review, i) in reviews" :key="i">
+            <div class="mb-3" v-for="(review, i) in memberData.review" :key="i">
               <a
-                :href="review.href"
+                :href="review.address"
                 style="text-decoration: none; color: #1379d2"
-                ><strong>{{ review.name }}</strong></a
+                ><strong>{{ review.title }}</strong></a
               >
             </div>
           </div>
         </div>
-      </div> -->
-      <!-- <div class="mt-3">
-        <hr />
-      </div> -->
-      <!-- <p class="row mt-5">
-        <span class="col-2 h4 text-center"><strong>소셜 정보</strong></span>
-
-        <span
-          class="col text-start"
-          :key="index"
-          v-for="(mem, index) in memberData"
-          >{{ mem.rating }}
-        </span>
-      </p> -->
+        <div class="mt-3">
+          <hr />
+        </div>
+        <div class="row mt-5">
+          <span class="col-2 h4 text-center"><strong>소셜 정보</strong></span>
+          <div class="mb-3" v-for="(url, i) in memberData.url_list" :key="i">
+            <a :href="url.address">{{ url.title }}</a>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="buttons-container">
       <!-- <button class="btn confirm" @click="[confirm()]">확인</button> -->
@@ -142,13 +141,14 @@ export default {
       // *userImage
       // *userIntro
       // *likeDeptCode
+      // {진행한 프로젝트 모집글 제목 , 모집글링크 } [{title:'',address:''}]이런식으로
+      // {작성한 리뷰 제목 , 주소}  REVIEW테이블   [{title:'',address:''}]이런식으로
+      // 소셜정보  마이페이지 URL_LIST   [{title:'',address:''}]이런식으로
+
+      // 평판 보류
       // 평점총합/평점.length
       // 평점.length
-      // {평점 + 평가 코멘트 }  RATE테이블 RATE_TARGET(USER)인 RATE /  RATE_COMMENT
-      // {진행한 프로젝트 모집글 제목 , 모집글링크 }
-
-      // 생략
-      // {작성한 리뷰 제목 , 주소}  REVIEW테이블   TITLE / REVIEW_ADDRESS(테이블없음)
+      // {평점 + 평가 코멘트 }  RATE테이블  RATE /  RATE_COMMENT
     };
   },
   setup() {
