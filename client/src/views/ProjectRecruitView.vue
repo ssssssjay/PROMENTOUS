@@ -30,7 +30,10 @@
         </div>
       </div>
       <div v-if="projects[0] === undefined" class="project-empty">
-        원하시는 조건에 맞는 모집 공고가 없습니다!!
+        <div class="col-md-auto emptyProject">
+          <img class="" src="@/img/emptyProject.jpg" alt="" />
+          <p>원하시는 조건에 맞는 모집 공고가 없습니다!!</p>
+        </div>
       </div>
       <CardList v-else :projects="projects" />
       <PaginationLayout :page="page" @paging="paging" class="pagination" />
@@ -226,5 +229,16 @@ export default {
   padding: 24px 0 0 12px;
   font-size: 24px;
   font-weight: bold;
+}
+.emptyProject {
+  min-width: 1000px;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.emptyProject > img {
+  width: 400px;
+  height: 400px;
 }
 </style>
