@@ -19,17 +19,13 @@
               </p>
             </span>
 
-            <span class="ps-4 col-2 m-0">
-              <!-- <p> -->
+            <span class="ps-4 col-2 m-0 pt-5">
               <!-- 클립보드 복사 -->
-              <!-- 이 버튼들 밑으로 붙이는 방법 연구해보자.. -->
               <copy-to-clipboard :pageUrl="pageUrl" />
-              <button type="button" class="btn btn-outline-dark btn-sm mx-1">
+              <button type="button" class="btn btn-success btn-sm mx-1">
                 수정
               </button>
-              <button type="button" class="btn btn-outline-dark btn-sm">
-                삭제
-              </button>
+              <button type="button" class="btn btn-danger btn-sm">삭제</button>
               <!-- </p> -->
             </span>
             <hr />
