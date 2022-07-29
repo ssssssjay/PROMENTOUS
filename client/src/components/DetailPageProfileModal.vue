@@ -73,7 +73,7 @@
           <div class="col-8 h4 text-start">
             <button
               class="btn m-1 btn-primary Stack"
-              v-for="(Dept, index) in this.leaderData.like_dept_code"
+              v-for="(Dept, index) in this.leaderDept"
               :key="index">
               {{ Dept }}
             </button>
@@ -90,14 +90,21 @@
             <strong>진행한 프로젝트</strong>
           </div>
           <div class="col text-start px-4 h5">
+            <p class="emptyValue" v-if="leaderData.project.length == 0">
+              진행한 프로젝트가 없습니다
+            </p>
             <div
               class="mb-3"
               v-for="(project, i) in leaderData.project"
               :key="i">
-              <a
-                @click="goToProjectDetail(project.project_id)"
+              <router-link
+                v-if="leaderData.project.length != 0"
+                target="_blank"
+                :to="this.path"
                 style="text-decoration: none; color: #1379d2"
-                ><strong>{{ project.title }}</strong></a
+                ><strong @click="goToProjectDetail(project.project_id)">
+                  {{ project.title }}
+                </strong></router-link
               >
             </div>
           </div>
@@ -107,11 +114,18 @@
             <strong>작성한 후기글</strong>
           </div>
           <div class="col text-start px-4 h5">
+            <p class="emptyValue" v-if="leaderData.review.length == 0">
+              작성한 후기글이 없습니다
+            </p>
             <div class="mb-3" v-for="(review, i) in leaderData.review" :key="i">
-              <a
-                @click="goToReviewDetail(review.review_id)"
+              <router-link
+                v-if="leaderData.review.length != 0"
+                target="_blank"
+                :to="this.path"
                 style="text-decoration: none; color: #1379d2"
-                ><strong>{{ review.title }}</strong></a
+                ><strong @click="goToReviewDetail(review.review_id)">{{
+                  review.title
+                }}</strong></router-link
               >
             </div>
           </div>
@@ -209,14 +223,21 @@
             <strong>진행한 프로젝트</strong>
           </div>
           <div class="col text-start px-4 h5">
+            <p class="emptyValue" v-if="memberData.project.length == 0">
+              진행한 프로젝트가 없습니다
+            </p>
             <div
               class="mb-3"
               v-for="(project, i) in memberData.project"
               :key="i">
-              <a
-                :href="project.address"
+              <router-link
+                v-if="memberData.project.length != 0"
+                target="_blank"
+                :to="this.path"
                 style="text-decoration: none; color: #1379d2"
-                ><strong>{{ project.title }}</strong></a
+                ><strong @click="goToProjectDetail(project.project_id)">
+                  {{ project.title }}
+                </strong></router-link
               >
             </div>
           </div>
@@ -226,11 +247,18 @@
             <strong>작성한 후기글</strong>
           </div>
           <div class="col text-start px-4 h5">
+            <p class="emptyValue" v-if="memberData.review.length == 0">
+              작성한 후기글이 없습니다
+            </p>
             <div class="mb-3" v-for="(review, i) in memberData.review" :key="i">
-              <a
-                :href="review.address"
+              <router-link
+                v-if="memberData.review.length != 0"
+                target="_blank"
+                :to="this.path"
                 style="text-decoration: none; color: #1379d2"
-                ><strong>{{ review.title }}</strong></a
+                ><strong @click="goToReviewDetail(review.review_id)">{{
+                  review.title
+                }}</strong></router-link
               >
             </div>
           </div>
@@ -260,6 +288,7 @@ export default {
   name: "UserProfileModal2",
   components: { Modal },
   props: {
+    leaderDept: Object,
     leaderData: Object,
     leaderStack: Object,
     memberData: Object,
@@ -267,6 +296,7 @@ export default {
   },
   data() {
     return {
+      path: ""
       // *userNickname
       // *likeStackCode
       // *userImage
@@ -289,23 +319,14 @@ export default {
     // }
     goToProjectDetail(id) {
       window.scrollTo(0, 0);
-      const path = `/project/recruit/${id}`;
-      this.$router.push({
-        path: path,
-        name: "projectdetail",
-        params: { projectId: id }
-      });
+      this.path = `/project/recruit/${id}`;
+
       // TODO: 여기서 팝업 닫은 후 새로고침 처리 필요할 듯
       // this.$router.go();
     },
     goToReviewDetail(id) {
       window.scrollTo(0, 0);
-      const path = `/project/review/${id}`;
-      this.$router.push({
-        path: path,
-        name: "reviewdetail",
-        params: { reviewId: id }
-      });
+      this.path = `/project/review/${id}`;
     }
   },
   setup() {
@@ -343,5 +364,9 @@ button.btn.btn-primary {
 }
 .Stack {
   font-size: 15px;
+}
+.emptyValue {
+  font-size: 15px;
+  margin-top: 7px;
 }
 </style>

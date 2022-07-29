@@ -4,16 +4,22 @@
     <hr />
     {{ this.currentMemberList }}
     <hr />
-    {{ leaderStack }}
+    {{ this.currentMemberList }}
+
+    <hr />
+
     <hr />
     {{ partIndex }} // {{ memberIndex }}
     <hr />
     {{ memberValue }}
     <hr />
-    {{ leaderCheck }} -->
+    {{ leaderCheck }}
+    <hr /> -->
+
     <ProfileModal
       ref="modal"
       :leaderStack="this.leaderStack"
+      :leaderDept="this.leaderDept"
       :leaderData="this.projectLeader"
       :memberData="this.memberValue"
       :leaderCheck="this.leaderCheck" />
@@ -236,15 +242,13 @@
                 v-for="(members, part, index) in currentMemberList"
                 :key="part">
                 <div class="col-6">
-                  <p class="fs-6 text-muted mb-0">{{ part }}{{ index }}</p>
+                  <p class="fs-6 text-muted mb-0">{{ part }}</p>
                 </div>
                 <p
                   class="row ps-4"
                   v-for="(member, index0) in members"
                   :key="member">
-                  <span class="col-7 pt-1"
-                    >{{ member.user_nickname }}{{ index0 }}</span
-                  >
+                  <span class="col-7 pt-1">{{ member.user_nickname }}</span>
                   <span class="col-5 p-0">
                     <!-- TODO: 여기를 아이콘으로 바꾸는게 나을 것 같기도.. -->
                     <button
@@ -297,6 +301,7 @@ export default {
       partIndex: 0,
       memberValue: {},
       leaderStack: [],
+      leaderDept: [],
       warrantyText: "",
       projectId: null,
       recruitStatus: "모집중",
@@ -375,11 +380,21 @@ export default {
         ][this.memberIndex];
       }
     },
-    toArray() {
-      if (this.projectLeader.like_stack_code != "") {
+    stackToArray() {
+      if (this.projectLeader.like_stack_code.length == 1) {
+        this.leaderStack.push(this.projectLeader.like_stack_code);
+      } else {
         this.leaderStack = this.projectLeader.like_stack_code.split(",");
       }
     },
+    partToArray() {
+      if (this.projectLeader.like_dept_code.length == 1) {
+        this.leaderDept.push(this.projectLeader.like_dept_code);
+      } else {
+        this.leaderDept = this.projectLeader.like_dept_code.split(",");
+      }
+    },
+
     formatDate(datetime) {
       // TODO: 예외처리 코드 보완 필요
       if (!datetime) {
@@ -450,7 +465,8 @@ export default {
       // 유저 상세모달을 위한 데이터
       this.projectLeader.review = reviewHistory;
       this.projectLeader.project = this.projectLeader.leaderHistory;
-      this.toArray();
+      this.stackToArray();
+      this.partToArray();
     },
     // 모집 인원
     async getRecruitData() {
