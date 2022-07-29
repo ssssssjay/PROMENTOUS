@@ -139,10 +139,10 @@
               <span class="pro_font_bold">리더 정보</span>
             </div>
             <div class="row">
-              <div class="col">
+              <div class="col pe-1">
                 <img
-                  style="width: 90px"
-                  src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                  style="width: 90px; border-radius: 8%"
+                  v-bind:src="projectLeader.user_image"
                   alt="리더 정보 사진" />
               </div>
               <div class="col">
@@ -151,6 +151,7 @@
                   class="fs-4 pro_ellipsis">
                   {{ projectLeader.user_nickname }}
                 </p>
+                <!-- TODO: 별점 연결 -->
                 <p><i class="bi bi-star-fill pro_star_color"></i> 4.5/5 (23)</p>
               </div>
             </div>
