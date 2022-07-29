@@ -15,8 +15,9 @@
             <a class="media-left" href="#">
               <img
                 class="img-circle img-sm"
-                alt="Profile Picture"
-                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" />
+                style="border-radius: 10%"
+                alt="댓글 작성자 사진"
+                v-bind:src="comment.writer_image" />
             </a>
             <!-- 우측 영역 -->
             <div class="media-body">
@@ -75,6 +76,7 @@
                 <write-recomment-view
                   :pageType="pageType"
                   :projectId="projectId"
+                  :reviewId="reviewId"
                   :parentId="comment.reply_id"
                   :targetId="comment.reply_id" />
                 <hr />
@@ -86,8 +88,9 @@
                   <a class="media-left" href="#"
                     ><img
                       class="img-circle img-sm"
-                      alt="Profile Picture"
-                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                      style="border-radius: 10%"
+                      alt="대댓글 작성자 사진"
+                      v-bind:src="recomment.writer_image"
                   /></a>
                   <div class="media-body">
                     <div class="mar-btm">
@@ -152,6 +155,7 @@
                       <write-recomment-view
                         :pageType="pageType"
                         :projectId="projectId"
+                        :reviewId="reviewId"
                         :parentId="comment.reply_id" />
                       <hr />
                     </div>
@@ -178,6 +182,10 @@ export default {
     projectId: {
       type: Number,
       default: null
+    },
+    reviewId: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -202,8 +210,10 @@ export default {
     async getCommentList() {
       let data = {};
       data.pageType = this.pageType;
+      const paramId =
+        this.pageType === "projectRecruit" ? this.projectId : this.reviewId;
       this.commentList = await this.$get(
-        `/comment/recruit/get/${this.projectId}`
+        `/comment/recruit/get/${this.pageType}/${paramId}`
       );
     },
     // 댓글 수정
