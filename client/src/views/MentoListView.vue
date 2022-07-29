@@ -26,7 +26,7 @@
         <RecruitSortLayout />
         <div class="d-flex">
           <PartSearchLayout @send-value="sendValue" />
-          <SearchAll />
+          <SearchAll @search-keyword="SearchKeyword" />
         </div>
       </div>
       <div class="row mt-n4">
@@ -100,7 +100,8 @@ export default {
     return {
       part: [],
       /*페이징처리 조건을 위한 parameters -  searchKeyWord / originDeptCode / selectedPage */
-      searchKeyWord: "",
+      //searchKeyword  주석걺.
+      keyWord: "",
       originDeptCode: "",
       selectedPage: 1,
       page: 1, // Math.floor => 버림 , Math.ceil => 올림
@@ -154,9 +155,13 @@ export default {
         }
       }
     },
+    SearchKeyword(data) {
+      this.keyword = data;
+      this.getMentorList();
+    },
     async getMentorList() {
       this.mentoList = await this.$post("/mentor/mentorList", {
-        searchKeyWord: this.searchData,
+        searchKeyWord: this.keyword,
         dept_code: this.originDeptCode,
         selectedPage: this.pageToMove
       });
