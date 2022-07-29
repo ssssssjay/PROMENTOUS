@@ -8,6 +8,17 @@
     </section>
 
     <section class="container">
+      <hr />
+      applicants ////
+      <div>{{ this.applicants }}</div>
+      <hr />
+      teamMembers //// {{ this.teamMembers }}
+      <hr />
+      {{ this.teamTotalInfo.data }}
+      <hr />
+
+      <hr />
+
       <!-- <div>//지원자정보 (배열)>> 팀선택시변경되어야</div> -->
 
       <!-- <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
@@ -29,13 +40,12 @@
       <!-- <div>{{ this.teamTotalInfo.data }}</div>
       <hr />
       <div>{{ this.applicants }}</div>
-      
+
       {{ teamStatus }}
       {{ teamStatusName }} -->
 
       <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div> -->
-      <hr />
-      {{ this.teamMembers }}
+
       <!--
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div> -->
 
@@ -210,13 +220,15 @@
           <div class="tab-title">지원자관리</div>
 
           <div class="row">
-            <div v-show="this.applicants == ''">
+            <div v-show="this.applicants[0] == null">
               <img class="emptyApplicant" src="@/img/applicant.jpg" alt="" />
               <p style="text-align: center; font-size: 25px">
                 현재 지원자가 없습니다
               </p>
             </div>
-            <div class="row applicantList bg" v-show="this.applicants != ''">
+            <div
+              class="row applicantList bg"
+              v-show="this.applicants[0] != null">
               <div
                 class="applicant text-center card m-2"
                 style="width: 240px"
@@ -776,6 +788,7 @@ export default {
       console.log(this.initUrl);
       console.log("=========가져온결과 temp==========");
       console.log(temp);
+
       // 내연관 팀들 배열 중에서
       // 첫번째 값(DEFAULT) 으로 팀정보 다끌고오기위한 처리
       this.projectList = [];
@@ -894,7 +907,11 @@ export default {
       this.urlTitle = this.teamTotalInfo.data.basicInfo.meetingUrlTitle;
       this.urlAddress = this.teamTotalInfo.data.basicInfo.meetingUrl;
       //보증금
-      this.deposit = this.teamTotalInfo.data.basicInfo.warranty;
+      if (this.teamTotalInfo.data.basicInfo.warranty == -1) {
+        this.deposit = 0;
+      } else {
+        this.deposit = this.teamTotalInfo.data.basicInfo.warranty;
+      }
 
       //지원자정보 (배열)
       this.applicants = this.teamTotalInfo.data.applicants;
