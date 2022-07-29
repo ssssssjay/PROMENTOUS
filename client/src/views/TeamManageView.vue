@@ -585,7 +585,8 @@ export default {
       mentoringTotalPageCount: 0,
       projectInfoParams: {
         project_id: "", //"1",
-        mentoring_page: "" //"1"
+        mentoring_page: "", //"1"
+        sessionUserId: ""
       },
       params: {},
       /*저장용 saveParam OBJECT */
@@ -663,7 +664,7 @@ export default {
     확인하고픈 userId 처리가능합니다. */
     this.sessionUserId = this.user.user_id;
     //user from computed()
-    //this.sessionUserId = 3;
+    //this.sessionUserId = 32;
   },
   beforeMount() {},
   mounted() {
@@ -790,6 +791,7 @@ export default {
         this.selectedProjectId = this.projectList[0].projectId;
         this.selectedStatus = this.projectList[0].statusName;
         this.projectInfoParams.project_id = this.selectedProjectId;
+        this.projectInfoParams.sessionUserId = this.sessionUserId;
         this.projectIdSelect(); /* 팀개요 정보 다가져옴. */
       } catch (e) {
         this.exitTeamManage(e);
