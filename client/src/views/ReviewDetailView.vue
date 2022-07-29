@@ -9,30 +9,28 @@
             <span class="col-10">
               <p class="fs-1 m-0">{{ review.title }}</p>
               <p class="pt-1 ps-1">
-                {{ review.user_nickname }} |
+                <img
+                  class="img-circle img-sm me-2"
+                  style="border-radius: 50%; width: 30px"
+                  alt="후기글 작성자 사진"
+                  v-bind:src="review.user_image" />
+                {{ review.user_nickname }} &nbsp; &nbsp;| &nbsp;
                 {{ formatDate(review.created_datetime) }}
               </p>
             </span>
 
-            <span class="ps-4 col-2">
-              <!-- 버튼 UI 추후 수정 예정 -->
-              <p>
-                <button type="button" class="btn btn-outline-dark btn-sm mx-1">
-                  수정
-                </button>
-                <button type="button" class="btn btn-outline-dark btn-sm">
-                  삭제
-                </button>
-              </p>
-              <p>
-                <button
-                  type="button"
-                  class="btn btn-outline-dark btn-sm mx-1 pro-circle">
-                  <i class="bi bi-heart"></i>
-                </button>
-                <!-- 클립보드 복사 -->
-                <copy-to-clipboard :pageUrl="pageUrl" />
-              </p>
+            <span class="ps-4 col-2 m-0">
+              <!-- <p> -->
+              <!-- 클립보드 복사 -->
+              <!-- 이 버튼들 밑으로 붙이는 방법 연구해보자.. -->
+              <copy-to-clipboard :pageUrl="pageUrl" />
+              <button type="button" class="btn btn-outline-dark btn-sm mx-1">
+                수정
+              </button>
+              <button type="button" class="btn btn-outline-dark btn-sm">
+                삭제
+              </button>
+              <!-- </p> -->
             </span>
             <hr />
           </div>
