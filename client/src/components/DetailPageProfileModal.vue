@@ -95,7 +95,7 @@
               v-for="(project, i) in leaderData.project"
               :key="i">
               <a
-                :href="project.address"
+                @click="goToProjectDetail(project.project_id)"
                 style="text-decoration: none; color: #1379d2"
                 ><strong>{{ project.title }}</strong></a
               >
@@ -109,7 +109,7 @@
           <div class="col text-start px-4 h5">
             <div class="mb-3" v-for="(review, i) in leaderData.review" :key="i">
               <a
-                :href="review.address"
+                @click="goToReviewDetail(review.review_id)"
                 style="text-decoration: none; color: #1379d2"
                 ><strong>{{ review.title }}</strong></a
               >
@@ -287,6 +287,26 @@ export default {
     //     this.averageRate += this.applicantData.rating[i].score;
     //   }
     // }
+    goToProjectDetail(id) {
+      window.scrollTo(0, 0);
+      const path = `/project/recruit/${id}`;
+      this.$router.push({
+        path: path,
+        name: "projectdetail",
+        params: { projectId: id }
+      });
+      // TODO: 여기서 팝업 닫은 후 새로고침 처리 필요할 듯
+      // this.$router.go();
+    },
+    goToReviewDetail(id) {
+      window.scrollTo(0, 0);
+      const path = `/project/review/${id}`;
+      this.$router.push({
+        path: path,
+        name: "reviewdetail",
+        params: { reviewId: id }
+      });
+    }
   },
   setup() {
     const baseModal = ref(null);
