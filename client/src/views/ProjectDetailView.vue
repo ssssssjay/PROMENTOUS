@@ -442,6 +442,14 @@ export default {
       this.projectLeader = await this.$get(
         `/project/recruit/${this.projectId}/leader`
       );
+
+      const reviewHistory = await this.$get(
+        `/project/review/history/${this.projectLeader.user_id}`
+      );
+
+      // 유저 상세모달을 위한 데이터
+      this.projectLeader.review = reviewHistory;
+      this.projectLeader.project = this.projectLeader.leaderHistory;
       this.toArray();
     },
     // 모집 인원
