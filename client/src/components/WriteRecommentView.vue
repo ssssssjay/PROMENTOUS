@@ -48,6 +48,10 @@ export default {
       type: Number,
       default: null
     },
+    reviewId: {
+      type: Number,
+      default: null
+    },
     parentId: {
       type: Number,
       default: null
@@ -58,7 +62,8 @@ export default {
       commentData: {
         pageType: "",
         commentText: "",
-        projectId: null
+        projectId: null,
+        reviewId: null
       }
     };
   },
@@ -81,7 +86,10 @@ export default {
         return;
       }
 
-      const r = await this.$post(`/comment/register/${this.projectId}`, data);
+      const paramId =
+        this.pageType === "projectRecruit" ? this.projectId : this.reviewId;
+
+      const r = await this.$post(`/comment/register/${paramId}`, data);
       if (r.status === 200) {
         document.getElementById("retxtarea").value = "";
         this.$router.go();

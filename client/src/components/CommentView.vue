@@ -76,6 +76,7 @@
                 <write-recomment-view
                   :pageType="pageType"
                   :projectId="projectId"
+                  :reviewId="reviewId"
                   :parentId="comment.reply_id"
                   :targetId="comment.reply_id" />
                 <hr />
@@ -154,6 +155,7 @@
                       <write-recomment-view
                         :pageType="pageType"
                         :projectId="projectId"
+                        :reviewId="reviewId"
                         :parentId="comment.reply_id" />
                       <hr />
                     </div>
@@ -180,6 +182,10 @@ export default {
     projectId: {
       type: Number,
       default: null
+    },
+    reviewId: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -204,8 +210,10 @@ export default {
     async getCommentList() {
       let data = {};
       data.pageType = this.pageType;
+      const paramId =
+        this.pageType === "projectRecruit" ? this.projectId : this.reviewId;
       this.commentList = await this.$get(
-        `/comment/recruit/get/${this.projectId}`
+        `/comment/recruit/get/${this.pageType}/${paramId}`
       );
     },
     // 댓글 수정
