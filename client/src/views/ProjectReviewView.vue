@@ -13,11 +13,11 @@
           :btnText="btnText"
           @click="goToMenu('../Reviewwrite')" />
       </div>
-      <div class="d-flex pt-4 mb-4 align-items-start justify-content-between">
+      <div class="d-flex pt-4 mb-4 align-items-start justify-content-end">
         <!-- 우선은 정렬기능 비활성화 -->
         <!-- <RecruitSortLayout /> -->
         <div class="d-flex">
-          <StackSearchLayout @send-value="sendValue" />
+          <SingleStackSearchLayout @send-value="sendValue" />
           <SearchAll @search-keyword="SearchKeyword" />
         </div>
       </div>
@@ -26,25 +26,20 @@
           class="card"
           style="width: 40rem; height: 240px"
           v-for="(review, i) in reviews"
-          @click="onClick"
+          @click="
+            (e) => goToReviewDetail(review.project_id, review.review_id, e)
+          "
           :key="i">
           <div class="d-flex">
-            <img
-              style="width: 15rem"
-              src="@/assets/reviewThumbnail.png"
-              class="card-img-top thumbnail"
-              alt="후기썸네일이미지" />
             <!-- TODO : DB 상에 이미지 경로가 이상하여 전부 깨져서 우선은 로컬이미지로 렌더링 -->
-            <!-- <img
+            <img
               style="width: 15rem"
               :src="review.thumbnail_image"
               class="card-img-top thumbnail"
-              alt="후기썸네일이미지" /> -->
+              alt="후기썸네일이미지" />
             <div class="card-body">
               <h5 class="card-title">{{ review.title }}</h5>
-              <p class="card-text ellipsis">
-                {{ review.desc }}
-              </p>
+              <p class="card-text ellipsis" v-html="review.desc"></p>
               <div class="mb-3">
                 <i class="bi bi-eye me-1"></i>
                 <span class="me-1">{{ review.viewCount }}</span>
@@ -70,11 +65,7 @@
                 target="_blank"
                 >모집 공고 보러가기</a
               > -->
-              <a
-                class="btn btn-sm btn-outline-dark"
-                @click="goToDetail(review.review_id)"
-                >모집 공고 보러가기</a
-              >
+              <a class="btn btn-sm btn-outline-dark">모집 공고 보러가기</a>
             </div>
           </div>
         </div>
@@ -85,7 +76,7 @@
 </template>
 <script>
 // import RecruitSortLayout from "@/components/layouts/RecruitSortLayout.vue";
-import StackSearchLayout from "@/components/layouts/StackSearchLayout.vue";
+import SingleStackSearchLayout from "@/components/layouts/SingleStackSearchLayout.vue";
 import SearchAll from "@/components/SearchAll.vue";
 import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
 import PaginationLayout from "@/components/layouts/PaginationLayout.vue";
@@ -93,7 +84,7 @@ import PaginationLayout from "@/components/layouts/PaginationLayout.vue";
 export default {
   components: {
     // RecruitSortLayout,
-    StackSearchLayout,
+    SingleStackSearchLayout,
     SearchAll,
     RegisterbtnLayout,
     PaginationLayout
@@ -107,6 +98,7 @@ export default {
     return {
       btnText: "프로젝트 후기 작성하기",
       reviews: [],
+      stacks: [],
       page: 1,
       pageToMove: 1,
       keyword: ""
@@ -123,10 +115,8 @@ export default {
       const response = await this.$post(`/project/review`, {
         param: {
           page: this.pageToMove,
-          // stacks: this.stacks,
-          // keyword: this.keyword
-          stacks: [],
-          keyword: ""
+          stacks: this.stacks,
+          keyword: this.keyword
         }
       });
       console.log(response);
@@ -134,7 +124,6 @@ export default {
       this.reviews = response.data.reviewList;
       this.reviews.forEach((review) => {
         review.stack_code = this.convertStack(review.stack_code);
-        review.stack_code.pop();
       });
     },
     convertStack(raw_stack) {
@@ -152,11 +141,13 @@ export default {
         params: { reviewId: id }
       });
     },
-    onClick(e) {
+    goToReviewDetail(projectId, reviewId, e) {
       if (e.target.className === "btn btn-sm btn-outline-dark") {
+        window.scrollTo(0, 0);
+        this.$router.push(`/project/recruit/${projectId}`);
         return;
       }
-      console.log(e);
+      this.goToDetail(reviewId);
     },
     sendValue(data) {
       this.stacks = data;
@@ -190,6 +181,9 @@ export default {
   box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
     rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
     rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+.card-text {
+  font-size: 1rem !important;
 }
 .btn_write {
   border: 1px solid #363636;
