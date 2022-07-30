@@ -87,12 +87,6 @@
                 </span>
               </span>
             </p>
-            <div class="my-4">
-              <span class="text-muted pro_font_bold">| 프로젝트 소개</span>
-              <div
-                class="widget-box fs-4 p-5"
-                v-html="project.project_desc"></div>
-            </div>
             <p class="row" v-if="isRefUrl">
               <span class="text-muted col-2 pro_font_bold">| 참고링크</span>
               <span class="col-10">
@@ -109,6 +103,13 @@
                 </span>
               </span>
             </p>
+            <div class="my-4">
+              <span class="text-muted pro_font_bold">| 프로젝트 소개</span>
+              <div
+                class="widget-box fs-4 p-5"
+                v-html="project.project_desc"></div>
+            </div>
+
             <div class="py-5" v-if="status_code === FIN">
               <review-carousel :projectId="projectId" />
             </div>
