@@ -14,10 +14,11 @@
           @click="goToMenu('../Reviewwrite')" />
       </div>
       <div class="d-flex pt-4 mb-4 align-items-start justify-content-between">
-        <RecruitSortLayout />
+        <!-- 우선은 정렬기능 비활성화 -->
+        <!-- <RecruitSortLayout /> -->
         <div class="d-flex">
-          <StackSearchLayout />
-          <SearchAll />
+          <StackSearchLayout @send-value="sendValue" />
+          <SearchAll @search-keyword="SearchKeyword" />
         </div>
       </div>
       <main class="review_list d-flex flex-wrap">
@@ -78,21 +79,24 @@
           </div>
         </div>
       </main>
+      <PaginationLayout :page="page" @paging="paging" class="pagination" />
     </section>
   </div>
 </template>
 <script>
-import RecruitSortLayout from "@/components/layouts/RecruitSortLayout.vue";
+// import RecruitSortLayout from "@/components/layouts/RecruitSortLayout.vue";
 import StackSearchLayout from "@/components/layouts/StackSearchLayout.vue";
 import SearchAll from "@/components/SearchAll.vue";
 import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
+import PaginationLayout from "@/components/layouts/PaginationLayout.vue";
 
 export default {
   components: {
-    RecruitSortLayout,
+    // RecruitSortLayout,
     StackSearchLayout,
     SearchAll,
-    RegisterbtnLayout
+    RegisterbtnLayout,
+    PaginationLayout
   },
   computed: {
     user() {
@@ -102,23 +106,10 @@ export default {
   data() {
     return {
       btnText: "프로젝트 후기 작성하기",
-      reviews: [
-        // 아래는 응답 예시임
-        // {
-        //   created_datetime: "2022-04-19T03:40:20.000Z",
-        //   del_yn: "N",
-        //   desc: "프로젝트 모집 플랫폼인 PROMENTOUS를 만들었다. 후기.. ~~ 가나다라마바사아자차카가나다라마바사아자차카가나다라마바사아자차카가나다라마바사아자차카가나다라마바사아자차카가나다라마바사아자차카가나다라마바사아자차카",
-        //   project_id: 4,
-        //   review_id: 1,
-        //   stack_code: "python,",
-        //   stack_code_origin: "P01",
-        //   thumbnail_image: "img1.jpg",
-        //   title: "PROMENTOUS 개발 후기",
-        //   user_nickname: "약히개발",
-        //   viewCount: 0,
-        //   writer_id: 10
-        // }
-      ]
+      reviews: [],
+      page: 1,
+      pageToMove: 1,
+      keyword: ""
     };
   },
   setup() {},
@@ -129,9 +120,18 @@ export default {
   unmounted() {},
   methods: {
     async getReviewList() {
-      const response = await this.$get(`/project/review`);
+      const response = await this.$post(`/project/review`, {
+        param: {
+          page: this.pageToMove,
+          // stacks: this.stacks,
+          // keyword: this.keyword
+          stacks: [],
+          keyword: ""
+        }
+      });
       console.log(response);
-      this.reviews = response;
+      this.page = Math.ceil(Math.ceil(response.data.count[0].cnt / 8));
+      this.reviews = response.data.reviewList;
       this.reviews.forEach((review) => {
         review.stack_code = this.convertStack(review.stack_code);
         review.stack_code.pop();
@@ -157,6 +157,18 @@ export default {
         return;
       }
       console.log(e);
+    },
+    sendValue(data) {
+      this.stacks = data;
+      this.getReviewList();
+    },
+    SearchKeyword(data) {
+      this.keyword = data;
+      this.getReviewList();
+    },
+    paging(data) {
+      this.pageToMove = data;
+      this.getReviewList();
     }
   }
 };
@@ -216,5 +228,10 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
 }
 </style>

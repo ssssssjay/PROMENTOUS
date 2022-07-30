@@ -4,7 +4,7 @@
       <div class="card" v-for="(project, i) in projects" :key="i">
         <section
           class="card-body"
-          :class="project.status_code === '모집중' ? '' : 'fin'"
+          :class="project.status_code === '모집완료' ? 'fin' : ''"
           @click="goToDetail(project.project_id)">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-start text-muted desc-exp-date"

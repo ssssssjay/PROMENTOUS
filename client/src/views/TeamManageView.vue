@@ -264,8 +264,7 @@
                       <button
                         class="btn m-1 btn-primary Stack"
                         :key="i"
-                        v-for="(stack, i) in applicants[index].likeStackCode"
-                        v-show="stack.length > 0">
+                        v-for="(stack, i) in applicants[index].likeStackCode">
                         {{ stack }}
                       </button>
                     </div>
@@ -915,19 +914,7 @@ export default {
 
       //지원자정보 (배열)
       this.applicants = this.teamTotalInfo.data.applicants;
-      for (let q = 0; q < this.applicants.length; q++) {
-        if (this.applicants[q].likeStackCode != null) {
-          let str = this.applicants[q].likeStackCode.slice(
-            0,
-            this.applicants[q].likeStackCode.length - 1
-          );
-          console.log("--------------------------");
-          console.log(str);
-          this.applicants[q].likeStackCode = str.split(",");
-        } else {
-          this.applicants[q].likeStackCode = [];
-        }
-      }
+
       this.filterApplicant();
       //멤버정보 (배열)
       let array = [];
@@ -945,18 +932,6 @@ export default {
       }
       this.teamMembers = this.teamTotalInfo.data.members;
 
-      for (let q = 0; q < this.teamMembers.length; q++) {
-        let str = "";
-        if (this.teamMembers[q].likeStackCode != null) {
-          str = this.teamMembers[q].likeStackCode.slice(
-            0,
-            this.teamMembers[q].likeStackCode.length - 1
-          );
-        } else {
-          str = "";
-        }
-        this.teamMembers[q].likeStackCode = str.split(",");
-      }
       // this.filterFinishMemberRating();
       this.mentoring = this.teamTotalInfo.data.mentorings;
       this.filterFinishMentoring();
