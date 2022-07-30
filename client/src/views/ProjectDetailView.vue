@@ -220,6 +220,7 @@
                     "
                     :disabled="
                       project.status_code === `FIN` ||
+                      project.leader_user === userId ||
                       recruit.acc_count === recruit.to ||
                       !applyAbleFlag
                     ">
@@ -297,6 +298,7 @@ export default {
 
   data() {
     return {
+      userId: 0,
       leaderCheck: true,
       memberIndex: 0,
       partIndex: 0,
@@ -331,6 +333,7 @@ export default {
     };
   },
   created() {
+    this.userId = this.$store.state.user.user_id;
     this.pageUrl = window.document.location.href;
     this.projectId = this.$route.params.projectId;
     this.getProjectData();
