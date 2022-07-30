@@ -46,16 +46,22 @@
 
     <div class="container">
       <div class="row mt-5">
-        <p class="col-2 text-start h4"><strong>프로젝트 리스트</strong></p>
-        <p class="col-10 text-end">
-          <a href="../project/recruit">프로젝트 더보기</a>
+        <p id="tb" class="col-3 text-start h2">
+          <strong>프로젝트 리스트</strong>
+        </p>
+        <p class="col-9 text-end">
+          <a
+            href="../project/recruit"
+            style="text-decoration: none; color: black"
+            >프로젝트 더보기</a
+          >
         </p>
         <hr />
       </div>
       <!-- 패러셀 -->
 
       <!-- 상단 : 프로젝트 리스트 -->
-      <CardList class="mt-3"></CardList>
+      <CardList class="mt-3" :projects="projects"></CardList>
       <!-- <div class="project-list">
         <div class="row" style="vertical-align: middle">
           <div
@@ -102,9 +108,11 @@
       <!-- 하단 : 멘토리스트 -->
       <div style="margin-top: 120px"></div>
       <div class="row mt-5">
-        <p class="col-2 text-start h4"><strong>멘토 리스트</strong></p>
+        <p id="tb" class="col-2 text-start h2"><strong>멘토 리스트</strong></p>
         <p class="col-10 text-end">
-          <a href="../mentolist">멘토 더보기</a>
+          <a href="../mentolist" style="text-decoration: none; color: black"
+            >멘토 더보기</a
+          >
         </p>
         <hr />
       </div>
@@ -116,32 +124,36 @@
             style="
               max-width: 400px;
               min-width: 400px;
-              min-height: 400px;
-              max-height: 400px;
+              min-height: 450px;
+              max-height: 450px;
             "
-            v-for="(mentor, index) in mentors"
-            :key="index">
+            v-for="(mentor, index) in mentors2"
+            :key="index"
+            @click="goToMentorDetail(`/mentordetail/${mentor.user_id}`)">
             <div class="card-title text-center mt-4 mb-0">
               <img
-                src="../assets/default.jpg"
+                :src="mentor.user_image"
                 alt="../assets/default.jpg"
-                style="border-radius: 70%; width: 150px" />
+                style="border-radius: 70%; width: 150px; height: 150px" />
+            </div>
+            <div id="to" class="card-body">
+              <h2 class="fs-5 mt-0">
+                <strong>{{ mentor.user_nickname }}</strong>
+              </h2>
+              <i class="bi bi-star-fill pro_star_color"></i
+              >{{ mentor.rateAVG }}/({{ mentor.rateCount }})
+              <p class="mt-2">
+                {{ mentor.mentoring_intro }}
+              </p>
             </div>
             <div class="card-body">
-              <h2 class="fs-5 mt-0">
-                <strong>{{ mentor.name }}</strong>
-              </h2>
-              <i class="bi bi-star-fill pro_star_color"></i>5.0 / (14)
-              <p class="mt-2">
-                {{ mentor.info }}
-              </p>
               <hr />
               <div
                 class="stack-icon mx-1"
-                style="width: auto"
-                v-for="(part, index) in mentor.part"
+                style="width: auto; font-size: 14px"
+                v-for="(mentor, index) in mentors2"
                 :key="index">
-                {{ part }}
+                {{ mentor.mentoring_dept_code }}
               </div>
             </div>
           </div>
@@ -160,162 +172,6 @@ export default {
   components: { CardList },
   data() {
     return {
-      // projects: [
-      //   {
-      //     expDate: "2022/07/24",
-      //     title: "프로젝트 멘토링 서비스",
-      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-      //     viewCount: "201",
-      //     bookmarkCount: "14",
-      //     writter: "joansdev",
-      //     stacks: ["JS", "TS", "React"]
-      //   },
-      //   {
-      //     expDate: "2022/11/13",
-      //     title: "찰리와 초콜릿 기계 설계해보기",
-      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-      //     viewCount: "20198",
-      //     bookmarkCount: "281",
-      //     writter: "찰리",
-      //     stacks: ["JS", "TS"]
-      //   },
-      //   {
-      //     expDate: "2023/03/03",
-      //     title: "맛집 추천 프로그램",
-      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-      //     viewCount: "9",
-      //     bookmarkCount: "2",
-      //     writter: "김준현",
-      //     stacks: ["JS", "TS", "React", "Spring", "AWS"]
-      //   },
-      //   {
-      //     expDate: "2022/05/01",
-      //     title: "동물 건강진료 서비스",
-      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-      //     viewCount: "521",
-      //     bookmarkCount: "21",
-      //     writter: "강형욱",
-      //     stacks: ["JS", "TS", "React", "Kotlin"]
-      //   },
-      //   {
-      //     expDate: "2022/02/09",
-      //     title: "음악 선곡 프로그램",
-      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-      //     viewCount: "21",
-      //     bookmarkCount: "4",
-      //     writter: "김범수",
-      //     stacks: ["JS", "TS", "React"]
-      //   },
-      //   {
-      //     expDate: "2023/12/24",
-      //     title: "크리스마스 데이팅 어플",
-      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-      //     viewCount: "22106",
-      //     bookmarkCount: "6892",
-      //     writter: "Santa Claus",
-      //     stacks: ["JS", "TS", "React", "Node.js", "Kotlin"]
-      //   },
-      //   {
-      //     expDate: "2022/04/20",
-      //     title: "엑셀 자동화 프로그램",
-      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-      //     viewCount: "1",
-      //     bookmarkCount: "0",
-      //     writter: "김대리",
-      //     stacks: ["JS", "TS", "React"]
-      //   },
-      //   {
-      //     expDate: "2021/02/28",
-      //     title: "집 지키는 로봇 설계",
-      //     info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-      //     viewCount: "31202",
-      //     bookmarkCount: "560",
-      //     writter: "케빈",
-      //     stacks: ["JS", "React"]
-      //   }
-      // ],
-      projects: [
-        {
-          title: "Vue-Todo",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "devprogramming4",
-          expDate: "2022-08-09",
-          usingStack: ["nodeJS", "vue", "mysql"],
-          bookmarkCount: 3,
-          viewCount: 5,
-          status: "진행중"
-        },
-        {
-          title: "React-Todo",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "sungjae",
-          expDate: "2022-08-08",
-          usingStack: ["JS", "nodeJS"],
-          bookmarkCount: 2,
-          viewCount: 4,
-          status: "진행중"
-        },
-        {
-          title: "뷰로 인생 끝장내버리기",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "뷰쳐돌이",
-          expDate: "2022-06-20",
-          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
-          bookmarkCount: 100,
-          viewCount: 1000,
-          status: "진행중"
-        },
-        {
-          title: "뷰로 인생 끝장내버리기",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "뷰쳐돌이",
-          expDate: "2022-06-20",
-          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
-          bookmarkCount: 100,
-          viewCount: 1000,
-          status: "진행중"
-        },
-        {
-          title: "뷰로 인생 끝장내버리기",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "뷰쳐돌이",
-          expDate: "2022-06-20",
-          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
-          bookmarkCount: 100,
-          viewCount: 1000,
-          status: "진행중"
-        },
-        {
-          title: "뷰로 인생 끝장내버리기",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "뷰쳐돌이",
-          expDate: "2022-06-20",
-          usingStack: ["Vue", "nodeJS", "mySQL", "AWS"],
-          bookmarkCount: 100,
-          viewCount: 1000,
-          status: "진행중"
-        },
-        {
-          title: "뷰로 인생 끝장내버리기",
-          desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione totamvero sint cumque at obcaecati, ullam, inventore voluptatum hic facerevoluptates dolore sequi, pariatur illo temporibus! Aliquid suscipitdolorum quo!",
-          user: "뷰쳐돌이",
-          expDate: "2022-06-20",
-          usingStack: [
-            "Vue",
-            "nodeJS",
-            "mySQL",
-            "AWS",
-            "mySQL",
-            "AWS",
-            "mySQL",
-            "AWS"
-          ],
-          bookmarkCount: 100,
-          viewCount: 1000,
-          status: "진행중"
-        }
-      ],
-
       mentors: [
         {
           img: "../assets/profile.jpg",
@@ -365,8 +221,30 @@ export default {
           info: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
           part: ["프론트엔드", "디자인"]
         }
-      ]
+      ],
+      projects: [],
+      mentors2: []
     };
+  },
+  created() {
+    this.getProjectData();
+    this.getMentorData();
+  },
+  methods: {
+    async getProjectData() {
+      const response = await this.$get("http://localhost:3000/project/recruit");
+      console.log(response);
+      this.projects = response;
+    },
+    async getMentorData() {
+      const response2 = await this.$get("http://localhost:3000/mentor");
+      console.log(response2);
+      this.mentors2 = response2;
+    },
+    goToMentorDetail(path) {
+      this.$router.push({ path: path });
+      /**/
+    }
   }
 };
 </script>
@@ -457,5 +335,10 @@ export default {
 #user-image {
   width: 100%;
   vertical-align: middle;
+}
+
+#to {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

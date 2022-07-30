@@ -25,7 +25,10 @@
                 style="width: 400px"
                 v-model="title"
                 v-show="editStatus" />
-              <button class="btn btn-outline-dark mx-4 px-4" v-show="applyYes">
+              <button
+                class="btn btn-outline-dark mx-4 px-4"
+                v-show="applyYes"
+                @click="goToApply('/mentoringapply')">
                 <strong>신청하기!</strong>
               </button>
               <button
@@ -217,6 +220,7 @@ export default {
       title: "프론트하드코딩임..'최강' 캡틴안산의 Vue 멘토링",
       likePart: ["프론트엔드", "백엔드", "모바일"],
       mentor: { nickname: "joansdev", score: "4.5", scoreCount: "15" },
+      mentorInfoId: "1",
       reputations: [
         {
           score: "4",
@@ -247,8 +251,8 @@ export default {
         "프론트하드코딩임..누구나 다루기 쉬운 Vue.js 입문의 리뉴얼 강의입니다. 입문자의 관점으로 더욱더 눈높이를 낮춰 프론트엔드 개발할 때 알고 있으면 좋은 지식들을 상세하게 설명하였습니다. Vue.js로 재밌게 웹 개발을 시작하실 수 있도록 알차게 내용을 구성하였으니, 관심 있으신 분들은 강의 소개 영상을 꼭 확인해보세요! 😁",
       mentorings: [
         {
-          name: "프론트하드코딩임..찰리와 초콜릿기계 설계해보기",
-          href: "https://www.naver.com/"
+          name: "찰리와 초콜릿기계 설계해보기",
+          href: "http://localhost:8080/project/recruit/10"
         },
         { name: "쀼 프로젝트", href: "https://www.naver.com/" },
         { name: "업무자동화 프로그램 개발", href: "https://www.naver.com/" },
@@ -261,8 +265,10 @@ export default {
       siteList: [],
       infoStatus: true,
       editStatus: false,
+      //applyYes가 true면 프로젝트 활성화(신청 가능) // applyYes & applyNo는 항상 반대값
       applyYes: true,
       applyNo: false,
+      applyYn: "Y",
       modalStatus: false
     };
   },
@@ -295,6 +301,11 @@ export default {
     },
     changeApplyStatus() {
       [this.applyYes, this.applyNo] = [this.applyNo, this.applyYes];
+      if (this.applyYn == "Y") {
+        this.applyYn = "N";
+      } else {
+        this.applyYn = "Y";
+      }
     },
     changeStatus() {
       [this.infoStatus, this.editStatus] = [this.editStatus, this.infoStatus];

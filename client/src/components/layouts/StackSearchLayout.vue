@@ -58,7 +58,7 @@ export default {
         //   stackList[i].code_data_desc
         // );
         let data = {
-          value: stackList[i].code_data_name,
+          value: stackList[i].code_data_desc,
           label: stackList[i].code_data_desc
         };
         this.options.push(data);

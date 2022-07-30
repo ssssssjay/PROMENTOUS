@@ -69,8 +69,12 @@ export default {
   data() {
     return {};
   },
-  setup() {},
-  created() {},
+  setup() {
+    // props.projects = this.d;
+  },
+  created() {
+    // passProjects();
+  },
   mounted() {},
   unmounted() {},
   methods: {
@@ -84,6 +88,9 @@ export default {
         params: { projectId: id }
       });
     }
+    // passProjects(data) {
+    //   const d = data;
+    // }
   }
 };
 </script>

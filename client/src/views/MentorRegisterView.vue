@@ -188,14 +188,14 @@ export default {
         [this.link.name]: this.link.href
       };
       let obj2 = {
-        url_title : this.link.name  ,
-        url_address :this.link.href
-      }
+        url_title: this.link.name,
+        url_address: this.link.href
+      };
       this.linkList.push(obj);
       this.urlList.push(obj2);
       alert("링크 정보가 추가되었습니다.");
-      this.link.name= "" ; 
-      this.link.href= "";
+      this.link.name = "";
+      this.link.href = "";
     },
     async saveMentorInfo() {
       /* eslint-disable */
@@ -211,22 +211,33 @@ export default {
         this.saveParam.mentor_info.mentoring_time = this.timePerTime;
         this.saveParam.ref_url = this.urlList;
         //console.log(this.saveParam);
-              // saveTeamManageInfo
-      const r = await this.$post(
-        // TODO: axios.defaults.baseURL로 변경
-        `/mentor/registerMentorInfo`,
-        this.saveParam
-      );
-      if (r.status === 200) {
-        //성공 후 다시 멘토리스트 화면으로 돌아가기
-         this.$router.push("/mentolist");
+        // saveTeamManageInfo
+        const r = await this.$post(
+          // TODO: axios.defaults.baseURL로 변경
+          `/mentor/registerMentorInfo`,
+          this.saveParam
+        );
+        if (r.status === 200) {
+          //성공 후 다시 멘토리스트 화면으로 돌아가기
+          this.$router.push("/mentolist");
         }
-      console.log(this.r);
-      
+        console.log(this.r);
       } else {
         alert("n");
       }
     }
+    // async passData() {
+    //   const response = await this.$post("", {
+    //     param: {
+    //       title: this.mentorTitle,
+    //       email: this.mentoEmail,
+    //       payPerTime: this.payPerTime,
+    //       parts: this.partList,
+    //       link: this.linkList,
+    //       info: this.mentorInfo
+    //     }
+    //   });
+    // }
   }
 };
 </script>

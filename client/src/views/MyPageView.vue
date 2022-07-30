@@ -32,7 +32,7 @@
             </div>
             <div class="col-10">
               <p class="h2">자기소개</p>
-              <p v-show="infoStatus">
+              <p id="to" class="h4" v-show="infoStatus">
                 {{ user.selfInfo }}
               </p>
               <p v-show="editStatus">
@@ -57,14 +57,14 @@
               >|
               <span class="col-2 text-center"><strong>팀원평판</strong></span>
               <span class="col-2 text-start">
-                <button id="bt" class="btn btn-outline-primary">
+                <button id="bt" class="btn btn-outline-dark">
                   <i class="bi bi-star-fill pro_star_color"></i
                   >{{ user.score }}/({{ user.scoreCount }})
                 </button></span
               >|
               <span class="col-2 text-center"><strong>멘토평판</strong></span>
               <span class="col-2 text-start"
-                ><button id="bt" class="btn btn-outline-primary">
+                ><button id="bt" class="btn btn-outline-dark">
                   <i class="bi bi-star-fill pro_star_color"></i>
                   {{ user.mentoScore }}/({{ user.mentoScoreCount }})
                 </button></span
@@ -245,14 +245,14 @@
             <p class="text-end">
               <button
                 type="button"
-                class="btn btn-primary btn-lg"
+                class="btn btn-dark btn-lg"
                 v-show="editStatus"
                 @click="[changeStatus1(), passData()]">
                 {{ this.buttonStatus }}
               </button>
               <button
                 type="button"
-                class="btn btn-outline-primary btn-lg"
+                class="btn btn-outline-dark btn-lg"
                 v-show="infoStatus"
                 @click="changeStatus2">
                 {{ this.buttonStatus }}
@@ -482,5 +482,11 @@ div > .tag {
   color: white;
   background-color: #1379d2;
   box-sizing: border-box;
+}
+
+#to {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

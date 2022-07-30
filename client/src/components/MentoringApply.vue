@@ -12,7 +12,7 @@
     <!-- 신청 정보 -->
     <div class="apply">
       <p class="row h4 mt-5">
-        <span class="col-2 text-end"><strong>스터디/프로젝트</strong></span>
+        <span class="col-2 text-start"><strong>스터디/프로젝트</strong></span>
         <span class="col-3 px-4"
           ><select class="form-control" name="" id="">
             <option value="">1</option>
@@ -21,19 +21,19 @@
         >
       </p>
       <p class="row h4 mt-5">
-        <span class="col-2 text-end"><strong>연락처</strong></span>
+        <span class="col-2 text-start"><strong>연락처</strong></span>
         <span class="col-3 px-4"
           ><input class="form-control" type="email" v-model="contact"
         /></span>
       </p>
       <p class="row h4 mt-5">
-        <span class="col-2 text-end"><strong>멘토링 신청 횟수</strong></span>
+        <span class="col-2 text-start"><strong>멘토링 신청 횟수</strong></span>
         <span class="col-3 px-4"
           ><input class="form-control" type="number" name="" id="" min="1"
         /></span>
       </p>
       <div class="row h4 mt-5">
-        <span class="col-2 text-end"><strong>멘토링 신청 분야</strong></span>
+        <span class="col-2 text-start"><strong>멘토링 신청 분야</strong></span>
         <div class="col-6 px-4 h5">
           <div v-for="part in mentor.parts" :key="part.partCode">
             <input
@@ -46,7 +46,7 @@
         </div>
       </div>
       <div class="row h4 mt-5 mb-5">
-        <span class="col-2 text-end"><strong>멘토링 희망내용</strong></span>
+        <span class="col-2 text-start"><strong>멘토링 희망내용</strong></span>
         <div class="col px-4">
           <textarea
             class="form-control"
