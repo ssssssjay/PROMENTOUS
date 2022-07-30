@@ -675,7 +675,7 @@ export default {
     확인하고픈 userId 처리가능합니다. */
     this.sessionUserId = this.user.user_id;
     //user from computed()
-    //this.sessionUserId = 32;
+    this.sessionUserId = 32;
   },
   beforeMount() {},
   mounted() {
@@ -806,7 +806,7 @@ export default {
         this.projectInfoParams.sessionUserId = this.sessionUserId;
         this.projectIdSelect(); /* 팀개요 정보 다가져옴. */
       } catch (e) {
-        this.exitTeamManage(e);
+        exitTeamManage(e);
       }
     },
     filterApplicant() {
@@ -931,7 +931,6 @@ export default {
         this.teamMembers = array;
       }
       this.teamMembers = this.teamTotalInfo.data.members;
-
       // this.filterFinishMemberRating();
       this.mentoring = this.teamTotalInfo.data.mentorings;
       this.filterFinishMentoring();
@@ -941,7 +940,7 @@ export default {
   exitTeamManage(e) {
     console.log("exitTeamManage 실행");
     console.log(e);
-    alert("자신에게 해당되는 프로젝트가 없습니다. 메인 화면으로 이동합니다. ");
+    //alert("자신에게 해당되는 프로젝트가 없습니다. 메인 화면으로 이동합니다. ");
     // TODO : ROUTER PUSH  to main(?)
   }
 };
