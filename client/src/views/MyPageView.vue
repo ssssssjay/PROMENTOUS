@@ -404,10 +404,6 @@ export default {
       let param = {
         nickname: this.user.nickname,
         info: this.user.selfInfo,
-        score: this.user.score,
-        scoreCount: this.user.scoreCount,
-        mentoScore: this.user.mentoScore,
-        mentoScoreCount: this.user.mentoScoreCount,
         login: this.user.googleAccount,
         /*selectedPArt ? part 변수명이 뭐가 될지는모르지만.
       일단  ['P01', 'V01']
@@ -416,12 +412,11 @@ export default {
         stacks: this.stacks,
         URL_LIST: this.URL_LIST
       };
+
       console.log("======저장용 데이터!=======");
       console.log("=============param=========");
       console.log(param);
-      const response = await this.$post("/user/myData", {
-        param: param
-      });
+      const response = await this.$post(`/user/saveData/${this.userId}`, param);
       console.log(response);
     },
     //마이페이지 조회
@@ -438,6 +433,8 @@ export default {
       this.user.scoreCount = response.userRateCount;
       this.user.mentoScore = response.mentorRateAVG;
       this.user.mentoScoreCount = response.mentorRateAVG;
+      this.stacks = response.like_stack_code;
+      this.parts = response.like_dept_code;
     }
   }
 };
