@@ -25,7 +25,7 @@
         <!-- 우선은 정렬기능 비활성화 -->
         <!-- <RecruitSortLayout /> -->
         <div class="d-flex">
-          <StackSearchLayout @send-value="sendValue" />
+          <SingleStackSearchLayout @send-value="sendValue" />
           <SearchAll @search-keyword="SearchKeyword" />
         </div>
       </div>
@@ -43,7 +43,7 @@
 <script>
 // import RecruitSortLayout from "../components/layouts/RecruitSortLayout.vue";
 import RegionSortLayout from "@/components/layouts/RegionSortLayout.vue";
-import StackSearchLayout from "@/components/layouts/StackSearchLayout.vue";
+import SingleStackSearchLayout from "@/components/layouts/SingleStackSearchLayout.vue";
 import SearchAll from "../components/SearchAll.vue";
 import RecruitStatus from "@/components/layouts/RecruitStatus.vue";
 import CardList from "@/components/CardList.vue";
@@ -53,7 +53,7 @@ export default {
   components: {
     // RecruitSortLayout,
     RegionSortLayout,
-    StackSearchLayout,
+    SingleStackSearchLayout,
     SearchAll,
     RecruitStatus,
     CardList,
@@ -120,7 +120,6 @@ export default {
       this.projects.forEach((project) => {
         project.exp_start_date = this.convertDate(project.exp_start_date);
         project.stack_code = this.convertStack(project.stack_code);
-        project.stack_code.pop();
         project.status_code = this.convertStatus(project.status_code);
       });
       console.log(response.data);
