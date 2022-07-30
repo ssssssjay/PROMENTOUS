@@ -133,10 +133,10 @@
             <p class="ps-4">
               <!-- 클립보드 복사 -->
               <copy-to-clipboard :pageUrl="pageUrl" />
-              <button type="button" class="btn btn-success btn-sm mx-1">
+              <!-- <button type="button" class="btn btn-success btn-sm mx-1">
                 수정
               </button>
-              <button type="button" class="btn btn-danger btn-sm">삭제</button>
+              <button type="button" class="btn btn-danger btn-sm">삭제</button> -->
             </p>
           </div>
           <!-- div 테두리 -->
