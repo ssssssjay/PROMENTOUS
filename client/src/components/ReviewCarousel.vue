@@ -27,15 +27,16 @@
               :key="review.review_id"
               :class="{ active: review.review_id == firstReviewId }">
               <a
-                href="#"
+                @click="goToReviewDetail(review.review_id)"
                 :title="review.title"
                 class="btn-link text-semibold media-heading box-inline pro_a_black fs-3 pro_ellipsis">
                 {{ review.title }}
               </a>
               <!-- TODO: css ellipsis 라인 수 제한 줘야함.-->
-              <p :title="review.desc" class="d-block mt-4 fs-5 pro_ellipsis">
-                {{ review.desc }}
-              </p>
+              <p
+                :title="review.desc"
+                class="d-block mt-4 fs-5 pro_ellipsis pro_carousel_text"
+                v-html="review.desc"></p>
             </div>
           </div>
 
@@ -97,6 +98,10 @@ export default {
         return;
       }
       this.firstReviewId = this.reviewList[0].review_id;
+    },
+    goToReviewDetail(id) {
+      window.scrollTo(0, 0);
+      this.$router.push(`/project/review/${id}`);
     }
   }
 };
@@ -183,5 +188,9 @@ h2::after {
 .carousel-indicators li.active {
   background: #555;
   box-shadow: inset 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.pro_carousel_text ::v-deep * {
+  font-size: 1rem;
 }
 </style>
