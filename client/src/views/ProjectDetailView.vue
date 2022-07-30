@@ -94,12 +94,6 @@
                 </span>
               </span>
             </p>
-            <div class="my-4">
-              <span class="text-muted pro_font_bold">| 프로젝트 소개</span>
-              <div
-                class="widget-box fs-4 p-5"
-                v-html="project.project_desc"></div>
-            </div>
             <p class="row" v-if="isRefUrl">
               <span class="text-muted col-2 pro_font_bold">| 참고링크</span>
               <span class="col-10">
@@ -116,6 +110,13 @@
                 </span>
               </span>
             </p>
+            <div class="my-4">
+              <span class="text-muted pro_font_bold">| 프로젝트 소개</span>
+              <div
+                class="widget-box fs-4 p-5"
+                v-html="project.project_desc"></div>
+            </div>
+
             <div class="py-5" v-if="status_code === FIN">
               <review-carousel :projectId="projectId" />
             </div>
@@ -140,10 +141,10 @@
             <p class="ps-4">
               <!-- 클립보드 복사 -->
               <copy-to-clipboard :pageUrl="pageUrl" />
-              <button type="button" class="btn btn-success btn-sm mx-1">
+              <!-- <button type="button" class="btn btn-success btn-sm mx-1">
                 수정
               </button>
-              <button type="button" class="btn btn-danger btn-sm">삭제</button>
+              <button type="button" class="btn btn-danger btn-sm">삭제</button> -->
             </p>
           </div>
           <!-- div 테두리 -->
@@ -226,6 +227,7 @@
                     "
                     :disabled="
                       project.status_code === `FIN` ||
+                      project.leader_user === userId ||
                       recruit.acc_count === recruit.to ||
                       !applyAbleFlag
                     ">
@@ -339,6 +341,7 @@ export default {
     };
   },
   created() {
+    this.userId = this.$store.state.user.user_id;
     this.pageUrl = window.document.location.href;
     this.projectId = this.$route.params.projectId;
     this.getProjectData();
@@ -419,7 +422,7 @@ export default {
     formatDate(datetime) {
       // TODO: 예외처리 코드 보완 필요
       if (!datetime) {
-        console.log("datetime undefined error 처리 필요");
+        // console.log("datetime undefined error 처리 필요");
         return "";
       }
       return datetime.substr(0, 10);
@@ -473,7 +476,7 @@ export default {
         this.project.progress_method
       );
     },
-
+    //모집상세글 ---- 팀리더  정보 가져오기
     async getLeaderData() {
       this.projectLeader = await this.$get(
         `/project/recruit/${this.projectId}/leader`
@@ -488,6 +491,17 @@ export default {
       this.projectLeader.project = this.projectLeader.leaderHistory;
       this.stackToArray();
       this.partToArray();
+      console.log("this.projectLeader");
+      console.log(this.projectLeader);
+    },
+    //모집상세글----- 팀원 정보 가져오기
+    async getCurrentMembers() {
+      this.currentMemberList = await this.$get(
+        `/project/recruit/${this.projectId}/currentMembers`
+      );
+
+      console.log("this.currentMemberList");
+      console.log(this.currentMemberList);
     },
     // 모집 인원
     async getRecruitData() {
@@ -497,12 +511,6 @@ export default {
 
       // 모집 인원수
       this.recruitNumber = await this.getRecruitNumber();
-    },
-    // 팀원 정보 보기
-    async getCurrentMembers() {
-      this.currentMemberList = await this.$get(
-        `/project/recruit/${this.projectId}/currentMembers`
-      );
     },
     async getRefUrl() {
       this.refUrl = await this.$get(
