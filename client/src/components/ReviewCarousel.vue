@@ -33,9 +33,10 @@
                 {{ review.title }}
               </a>
               <!-- TODO: css ellipsis 라인 수 제한 줘야함.-->
-              <p :title="review.desc" class="d-block mt-4 fs-5 pro_ellipsis">
-                {{ review.desc }}
-              </p>
+              <p
+                :title="review.desc"
+                class="d-block mt-4 fs-5 pro_ellipsis pro_carousel_text"
+                v-html="review.desc"></p>
             </div>
           </div>
 
@@ -183,5 +184,9 @@ h2::after {
 .carousel-indicators li.active {
   background: #555;
   box-shadow: inset 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.pro_carousel_text ::v-deep * {
+  font-size: 1rem;
 }
 </style>

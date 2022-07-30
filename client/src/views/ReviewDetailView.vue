@@ -79,10 +79,9 @@
               </span>
             </p>
             <div>
-              <!-- TODO: v-html 로 변경하기. -->
-              <div class="widget-box fs-4 py-4 px-5 mt-5">
-                {{ review.desc }}
-              </div>
+              <div
+                class="widget-box fs-4 py-4 px-5 mt-5"
+                v-html="review.desc"></div>
             </div>
           </div>
         </div>
