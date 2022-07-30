@@ -6,14 +6,14 @@
           class="card-body"
           :class="project.status_code === '모집완료' ? 'fin' : ''"
           @click="goToDetail(project.project_id)">
-          <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-4">
             <span class="text-start text-muted desc-exp-date"
               >시작예정일 : {{ project.exp_start_date }}</span
             >
             <span class="project-status">{{ project.status_code }}</span>
           </div>
-          <h2 class="fs-5 mb-3 title">{{ project.title }}</h2>
-          <div class="stack mb-3">
+          <h2 class="mb-4 ellipsis title">{{ project.title }}</h2>
+          <div class="stack mb-4">
             <div v-if="project.stack_code.length <= 3">
               <div
                 class="stack-icon me-1"
@@ -31,29 +31,32 @@
               + {{ project.stack_code.length - 3 }}
             </span>
           </div>
-          <div class="d-flex align-items-center border-bottom mb-2">
-            <!-- TODO : 프사 로딩 오류시에는?  -->
-            <span class="image me-1"
-              ><img v-bind:src="project.user_image" alt="프사"
-            /></span>
-            <span class="mb-1" style="width: 130px">{{
-              project.user_nickname
-            }}</span>
-            <div class="d-flex flex-column ms-5 mb-1" style="width: 50px">
-              <div>
-                <i class="bi bi-eye me-1"></i>
-                <span> {{ project.viewCount }}</span>
-              </div>
+          <div class="d-flex justify-content-end pb-3 mb-3 border-bottom">
+            <div class="acceptStatus">
+              모집현황 :
+              <strong
+                >{{ project.acceptedCnt }} / {{ project.totalPeople }}</strong
+              >
+            </div>
+            <div class="ms-3 progressMethod">
+              진행방식 :
+              <strong>{{
+                project.progress_method === "ON" ? "온라인" : "오프라인"
+              }}</strong>
             </div>
           </div>
-          <div class="bottom">
-            <span
-              >모집현황{{ project.acceptedCnt }} /
-              {{ project.totalPeople }}</span
-            >
-            <button class="progressMethod btn-primary">
-              {{ project.progress_method === "ON" ? "온라인" : "오프라인" }}
-            </button>
+          <div class="d-flex align-items-center justify-content-between">
+            <!-- TODO : 프사 로딩 오류시에는?  -->
+            <div>
+              <span class="image me-2">
+                <img v-bind:src="project.user_image" alt="프사" />
+              </span>
+              <span class="mb-1">{{ project.user_nickname }}</span>
+            </div>
+            <div>
+              <i class="bi bi-eye me-2"></i>
+              <span> {{ project.viewCount }}</span>
+            </div>
           </div>
         </section>
       </div>
@@ -118,7 +121,7 @@ export default {
   border-radius: 15px;
   content: "";
   width: 100%;
-  height: 250px;
+  height: 298.5px;
   background-color: rgba($color: #fff, $alpha: 0.5);
 }
 .project_list .card:nth-child(4n) {
@@ -134,7 +137,7 @@ export default {
   font-size: 15px;
 }
 .stack-icon {
-  font-size: 12px;
+  font-size: 14px;
   display: inline-block;
   padding: 0 12px;
   text-align: center;
@@ -153,15 +156,18 @@ export default {
   box-sizing: border-box;
 }
 .ellipsis {
-  width: 200px;
+  width: 254px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 .title {
-  height: 40px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 2rem;
+  height: 4rem;
 }
 .image > img {
   width: 30px;
@@ -169,11 +175,17 @@ export default {
   border-radius: 50%;
   margin-bottom: 4px;
 }
+.acceptStatus,
 .progressMethod {
-  font-size: 15px;
-  float: right;
-  margin: 0px;
+  display: inline-block;
+  color: #888;
   border-radius: 5px;
-  background-color: #1379d2;
+  text-align: center;
+  font-size: 15px;
+  strong {
+    color: #000;
+    font-size: 1.15em;
+    font-weight: 700;
+  }
 }
 </style>
