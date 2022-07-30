@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <StackSearch
+    <StackSearch
       v-model="value"
       class="stack_search"
       placeholder="언어/스택으로
@@ -10,25 +10,10 @@
       :searchable="true"
       :create-option="true"
       :options="options"
-      @click="transValue" /> -->
-    <StackSearch
-      v-model="value"
-      class="stack_search"
-      placeholder="언어/스택으로
-    검색해보세요"
-      mode="single"
-      :close-on-select="true"
-      :searchable="false"
-      :create-option="true"
-      :options="options"
       @click="transValue" />
   </div>
 </template>
 <script>
-// 생성자함수
-// function Stack(value, label) {
-//   (this.value = value), (this.label = label);
-// }
 export default {
   components: {
     StackSearch
@@ -37,7 +22,7 @@ export default {
   data() {
     return {
       value: [],
-      options: [] // 배열들을 갖다 넣기
+      options: []
     };
   },
   setup() {},
@@ -58,7 +43,7 @@ export default {
         //   stackList[i].code_data_desc
         // );
         let data = {
-          value: stackList[i].code_data_desc,
+          value: stackList[i].code_data_name,
           label: stackList[i].code_data_desc
         };
         this.options.push(data);
