@@ -18,7 +18,9 @@ export default {
   components: {
     StackSearch
   },
-
+  props: {
+    stacks: Object
+  },
   data() {
     return {
       value: [],
@@ -29,9 +31,23 @@ export default {
   created() {
     this.getStackList();
   },
+  updated() {},
   mounted() {},
   unmounted() {},
   methods: {
+    transStacks() {
+      this.value = [];
+      for (let i = 0; i < this.stacks.length; i++) {
+        for (let j = 0; j < this.options.length; j++) {
+          if (
+            this.stacks.length != 0 &&
+            this.options[j].label == this.stacks[i]
+          ) {
+            this.value.push(this.options[j].value);
+          }
+        }
+      }
+    },
     async getStackList() {
       const stackList = await this.$get(
         `http://localhost:3000/common/stackList`
@@ -48,11 +64,12 @@ export default {
         };
         this.options.push(data);
       }
+      this.transStacks();
       // console.log(this.options);
     },
     transValue() {
       this.$emit("send-value", this.value);
-      // console.log(this.value);
+      console.log(this.value);
     }
   }
 };

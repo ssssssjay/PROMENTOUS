@@ -80,14 +80,21 @@
             <strong>진행한 프로젝트</strong>
           </div>
           <div class="col text-start px-4 h5">
+            <p class="emptyValue" v-if="memberData.project.length == 0">
+              진행한 프로젝트가 없습니다
+            </p>
             <div
               class="mb-3"
               v-for="(project, i) in memberData.project"
               :key="i">
-              <a
-                :href="project.address"
+              <router-link
+                v-if="project.length != 0"
+                target="_blank"
+                :to="this.path"
                 style="text-decoration: none; color: #1379d2"
-                ><strong>{{ project.title }}</strong></a
+                ><strong @click="goToProjectDetail(project.project_id)">
+                  {{ project.title }}
+                </strong></router-link
               >
             </div>
           </div>
@@ -97,11 +104,18 @@
             <strong>작성한 후기글</strong>
           </div>
           <div class="col text-start px-4 h5">
+            <p class="emptyValue" v-if="memberData.review.length == 0">
+              작성한 후기글이 없습니다
+            </p>
             <div class="mb-3" v-for="(review, i) in memberData.review" :key="i">
-              <a
-                :href="review.address"
+              <router-link
+                v-if="review.length != 0"
+                target="_blank"
+                :to="this.path"
                 style="text-decoration: none; color: #1379d2"
-                ><strong>{{ review.title }}</strong></a
+                ><strong @click="goToReviewDetail(review.review_id)">{{
+                  review.title
+                }}</strong></router-link
               >
             </div>
           </div>
@@ -112,7 +126,9 @@
         <div class="row mt-5">
           <span class="col-2 h4 text-center"><strong>소셜 정보</strong></span>
           <div class="mb-3" v-for="(url, i) in memberData.url_list" :key="i">
-            <a :href="url.address">{{ url.title }}</a>
+            <a target="_blank" :href="`https://${url.url_address}`">{{
+              url.url_title
+            }}</a>
           </div>
         </div>
       </div>
@@ -134,8 +150,8 @@ export default {
   },
   data() {
     return {
-      averageRate: 1
-
+      averageRate: 1,
+      path: ""
       // *userNickname
       // *likeStackCode
       // *userImage
@@ -177,11 +193,14 @@ export default {
   mounted() {},
   unmounted() {},
   methods: {
-    // rateAverage() {
-    //   for (let i = 0; i < this.memberData.rating.length; i++) {
-    //     this.averageRate += this.memberData.rating[i].score;
-    //   }
-    // }
+    goToProjectDetail(id) {
+      window.scrollTo(0, 0);
+      this.path = `/project/recruit/${id}`;
+    },
+    goToReviewDetail(id) {
+      window.scrollTo(0, 0);
+      this.path = `/project/review/${id}`;
+    }
   }
 };
 </script>
@@ -192,5 +211,9 @@ button.btn.btn-primary {
 }
 .Stack {
   font-size: 15px;
+}
+.emptyValue {
+  font-size: 15px;
+  margin-top: 7px;
 }
 </style>

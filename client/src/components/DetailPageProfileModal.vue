@@ -1,13 +1,13 @@
 <template>
   <Modal ref="baseModal" class="modal">
-    <hr />
+    <!-- <hr />
     {{ memberData }}
     <hr />
     {{ leaderData }}
     <hr />
     {{ leaderStack }}
     <hr />
-    {{ leaderCheck }}
+    {{ leaderCheck }} -->
 
     <div class="container" v-if="leaderCheck == true">
       <!-- 상단 -->
@@ -312,17 +312,9 @@ export default {
     };
   },
   methods: {
-    // rateAverage() {
-    //   for (let i = 0; i < this.applicantData.rating.length; i++) {
-    //     this.averageRate += this.applicantData.rating[i].score;
-    //   }
-    // }
     goToProjectDetail(id) {
       window.scrollTo(0, 0);
       this.path = `/project/recruit/${id}`;
-
-      // TODO: 여기서 팝업 닫은 후 새로고침 처리 필요할 듯
-      // this.$router.go();
     },
     goToReviewDetail(id) {
       window.scrollTo(0, 0);
