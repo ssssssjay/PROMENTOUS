@@ -124,8 +124,8 @@
             style="
               max-width: 400px;
               min-width: 400px;
-              min-height: 450px;
-              max-height: 450px;
+              min-height: 400px;
+              max-height: 400px;
             "
             v-for="(mentor, index) in mentors2"
             :key="index"
@@ -142,9 +142,12 @@
               </h2>
               <i class="bi bi-star-fill pro_star_color"></i
               >{{ mentor.rateAVG }}/({{ mentor.rateCount }})
-              <p class="mt-2">
-                {{ mentor.mentoring_intro }}
-              </p>
+
+              <div class="text">
+                <p class="card-text">
+                  {{ mentor.mentoring_intro }}
+                </p>
+              </div>
             </div>
             <div class="card-body">
               <hr />
@@ -351,9 +354,17 @@ export default {
   width: 100%;
   vertical-align: middle;
 }
+div.text {
+  height: 30px;
+}
+.card-text {
+  font-size: 13px;
+  /* min-height: 80px; */
 
-#to {
   overflow: hidden;
   text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 </style>
