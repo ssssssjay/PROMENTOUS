@@ -720,7 +720,27 @@ export default {
           data
         );
         if (r.status === 200) {
-          this.projectIdSelect(); /* refresh  */
+          let temp = await this.$get(this.initUrl, {});
+          console.log(temp == null);
+          console.log(temp == {});
+          console.log(typeof temp);
+          console.log("=========initUrl 팀 리스트끌고오기 ==========");
+          console.log(this.initUrl);
+          console.log("=========가져온결과 temp==========");
+          console.log(temp);
+
+          /* refresh 프로젝트 리스트    */
+          this.projectList = [];
+          if (temp.length == 1) {
+            this.projectList = temp;
+          } else {
+            temp.forEach((element) => {
+              this.projectList.push(element);
+            });
+          }
+          this.selectedStatus = this.projectList[0].statusName;
+          /* refresh 프로젝트 내용   */
+          this.projectIdSelect();
         }
         console.log(this.r);
       } else {
@@ -800,8 +820,8 @@ export default {
           });
         }
 
-        this.selectedProjectId = this.projectList[0].projectId;
         this.selectedStatus = this.projectList[0].statusName;
+        this.selectedProjectId = this.projectList[0].projectId;
         this.projectInfoParams.project_id = this.selectedProjectId;
         this.projectInfoParams.sessionUserId = this.sessionUserId;
         this.projectIdSelect(); /* 팀개요 정보 다가져옴. */

@@ -1,6 +1,7 @@
 <template>
   <div class="container mt-5">
-    <!-- {{ this.projectLeader }}
+    <!--  projectLeader ::
+    {{ this.projectLeader }}
     <hr />
     {{ this.currentMemberList }}
     <hr />
@@ -14,8 +15,7 @@
     {{ memberValue }}
     <hr />
     {{ leaderCheck }}
-    <hr /> -->
-
+    <hr />-->
     <ProfileModal
       ref="modal"
       :leaderStack="this.leaderStack"
@@ -456,7 +456,7 @@ export default {
         this.project.progress_method
       );
     },
-
+    //모집상세글 ---- 팀리더  정보 가져오기
     async getLeaderData() {
       this.projectLeader = await this.$get(
         `/project/recruit/${this.projectId}/leader`
@@ -471,6 +471,17 @@ export default {
       this.projectLeader.project = this.projectLeader.leaderHistory;
       this.stackToArray();
       this.partToArray();
+      console.log("this.projectLeader");
+      console.log(this.projectLeader);
+    },
+    //모집상세글----- 팀원 정보 가져오기
+    async getCurrentMembers() {
+      this.currentMemberList = await this.$get(
+        `/project/recruit/${this.projectId}/currentMembers`
+      );
+
+      console.log("this.currentMemberList");
+      console.log(this.currentMemberList);
     },
     // 모집 인원
     async getRecruitData() {
@@ -480,12 +491,6 @@ export default {
 
       // 모집 인원수
       this.recruitNumber = await this.getRecruitNumber();
-    },
-    // 팀원 정보 보기
-    async getCurrentMembers() {
-      this.currentMemberList = await this.$get(
-        `/project/recruit/${this.projectId}/currentMembers`
-      );
     },
     async getRefUrl() {
       this.refUrl = await this.$get(
