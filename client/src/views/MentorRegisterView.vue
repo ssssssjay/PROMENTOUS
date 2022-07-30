@@ -146,6 +146,11 @@
 <script>
 export default {
   components: {},
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
+  },
   data() {
     return {
       mentorTitle: "",
@@ -179,7 +184,9 @@ export default {
   },
   setup() {},
   created() {},
-  mounted() {},
+  mounted() {
+    this.checkMentorInfoExists();
+  },
   unmounted() {},
   methods: {
     addLink() {
@@ -197,6 +204,17 @@ export default {
       this.link.name = "";
       this.link.href = "";
     },
+    async checkMentorInfoExists() {
+      const r = await this.$post(`/mentor/checkMentorInfoExist`, {
+        user_id: this.user.user_id
+      });
+      console.log(r.data.length);
+      if (r.data.length == 0) {
+        console.log("멘토신청 가능!! ");
+      } else {
+        console.log("멘토신청 불가능!!");
+      }
+    },
     async saveMentorInfo() {
       /* eslint-disable */
       let flag = confirm("멘토 등록하시겠습니까?");
@@ -210,17 +228,17 @@ export default {
         this.saveParam.mentor_info.mentoring_price = this.payPerTime;
         this.saveParam.mentor_info.mentoring_time = this.timePerTime;
         this.saveParam.ref_url = this.urlList;
-        //console.log(this.saveParam);
+        console.log(this.saveParam);
         // saveTeamManageInfo
         const r = await this.$post(
           // TODO: axios.defaults.baseURL로 변경
           `/mentor/registerMentorInfo`,
           this.saveParam
         );
-        if (r.status === 200) {
-          //성공 후 다시 멘토리스트 화면으로 돌아가기
-          this.$router.push("/mentolist");
-        }
+        // if (r.status === 200) {
+        //   //성공 후 다시 멘토리스트 화면으로 돌아가기
+        //   this.$router.push("/mentolist");
+        // }
         console.log(this.r);
       } else {
         alert("n");
