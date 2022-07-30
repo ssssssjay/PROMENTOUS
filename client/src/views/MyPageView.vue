@@ -89,27 +89,7 @@
                   v-show="infoStatus"
                   >{{ part }}</span
                 >
-                <!-- <button
-                  type="button"
-                  class="btn btn-primary m-1 mt-0"
-                  v-for="(option, index) in selectedOptionList"
-                  :key="option"
-                  v-show="infoStatus">
-                  {{ selectedOptionList[index] }}
-                </button> -->
-                <!-- <select
-                  v-model="selectedOptionList"
-                  class="form-select"
-                  aria-label="options"
-                  multiple
-                  v-show="editStatus">
-                  <option
-                    :value="option.name"
-                    v-for="option in options"
-                    :key="option.optionCode">
-                    {{ option.name }}
-                  </option>
-                </select> -->
+
                 <PartSearchLayout
                   style="float: left"
                   @send-value="addPart"
@@ -142,11 +122,11 @@
               <div class="col" v-show="infoStatus">
                 <a
                   class="mb-1 px-4 tag"
-                  :href="url.address"
+                  :href="url.url_address"
                   target="_blank"
                   v-for="(url, index) in URL_LIST"
                   :key="index">
-                  {{ URL_LIST[index].title }}
+                  {{ URL_LIST[index].url_title }}
                 </a>
               </div>
 
@@ -156,14 +136,14 @@
                   class="form-control"
                   style="width: 200px"
                   placeholder="링크 이름"
-                  v-model="URL.title" />
+                  v-model="URL.url_title" />
 
                 <input
                   type="text"
                   class="form-control"
                   style="width: 600px"
                   placeholder="링크 주소"
-                  v-model="URL.address" />
+                  v-model="URL.url_address" />
                 <button
                   type="button"
                   class="btn btn-secondary"
@@ -173,10 +153,10 @@
                 <div v-for="(URL, index) in URL_LIST" :key="index">
                   <div class="col partTo ms-1">
                     <p class="form-control mb-1">
-                      {{ URL_LIST[index].title }}
+                      {{ URL_LIST[index].url_title }}
                     </p>
                     <p class="form-control mb-1">
-                      {{ URL_LIST[index].address }}
+                      {{ URL_LIST[index].url_address }}
                     </p>
 
                     <button
@@ -290,7 +270,7 @@ export default {
       infoStatus: true,
       editStatus: false,
       buttonStatus: "수정",
-      URL: { title: "", address: "" },
+      URL: { url_title: "", url_address: "" },
       URL_LIST: [] //DB로 쏘옥};
     };
   },
@@ -333,15 +313,15 @@ export default {
       this.buttonStatus = "저장";
     },
     addUrl() {
-      if (this.URL.title !== "" && this.URL.address !== "") {
+      if (this.URL.url_title !== "" && this.URL.url_address !== "") {
         let obj0 = {
-          ["title"]: this.URL.title,
-          ["address"]: this.URL.address
+          ["title"]: this.URL.url_title,
+          ["address"]: this.URL.url_address
         };
         this.URL_LIST.push(obj0);
-        this.URL.title = "";
-        this.URL.address = "";
-      } else if (this.URL.title === "" || this.URL.address === 0) {
+        this.URL.url_title = "";
+        this.URL.url_address = "";
+      } else if (this.URL.url_title === "" || this.URL.url_address === 0) {
         alert("링크를 정확히 입력해주세요");
       }
     },

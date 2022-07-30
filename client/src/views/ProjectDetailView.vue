@@ -1,11 +1,9 @@
 <template>
   <div class="container mt-5">
-    <!--  projectLeader ::
-    {{ this.projectLeader }}
+    <!-- leader정보 {{ this.projectLeader }}
+    {{ leaderDept }}
     <hr />
-    {{ this.currentMemberList }}
-    <hr />
-    {{ this.currentMemberList }}
+    멤버 정보{{ this.currentMemberList }}
 
     <hr />
 
@@ -14,15 +12,24 @@
     <hr />
     {{ memberValue }}
     <hr />
-    {{ leaderCheck }}
-    <hr />-->
+    {{ memberValue.url_list }} -->
+    <!-- {{
+      Object.values(this.currentMemberList)[this.partIndex][this.memberIndex]
+        .like_dept_code
+    }}
+    <hr />
+    teamDept {{ TeamDept }} -->
+
+    <hr />
+
     <ProfileModal
       ref="modal"
       :leaderStack="this.leaderStack"
       :leaderDept="this.leaderDept"
       :leaderData="this.projectLeader"
       :memberData="this.memberValue"
-      :leaderCheck="this.leaderCheck" />
+      :leaderCheck="this.leaderCheck"
+      :teamDept="this.TeamDept" />
     <div class="row">
       <!-- 페이지 좌측 -->
       <div class="col-lg-9 pe-xl-1-9 mb-1-9 mb-lg-0">
@@ -262,7 +269,8 @@
                           transPart(index),
                           transIndex(index0),
                           saveMemberValues(),
-                          memberModal()
+                          memberModal(),
+                          saveTeamDept()
                         ]
                       ">
                       상세정보
@@ -298,7 +306,7 @@ export default {
 
   data() {
     return {
-      userId: 0,
+      TeamDept: [],
       leaderCheck: true,
       memberIndex: 0,
       partIndex: 0,
@@ -373,6 +381,18 @@ export default {
     transPart(value) {
       this.partIndex = value;
     },
+    saveTeamDept() {
+      if (
+        Object.values(this.currentMemberList)[this.partIndex][this.memberIndex]
+          .like_dept_code[0] == null
+      ) {
+        return (this.TeamDept = []);
+      } else {
+        this.TeamDept = Object.values(this.currentMemberList)[this.partIndex][
+          this.memberIndex
+        ].like_dept_code;
+      }
+    },
     saveMemberValues() {
       if (
         Object.values(this.currentMemberList)[this.partIndex][
@@ -394,7 +414,7 @@ export default {
     partToArray() {
       if (this.projectLeader.like_dept_code.length == 1) {
         this.leaderDept.push(this.projectLeader.like_dept_code);
-      } else {
+      } else if (this.projectLeader.like_dept_code.length != 0) {
         this.leaderDept = this.projectLeader.like_dept_code.split(",");
       }
     },

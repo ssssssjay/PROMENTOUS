@@ -50,7 +50,11 @@
         <div class="row">
           <span class="col-2 h4 text-center"><strong>관심 스택</strong></span>
           <div class="col-8 h4 text-start">
+            <p class="emptyValue" v-if="applicantData.likeStackCode == null">
+              등록된 관심 스택이 없습니다
+            </p>
             <button
+              v-else
               class="btn m-1 btn-primary Stack"
               v-for="(stack, index) in applicantData.likeStackCode"
               :key="index">
@@ -61,6 +65,9 @@
         <div class="row my-5">
           <span class="col-2 h4 text-center"><strong>관심 분야</strong></span>
           <div class="col-8 h4 text-start">
+            <p class="emptyValue" v-if="applicantData.likeDeptCode == null">
+              등록된 관심 분야가 없습니다
+            </p>
             <button
               class="btn m-1 btn-primary Stack"
               v-for="(Dept, index) in applicantData.likeDeptCode"
@@ -129,8 +136,15 @@
       </div>
       <div class="row mt-5">
         <span class="col-2 h4 text-center"><strong>소셜 정보</strong></span>
-        <div class="mb-3" v-for="(url, i) in applicantData.url_list" :key="i">
-          <a target="_blank" :href="`https://${url.url_address}`">{{
+        <p class="col-3 emptyValue" v-if="applicantData.url_list.length == 0">
+          등록된 소셜 정보가 없습니다
+        </p>
+        <div
+          v-else
+          class="col-2 mb-3"
+          v-for="(url, i) in applicantData.url_list"
+          :key="i">
+          <a class="url" target="_blank" :href="`https://${url.url_address}`">{{
             url.url_title
           }}</a>
         </div>
@@ -218,5 +232,11 @@ button.btn.btn-primary {
 .emptyValue {
   font-size: 15px;
   margin-top: 7px;
+}
+.url {
+  text-decoration: none;
+  color: #1379d2;
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>

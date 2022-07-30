@@ -125,10 +125,20 @@
         </div>
         <div class="row mt-5">
           <span class="col-2 h4 text-center"><strong>소셜 정보</strong></span>
-          <div class="mb-3" v-for="(url, i) in memberData.url_list" :key="i">
-            <a target="_blank" :href="`https://${url.url_address}`">{{
-              url.url_title
-            }}</a>
+          <p class="col-3 emptyValue" v-if="memberData.url_list.length == 0">
+            등록된 소셜 정보가 없습니다
+          </p>
+          <div
+            v-else
+            class="col-2 mb-3"
+            v-for="(url, i) in memberData.url_list"
+            :key="i">
+            <a
+              class="url"
+              target="_blank"
+              :href="`https://${url.url_address}`"
+              >{{ url.url_title }}</a
+            >
           </div>
         </div>
       </div>
@@ -215,5 +225,11 @@ button.btn.btn-primary {
 .emptyValue {
   font-size: 15px;
   margin-top: 7px;
+}
+.url {
+  text-decoration: none;
+  color: #1379d2;
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>

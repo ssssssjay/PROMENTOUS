@@ -140,8 +140,8 @@
               <h2 class="fs-5 mt-0">
                 <strong>{{ mentor.user_nickname }}</strong>
               </h2>
-              <i class="bi bi-star-fill pro_star_color"></i
-              >{{ mentor.rateAVG }}/({{ mentor.rateCount }})
+              <i class="bi bi-star-fill pro_star_color"></i>{{ rate1[index] }} /
+              ({{ rate2[index] }})
 
               <div class="text">
                 <p class="card-text">
@@ -175,6 +175,8 @@ export default {
   components: { CardList },
   data() {
     return {
+      rate1: [3.7, 4.6, 4.9, 3.2, 4, 2.7],
+      rate2: [12, 43, 5, 10, 34, 20],
       mentors: [
         {
           img: "../assets/profile.jpg",

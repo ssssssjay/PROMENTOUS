@@ -8,16 +8,17 @@
     </section>
 
     <section class="container">
+      <!-- {{ this.teamTotalInfo.data }} -->
       <!-- <hr />
-        applicants ////
-        <div>{{ this.applicants }}</div>
-        <hr />
-        teamMembers //// {{ this.teamMembers }}
-        <hr />
-        {{ this.teamTotalInfo.data }}
-        <hr />
+      applicants ////
+      <div>{{ this.applicants }}</div>
+      <hr />
+      teamMembers //// {{ this.teamMembers }}
+      <hr />
+      {{ this.teamTotalInfo.data }}
+      <hr />
 
-        <hr /> -->
+      <hr /> -->
 
       <!-- <div>//지원자정보 (배열)>> 팀선택시변경되어야</div> -->
 
