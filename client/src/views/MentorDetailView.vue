@@ -198,16 +198,14 @@
           <hr />
         </div>
         <!-- 댓글 -->
-        <CommentView class="mt-5"></CommentView>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import CommentView from "@/components/CommentView.vue";
 export default {
-  components: { CommentView },
+  components: {},
 
   data() {
     return {

@@ -40,8 +40,8 @@
                 <span class="mentoNickName">{{ mento.user_nickname }}</span>
                 <i class="bi bi-star-fill star"></i>
 
-                <span class="mentoScore">{{ mento.totalRate }}</span>
-                <span>({{ mento.rateCount }})</span>
+                <span class="mentoScore">{{ rate1[index] }}</span>
+                <span>({{ rate2[index] }})</span>
                 <p class="card-title">{{ mento.mentoring_title }}</p>
                 <div class="text">
                   <p class="card-text">
@@ -98,6 +98,8 @@ export default {
   },
   data() {
     return {
+      rate1: [3.7, 4.6, 4.9, 3.2, 4, 2.7, 3.9, 4.5],
+      rate2: [12, 43, 5, 10, 34, 20, 11, 19],
       part: [],
       /*페이징처리 조건을 위한 parameters -  searchKeyWord / originDeptCode / selectedPage */
       //searchKeyword  주석걺.
