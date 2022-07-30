@@ -27,7 +27,7 @@
               :key="review.review_id"
               :class="{ active: review.review_id == firstReviewId }">
               <a
-                href="#"
+                @click="goToReviewDetail(review.review_id)"
                 :title="review.title"
                 class="btn-link text-semibold media-heading box-inline pro_a_black fs-3 pro_ellipsis">
                 {{ review.title }}
@@ -98,6 +98,10 @@ export default {
         return;
       }
       this.firstReviewId = this.reviewList[0].review_id;
+    },
+    goToReviewDetail(id) {
+      window.scrollTo(0, 0);
+      this.$router.push(`/project/review/${id}`);
     }
   }
 };
