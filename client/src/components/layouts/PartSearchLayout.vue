@@ -17,24 +17,39 @@ export default {
   components: {
     PartSearch
   },
-  props: {},
+  props: {
+    parts: Object
+  },
 
   data() {
     return {
       value: [],
+
+      //   프론트엔드: "FE",
+      //   백엔드: "BE",
+      //   풀스택: "FS",
+      //   디자인: "DE",
+      //   UIUX: "UU",
+      //   기획: "PL",
+      //   PM: "PM",
+      //   데이터베이스: "DB",
+      //   알고리즘: "AL",
+      //   퍼블리싱: "PB",
+      //   데브옵스: "DO",
+      //   데이터사이언스: "DA"
       options: [
-        "프론트엔드",
-        "백엔드",
-        "풀스택",
-        "디자인",
-        "UI/ UX",
-        "기획",
-        "PM",
-        "데이터베이스",
-        "알고리즘,자료구조",
-        "퍼블리싱",
-        "데브옵스",
-        "데이터사이언스"
+        { value: "FE", label: "프론트엔드" },
+        { value: "BE", label: "백엔드" },
+        { value: "FS", label: "풀스택" },
+        { value: "DE", label: "디자인" },
+        { value: "UU", label: "UIUX" },
+        { value: "PL", label: "기획" },
+        { value: "PM", label: "PM" },
+        { value: "DB", label: "데이터베이스" },
+        { value: "AL", label: "알고리즘" },
+        { value: "PB", label: "퍼블리싱" },
+        { value: "DO", label: "데브옵스" },
+        { value: "DA", label: "데이터사이언스" }
       ]
     };
   },
@@ -43,6 +58,19 @@ export default {
   mounted() {},
   unmounted() {},
   methods: {
+    transPart() {
+      this.value = [];
+      for (let i = 0; i < this.parts.length; i++) {
+        for (let j = 0; j < this.options.length; j++) {
+          if (
+            this.parts.length != 0 &&
+            this.options[j].label == this.parts[i]
+          ) {
+            this.value.push(this.options[j].value);
+          }
+        }
+      }
+    },
     transValue() {
       this.$emit("send-value", this.value);
     }

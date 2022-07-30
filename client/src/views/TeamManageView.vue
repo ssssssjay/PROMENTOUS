@@ -8,16 +8,16 @@
     </section>
 
     <section class="container">
-      <hr />
-      applicants ////
-      <div>{{ this.applicants }}</div>
-      <hr />
-      teamMembers //// {{ this.teamMembers }}
-      <hr />
-      {{ this.teamTotalInfo.data }}
-      <hr />
+      <!-- <hr />
+        applicants ////
+        <div>{{ this.applicants }}</div>
+        <hr />
+        teamMembers //// {{ this.teamMembers }}
+        <hr />
+        {{ this.teamTotalInfo.data }}
+        <hr />
 
-      <hr />
+        <hr /> -->
 
       <!-- <div>//지원자정보 (배열)>> 팀선택시변경되어야</div> -->
 
@@ -183,7 +183,7 @@
             v-show="correctionMode === true" />
 
           <p v-show="correctionMode === false" class="">
-            {{ actualStartDate }}
+            {{ actualStartDate.slice(0, 10) }}
           </p>
         </div>
         <!-- ---------------------------------------------------------------------------------------------- -->

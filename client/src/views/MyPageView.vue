@@ -3,20 +3,16 @@
     <div class="row">
       <!-- 페이지우측  -->
       <div class="col">
-        <!--         
-        {{ this.selectedOptionList }}
+        <!-- {{ this.selectedOptionList }}
         <hr />
         {{ this.optionList }}
         <hr />
         {{ this.partList }}
         <hr />
-        {{ this.parts }}
+        part : {{ this.parts }}
         <hr />
-        {{ this.stacks }}
-        <hr />
-        {{ this.selectedPart }}
-        <hr />
-        {{ this.selectedStackList }} -->
+        stacks : {{ this.stacks }}
+        <hr /> -->
 
         <div class="content text-start">
           <!-- 글 제목 -->
@@ -117,6 +113,8 @@
                 <PartSearchLayout
                   style="float: left"
                   @send-value="addPart"
+                  ref="PartSearchRef"
+                  :parts="parts"
                   v-show="editStatus"></PartSearchLayout>
               </span>
             </p>
@@ -133,7 +131,9 @@
                 >
                 <StackSearchLayout
                   style="float: left"
+                  :stacks="this.stacks"
                   @send-value="addStack2"
+                  ref="StackSearchRef"
                   v-show="editStatus"></StackSearchLayout>
               </span>
             </p>
@@ -188,59 +188,8 @@
                   </div>
                 </div>
               </div>
-
-              <!-- <span class="col-10 text-start" v-show="infoStatus">
-                <a
-                  class="px-4"
-                  :href="Object.values(site)"
-                  v-for="(site, index) in siteList"
-                  :key="index"
-                  target="_blank"
-                  >{{ Object.keys(site).join() }}</a
-                >
-              </span>
-              <span class="col-4 px-3 pt-0" v-show="editStatus">
-                <input
-                  type="text"
-                  class="form-control text-start"
-                  placeholder="사이트 제목을 입력해주세요!"
-                  name=""
-                  id=""
-                  v-model="site.name" />
-              </span>
-              <span class="col-5 px-2 pt-0" v-show="editStatus">
-                <input
-                  type="url"
-                  class="form-control text-start"
-                  placeholder="사이트 링크를 입력해주세요!"
-                  name=""
-                  id=""
-                  v-model="site.link" />
-              </span>
-              <span class="col-1 text-center">
-                <button
-                  type="button"
-                  class="btn btn-outline-primary px-4"
-                  @click="addSite"
-                  v-show="editStatus">
-                  +
-                </button>
-              </span> -->
             </div>
-            <!-- <p class="row">
-              <span class="col-2"></span>
-              <span class="col-8 text-left"
-                ><a
-                  class="text-start px-4"
-                  :href="Object.values(site)"
-                  v-for="(site, index) in siteList"
-                  :key="index"
-                  target="_blank"
-                  v-show="editStatus"
-                  >{{ Object.keys(site).join() }}</a
-                ></span
-              >
-            </p> -->
+
             <hr />
             <p class="text-end">
               <button
@@ -254,7 +203,7 @@
                 type="button"
                 class="btn btn-outline-dark btn-lg"
                 v-show="infoStatus"
-                @click="changeStatus2">
+                @click="changeStatus2(), transStack(), transPart()">
                 {{ this.buttonStatus }}
               </button>
             </p>
@@ -342,7 +291,7 @@ export default {
       editStatus: false,
       buttonStatus: "수정",
       URL: { title: "", address: "" },
-      URL_LIST: [] //DB로 쏘옥
+      URL_LIST: [] //DB로 쏘옥};
     };
   },
   setup() {},
@@ -352,8 +301,15 @@ export default {
   mounted() {
     this.getUserData();
   },
+  updated() {},
   unmounted() {},
   methods: {
+    transStack() {
+      this.$refs.StackSearchRef.transStacks();
+    },
+    transPart() {
+      this.$refs.PartSearchRef.transPart();
+    },
     addStack() {
       this.selectedStackList = this.stacks.filter(
         (stack) => stack.partCode === this.selectedPart
@@ -435,6 +391,7 @@ export default {
       this.user.mentoScoreCount = response.mentorRateAVG;
       this.stacks = response.like_stack_code;
       this.parts = response.like_dept_code;
+      this.URL_LIST = response.url_list;
     }
   }
 };
