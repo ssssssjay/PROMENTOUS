@@ -46,8 +46,10 @@
 
     <div class="container">
       <div class="row mt-5">
-        <p class="col-2 text-start h4"><strong>프로젝트 리스트</strong></p>
-        <p class="col-10 text-end">
+        <p id="tb" class="col-3 text-start h2">
+          <strong>프로젝트 리스트</strong>
+        </p>
+        <p class="col-9 text-end">
           <a
             href="../project/recruit"
             style="text-decoration: none; color: black"
@@ -106,7 +108,7 @@
       <!-- 하단 : 멘토리스트 -->
       <div style="margin-top: 120px"></div>
       <div class="row mt-5">
-        <p class="col-2 text-start h4"><strong>멘토 리스트</strong></p>
+        <p id="tb" class="col-2 text-start h2"><strong>멘토 리스트</strong></p>
         <p class="col-10 text-end">
           <a href="../mentolist" style="text-decoration: none; color: black"
             >멘토 더보기</a
@@ -122,32 +124,36 @@
             style="
               max-width: 400px;
               min-width: 400px;
-              min-height: 400px;
-              max-height: 400px;
+              min-height: 450px;
+              max-height: 450px;
             "
-            v-for="(mentor, index) in mentors"
-            :key="index">
+            v-for="(mentor, index) in mentors2"
+            :key="index"
+            @click="goToMentorDetail(`/mentordetail/${mentor.user_id}`)">
             <div class="card-title text-center mt-4 mb-0">
               <img
-                src="../assets/default.jpg"
+                :src="mentor.user_image"
                 alt="../assets/default.jpg"
-                style="border-radius: 70%; width: 150px" />
+                style="border-radius: 70%; width: 150px; height: 150px" />
+            </div>
+            <div id="to" class="card-body">
+              <h2 class="fs-5 mt-0">
+                <strong>{{ mentor.user_nickname }}</strong>
+              </h2>
+              <i class="bi bi-star-fill pro_star_color"></i
+              >{{ mentor.rateAVG }}/({{ mentor.rateCount }})
+              <p class="mt-2">
+                {{ mentor.mentoring_intro }}
+              </p>
             </div>
             <div class="card-body">
-              <h2 class="fs-5 mt-0">
-                <strong>{{ mentor.name }}</strong>
-              </h2>
-              <i class="bi bi-star-fill pro_star_color"></i>5.0 / (14)
-              <p class="mt-2">
-                {{ mentor.info }}
-              </p>
               <hr />
               <div
                 class="stack-icon mx-1"
-                style="width: auto"
-                v-for="(part, index) in mentor.part"
+                style="width: auto; font-size: 14px"
+                v-for="(mentor, index) in mentors2"
                 :key="index">
-                {{ part }}
+                {{ mentor.mentoring_dept_code }}
               </div>
             </div>
           </div>
@@ -216,17 +222,28 @@ export default {
           part: ["프론트엔드", "디자인"]
         }
       ],
-      projects: []
+      projects: [],
+      mentors2: []
     };
   },
   created() {
     this.getProjectData();
+    this.getMentorData();
   },
   methods: {
     async getProjectData() {
       const response = await this.$get("http://localhost:3000/project/recruit");
       console.log(response);
       this.projects = response;
+    },
+    async getMentorData() {
+      const response2 = await this.$get("http://localhost:3000/mentor");
+      console.log(response2);
+      this.mentors2 = response2;
+    },
+    goToMentorDetail(path) {
+      this.$router.push({ path: path });
+      /**/
     }
   }
 };
@@ -318,5 +335,10 @@ export default {
 #user-image {
   width: 100%;
   vertical-align: middle;
+}
+
+#to {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
