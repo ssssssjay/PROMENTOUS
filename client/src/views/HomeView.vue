@@ -151,9 +151,9 @@
               <div
                 class="stack-icon mx-1"
                 style="width: auto; font-size: 14px"
-                v-for="(mentor, index) in mentors2"
+                v-for="(part, index) in mentor.mentoring_dept_code"
                 :key="index">
-                {{ mentor.mentoring_dept_code }}
+                {{ part }}
               </div>
             </div>
           </div>
@@ -235,6 +235,10 @@ export default {
       const response = await this.$get("http://localhost:3000/project/recruit");
       console.log(response);
       this.projects = response;
+      this.projects.forEach((project) => {
+        project.status_code = this.isPossible(project.status_code);
+        project.exp_start_date = this.expDate(project.exp_start_date);
+      });
     },
     async getMentorData() {
       const response2 = await this.$get("http://localhost:3000/mentor");
@@ -244,6 +248,17 @@ export default {
     goToMentorDetail(path) {
       this.$router.push({ path: path });
       /**/
+    },
+
+    isPossible(status) {
+      if (status === "REC") {
+        return "모집중";
+      } else if (status === "FIN") {
+        return "모집완료";
+      }
+    },
+    expDate(date) {
+      return date.substring(0, 10);
     }
   }
 };
