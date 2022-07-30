@@ -47,6 +47,10 @@ export default {
     projectId: {
       type: Number,
       default: null
+    },
+    reviewId: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -77,7 +81,10 @@ export default {
         return;
       }
 
-      const r = await this.$post(`/comment/register/${this.projectId}`, data);
+      const paramId =
+        this.pageType === "projectRecruit" ? this.projectId : this.reviewId;
+
+      const r = await this.$post(`/comment/register/${paramId}`, data);
       // TODO: 정상 등록 -> 댓글 부분 화면 갱신 필요
       if (r.status === 200) {
         document.getElementById("txtarea").value = "";

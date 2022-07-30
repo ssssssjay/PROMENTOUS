@@ -3,9 +3,12 @@
     <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
       <div class="container">
         <div class="logo">
-          <a class="navbar-brand mainLogo">PROMENTOUS</a>
-          <!-- :class="{ active: $route.path == '/home' }"
-            to="/home" -->
+          <router-link
+            class="navbar-brand mainLogo"
+            :class="{ active: $route.path == '/home' }"
+            to="/home"
+            >PROMENTOUS</router-link
+          >
         </div>
         <div class="col text-end me-5">
           <!-- <div class="col-lg-6 h-100 text-center text-lg-start my-auto"> -->
@@ -101,21 +104,20 @@
               :src="user.user_image"
               class="dropProfile bi bi-person-workspace"
               style="border-radius: 50%"
+              v-click-outside="closeProfile"
               @click="viewProfile" />
+
             <transition name="slide-up">
               <div class="login dropdown-menu show mt-2" v-if="clickProfile">
-                <img
-                  :src="user.user_image"
-                  class="dropProfile bi bi-person-workspace" />
-                <button
-                  type="button"
-                  class="closeBtn btn-close"
-                  @click="closeProfile"></button>
-                <br />
-                <div class="user">
+                <div class="user m-2">
                   <span class="nickname">{{ user.user_nickname }}</span>
                   <div class="email">{{ user.user_account }}</div>
+                  <button
+                    type="button"
+                    class="closeBtn btn-close"
+                    @click="closeProfile"></button>
                 </div>
+                <hr />
                 <div class="userMenu">
                   <a
                     class="myPage"
@@ -151,6 +153,7 @@
 </template>
 <script>
 import GoogleLogin from "../GoogleLogin.vue";
+import vClickOutside from "click-outside-vue3";
 
 let scrollPosition = 0;
 const body = document.querySelector("body");
@@ -200,6 +203,9 @@ export default {
     closeProfile() {
       this.clickProfile = false;
     }
+  },
+  directives: {
+    clickOutside: vClickOutside.directive
   }
 };
 </script>
@@ -276,11 +282,9 @@ div.dropdown-menu {
   border-radius: 6px;
 }
 .user {
-  position: absolute;
-  bottom: 100px;
-  left: 55px;
   font-size: 18px;
   font-weight: bold;
+  margin-left: 10px;
 }
 .userMenu > a {
   display: flex;

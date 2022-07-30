@@ -3,6 +3,21 @@
     <div class="row">
       <!-- 페이지우측  -->
       <div class="col">
+        <!--         
+        {{ this.selectedOptionList }}
+        <hr />
+        {{ this.optionList }}
+        <hr />
+        {{ this.partList }}
+        <hr />
+        {{ this.parts }}
+        <hr />
+        {{ this.stacks }}
+        <hr />
+        {{ this.selectedPart }}
+        <hr />
+        {{ this.selectedStackList }} -->
+
         <div class="content text-start">
           <!-- 글 제목 -->
           <div class="h1"><strong>내 정보</strong></div>
@@ -163,6 +178,7 @@
                     <p class="form-control mb-1">
                       {{ URL_LIST[index].address }}
                     </p>
+
                     <button
                       type="button"
                       class="btn btn-secondary"
@@ -313,12 +329,12 @@ export default {
         { partCode: "03", partName: "모바일" },
         { partCode: "04", partName: "기타" }
       ],
-      parts: [],
-      stacks: [],
+      parts: [1, 1, 1, 1, 1],
+      stacks: [2, 2, 2, 2, 2],
       selectedPart: "",
-      selectedStackList: [],
-      stackList: [],
-      value: [],
+      selectedStackList: [3, 3, 3, 3, 3],
+      stackList: [4, 4, 4, 4, 4, 4],
+      value: [5, 5, 5, 5, 5],
 
       site: { name: "", link: "" }, // site: {name:'GitHub', link:'www.github.com'}
       siteList: [], // [{GitHub:'www.github.com'}, {Naver:'www.naver.com'}, ...]
@@ -382,27 +398,37 @@ export default {
     addStack2(data) {
       this.stacks = data;
     },
+    // 마이페이지 저장  passData()
     // 마이페이지의 데이터를 넘겨줄 url은 어디?
     async passData() {
+      let param = {
+        nickname: this.user.nickname,
+        info: this.user.selfInfo,
+        score: this.user.score,
+        scoreCount: this.user.scoreCount,
+        mentoScore: this.user.mentoScore,
+        mentoScoreCount: this.user.mentoScoreCount,
+        login: this.user.googleAccount,
+        /*selectedPArt ? part 변수명이 뭐가 될지는모르지만.
+      일단  ['P01', 'V01']
+      모양새로 ( 스택 / 분야 ) 데이터가 서버에 던져진다고 가정함. */
+        parts: this.parts,
+        stacks: this.stacks,
+        URL_LIST: this.URL_LIST
+      };
+      console.log("======저장용 데이터!=======");
+      console.log("=============param=========");
+      console.log(param);
       const response = await this.$post("/user/myData", {
-        param: {
-          nickname: this.user.nickname,
-          info: this.user.selfInfo,
-          score: this.user.score,
-          scoreCount: this.user.scoreCount,
-          mentoScore: this.user.mentoScore,
-          mentoScoreCount: this.user.mentoScoreCount,
-          login: this.user.googleAccount,
-          parts: this.parts,
-          stacks: this.stacks,
-          URL_LIST: this.URL_LIST
-        }
+        param: param
       });
       console.log(response);
     },
+    //마이페이지 조회
     async getUserData() {
       const response = await this.$get(`/user/${this.userId}`);
-      // console.log(response);
+      //console.log("USERDATA 가져옴");
+      //console.log(response);
       this.user.nickname = response.user_nickname;
       this.user.selfInfo = response.user_intro;
       this.user.login = response.user_account;

@@ -5,31 +5,20 @@
         <h1 class="title">팀 관리</h1>
         <p class="des">팀 상태 및 공유링크를 확인하고 팀원/멘토를 평가해요</p>
       </div>
-      <!-- {{ this.applicantsList }}
-      {{ this.teamMembers }}
-      <div>{{ this.projectList }}</div> -->
     </section>
-    <hr />
-    <!-- {{ this.applicantsList }}
-    <hr />
-    {{ user }} -->
-    <!-- ---------------------------------------------------------------------------------------------- -->
-    <!-- 상태선택박스 -->
-    <!-- <div>MENTORINGTOTALPAGE ::: {{ this.mentoringTotalPageCount }}</div>
-    <div>MENTORING 현재선택한PAGE ::: {{ this.selectedMentoringPage }}</div>
-    <hr />
-    <div>{{ this.applicants[0] }}</div>
-    
-    <hr />
-    {{ this.applicantsList[0] }}
-    <div>{{ this.teamStatusList }}</div>
 
-    <hr />
-    <div>{{ this.teamMembers[0].rating }}</div>
-    <hr />
-    <div>{{ this.mentoring }}</div> -->
-    <!-- <div>{{ this.teamStatusList }}</div> -->
     <section class="container">
+      <hr />
+      applicants ////
+      <div>{{ this.applicants }}</div>
+      <hr />
+      teamMembers //// {{ this.teamMembers }}
+      <hr />
+      {{ this.teamTotalInfo.data }}
+      <hr />
+
+      <hr />
+
       <!-- <div>//지원자정보 (배열)>> 팀선택시변경되어야</div> -->
 
       <!-- <div>멘토정보 (배열)>> 팀선택시변경되어야</div>
@@ -39,8 +28,6 @@
       <div><br /></div>
       <div><br /></div>
       <div><br /></div>-->
-      {{ this.teamMembers }}
-      <div>프로젝트리스트</div>
 
       <!--<div>{{ typeof this.projectList }}</div>
       <div>{{ this.projectList[0] }}</div>
@@ -50,9 +37,15 @@
       <div>{{ this.projectList2 }}</div>
       <div>{{ typeof this.projectList2 }}</div>
       <div>{{ this.projectList2[0] }}</div>-->
-      <!-- <div>{{ this.teamTotalInfo.data }}</div> -->
+      <!-- <div>{{ this.teamTotalInfo.data }}</div>
+      <hr />
+      <div>{{ this.applicants }}</div>
+
+      {{ teamStatus }}
+      {{ teamStatusName }} -->
 
       <!-- <div>//팀원 (배열)>> 팀선택시변경되어야</div> -->
+
       <!--
       <div>멘토정보 (배열)>> 팀선택시변경되어야</div> -->
 
@@ -100,7 +93,7 @@
         <p>진행중인 프로젝트가 없습니다</p>
       </div>
     </div>
-    <section class="container" v-if="selectedProjectId !== ''">
+    <section class="container" v-else>
       <!-- v-if="SelectedProject" -->
       <!-- 선택해서 불러온 프로젝트 내용 -->
       <div class="d-flex flex-column bd-highlight mb-3">
@@ -115,19 +108,21 @@
           <RegisterbtnLayout
             :btnText="btnText2"
             v-show="correctionMode"
-            @click="[watch(), saveTeamInfo(), changeStatusName()]" />
+            @click="[watch(), saveTeamInfo()]" />
           <!--저장하기 -->
         </div>
 
         <!-- 팀모임링크 -->
         <!-- ////////////////////////////////////////////////////////// -->
-        <div class="p-2 mb-5 bd-highlight teamUrl">
-          팀모임 링크
-          <span class="url mx-4 form-control" v-show="correctionMode === false">
-            <span>링크제목</span>
+        <div class="row p-2 mb-5 bd-highlight teamUrl">
+          <div class="tab-title">팀모임 링크</div>
+          <span
+            class="url showurl form-control"
+            v-show="correctionMode === false">
+            <span class="me-3">링크제목</span>
             <span>{{ urlTitle }}</span>
           </span>
-          <span class="url mx-4" v-show="correctionMode">
+          <span class="col url m-0" v-show="correctionMode">
             <div class="input-group">
               <span class="input-group-text">링크제목</span>
               <input
@@ -137,11 +132,13 @@
                 v-model="urlTitle" />
             </div>
           </span>
-          <span class="url mx-4 form-control" v-show="correctionMode === false">
-            <span>URL</span>
+          <span
+            class="url showurl form-control"
+            v-show="correctionMode === false">
+            <span class="me-3">URL</span>
             <span>{{ urlAddress }}</span>
           </span>
-          <span class="url mx-4" v-show="correctionMode">
+          <span class="col url m-0" v-show="correctionMode">
             <div class="input-group">
               <span class="input-group-text">URL</span>
               <input
@@ -157,9 +154,9 @@
         <!-- 팀 STATUS -->
 
         <div class="p-2 mb-5 d-inline-flex bd-highlight TeamStatus">
-          팀 STATUS
+          <div class="tab-title">팀 STATUS</div>
           <TeamStatus
-            class="mx-4 TeamStatusSelect"
+            class="TeamStatusSelect"
             v-model="teamStatus"
             placeholder="팀상태를 선택해주세요"
             :options="[
@@ -170,68 +167,73 @@
             ]"
             v-show="correctionMode === true" />
 
-          <button
-            class="mx-4 btn btn-primary"
-            v-show="correctionMode === false">
+          <button class="btn btn-primary" v-show="correctionMode === false">
             {{ teamStatusName }}
           </button>
         </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 진행기간 -->
-        <!-- <div class="p-2 d-inline-flex mb-5 bd-highlight">
-          시작일
-          <Datepicker
+        <div class="p-2 d-inline-flex mb-5 bd-highlight">
+          <div class="tab-title">시작일</div>
+
+          <input
+            type="datetime-local"
+            class="datepicker"
             v-model="actualStartDate"
-            locale="kst"
-            class="mx-5 datepicker"
             v-show="correctionMode === true" />
-          {{ actualStartDate }}
-          <p v-show="correctionMode === false" class="ms-5">
-            {{ actualStartDate.slice(0, 15) }}
+
+          <p v-show="correctionMode === false" class="">
+            {{ actualStartDate }}
           </p>
-        </div> -->
+        </div>
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 보증금 -->
         <div class="p-2 mb-5 d-inline-flex bd-highlight">
-          보증금
+          <div class="tab-title">보증금</div>
           <input
             type="number"
-            class="deposit mx-5 form-control"
+            class="deposit form-control"
             v-model="deposit"
             v-show="correctionMode" />
-          <div class="deposit mx-5" v-show="correctionMode === false">
+          <div class="deposit" v-show="correctionMode === false">
             {{ deposit }}원
           </div>
         </div>
 
         <!-- ---------------------------------------------------------------------------------------------- -->
-        <!-- 관련링크  -->
-        <!-- <div class="p-2 mb-5 bd-highlight">관련 링크</div> -->
-        <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 모집글 링크 -->
-        <div class="p-2 mb-5 bd-highlight">
-          모집글 링크
-          <span class="url mx-4 text-start">
-            <a href="{{recrutingUrl}}">모집글 링크로 </a>
+        <div class="row p-2 mb-5 bd-highlight">
+          <div class="tab-title">모집글 링크</div>
+          <span class="col url text-start">
+            <a target="_blank" :href="this.recruitingUrl">모집글 링크로 </a>
           </span>
         </div>
+
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 지원자관리  -->
 
         <ApplicantProfileModal
           ref="modal4"
           :content="modalContent"
-          :applicantData="this.applicantsList[this.memberIndex]" />
-        <div class="p-2 mb-5 d-inline-flex bd-highlight">
-          지원자관리
+          :applicantData="this.applicants[this.memberIndex]" />
+        <div class="applicantPage p-2 mb-5 d-inline-flex bd-highlight">
+          <div class="tab-title">지원자관리</div>
 
-          <div class="row mx-5">
-            <div class="row applicantList bg">
+          <div class="row">
+            <div v-show="this.applicants[0] == null">
+              <img class="emptyApplicant" src="@/img/applicant.jpg" alt="" />
+              <p style="text-align: center; font-size: 25px">
+                현재 지원자가 없습니다
+              </p>
+            </div>
+            <div
+              class="row applicantList bg"
+              v-show="this.applicants[0] != null">
               <div
                 class="applicant text-center card m-2"
                 style="width: 240px"
                 :key="index"
-                v-for="(app, index) in applicantsList">
+                v-for="(app, index) in applicants">
                 <img
                   v-bind:src="app.userImage"
                   class="card-img-top m-2 userImage"
@@ -262,19 +264,35 @@
                       <button
                         class="btn m-1 btn-primary Stack"
                         :key="i"
-                        v-for="(stack, i) in applicantsList[index]
-                          .likeStackCode">
+                        v-for="(stack, i) in applicants[index].likeStackCode"
+                        v-show="stack.length > 0">
                         {{ stack }}
                       </button>
                     </div>
                   </li>
                 </ul>
                 <div class="card-body">
-                  <button class="btn m-1 btn-primary" @click="approve(index)">
+                  <button
+                    class="btn m-1 btn-primary"
+                    @click="approve(index)"
+                    v-show="app.applyStatus == 'NEW'">
                     승인
                   </button>
-                  <button class="btn m-1 btn-primary" @click="reject(index)">
+                  <button
+                    class="btn m-1 btn-primary"
+                    @click="reject(index)"
+                    v-show="app.applyStatus == 'NEW'">
                     거절
+                  </button>
+                  <button
+                    class="btn m-1 btn-primary"
+                    v-show="app.applyStatus == 'ACC'">
+                    승인됨
+                  </button>
+                  <button
+                    class="btn m-1 btn-primary"
+                    v-show="app.applyStatus == 'REJ'">
+                    거절됨
                   </button>
                 </div>
               </div>
@@ -288,11 +306,10 @@
         <!-- 팀원  -->
         <TeamMemberProfileModal
           ref="modal3"
-          :content="modalContent"
           :memberData="this.teamMembers[this.memberIndex]" />
         <div class="p-2 mb-5 d-inline-flex bd-highlight">
           <div class="memberText">
-            팀원보기
+            <div class="tab-title">팀원정보</div>
             <div class="memberRating">
               <button
                 class="btn m-1 btn-primary"
@@ -310,10 +327,10 @@
             </div>
           </div>
 
-          <div class="row mx-5">
+          <div class="row">
             <div class="row applicantList bg">
               <div
-                class="applicant text-center card m-2"
+                class="applicant text-center card"
                 style="width: 240px"
                 :key="index"
                 v-for="(mem, index) in teamMembers">
@@ -329,7 +346,15 @@
 
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item applicantAccount">
-                    이메일 {{ mem.memberEmail }}
+                    이메일
+                    {{ mem.memberEmail }}
+                  </li>
+
+                  <li class="list-group-item">
+                    역할
+                    <button class="btn btn-primary role">
+                      {{ mem.role }}
+                    </button>
                   </li>
                   <li class="list-group-item userSocialUrl">
                     소셜링크
@@ -340,20 +365,15 @@
                       >{{ url.title }}<br />
                     </a>
                   </li>
-                  <li class="list-group-item">
-                    역할
-                    <button class="btn btn-primary role">
-                      {{ mem.role }}
-                    </button>
-                  </li>
-                  <li class="row list-group-item">
+                  <li class="row list-group-item" style="height: 120px">
                     관심스택
                     <br />
                     <div>
                       <button
                         class="btn m-1 btn-primary Stack"
                         :key="i"
-                        v-for="(stack, i) in teamMembers[index].likeStackCode">
+                        v-for="(stack, i) in teamMembers[index].likeStackCode"
+                        v-show="stack.length > 0">
                         {{ stack }}
                       </button>
                     </div>
@@ -515,34 +535,13 @@ export default {
       btnText2: "저장하기",
       FinishMentoring: [],
       FinishMemberRating: [],
-      actualStartDate: "Fri Jul 01 2022 18:33:00 GMT+0900 (한국 표준시)",
+      actualStartDate: "2022-07-18T11:32",
       selectedStatus: "",
 
       datetime: "2011-08-03tdst324324234234",
-      correctionMode: true,
+      correctionMode: false,
       projectList2: [],
-      projectList: [
-        {
-          // 팀장id="",
-          // 멘토여부=""
-          statusCode: "REC",
-          statusName: "진행중",
-          projectId: "1",
-          projectName: "#################파이썬으로 만드는 TODO LIST"
-        },
-        {
-          statusCode: "REC",
-          statusName: "진행중",
-          projectId: "2",
-          projectName: "#################웹게임만들기"
-        },
-        {
-          statusCode: "FIN",
-          statusName: "진행완료",
-          projectId: "3",
-          projectName: "####################자바스크립트 따라잡기"
-        }
-      ],
+      projectList: [],
 
       projectid: "",
       urlAddress: "",
@@ -550,7 +549,7 @@ export default {
       teamStatus: "",
 
       deposit: 0,
-      recruitingUrl: "",
+      recruitingUrl: "https://www.naver.com",
       applicants: [
         {
           userImage: "",
@@ -597,14 +596,15 @@ export default {
       //paging 처리 위한 object
       mentoringTotalPageCount: 0,
       projectInfoParams: {
-        project_id: "3",
-        mentoring_page: "1"
+        project_id: "", //"1",
+        mentoring_page: "", //"1"
+        sessionUserId: ""
       },
       params: {},
       /*저장용 saveParam OBJECT */
       saveParam: {},
       teamTotalInfo: {},
-      sessionUserId: "65",
+      sessionUserId: "",
       initUrl: "",
       componentKey: 0,
       selectedProjectId: "",
@@ -671,11 +671,17 @@ export default {
       handleClick4
     };
   },
-  created() {},
+  created() {
+    /* 로그인 한 계정 USERID 심어주는 부분! 여기에 3, 22,20 등을 넣어서
+    확인하고픈 userId 처리가능합니다. */
+    this.sessionUserId = this.user.user_id;
+    //user from computed()
+    //this.sessionUserId = 32;
+  },
   beforeMount() {},
-  mounted() {/* eslint-disable */
+  mounted() {
     // this.filterStatusCode();
-        this.managePageInit();
+    this.managePageInit();
   },
   unmounted() {},
   methods: {
@@ -708,8 +714,6 @@ export default {
         data.project_status.project_id = project_id;
         data.project_status.project_status = this.teamStatus;
         data.project_status.changer = this.$store.state.user.user_id;
-        console.log("async saveTeamInfo() {")
-        console.log(data)
         // saveTeamManageInfo
         const r = await this.$patch(
           // TODO: axios.defaults.baseURL로 변경
@@ -717,7 +721,7 @@ export default {
           data
         );
         if (r.status === 200) {
-          this.projectIdSelect() /* refresh  */
+          this.projectIdSelect(); /* refresh  */
         }
         console.log(this.r);
       } else {
@@ -726,40 +730,33 @@ export default {
       // selectedPage가 바뀔 때.에를들어 기존1에서 2를 골랐을 때 색깔 바뀌는 처리 HOW ?
     },
     async approve(index) {
-      this.applicantsList[index].applyStatus = "ACC";      
+      this.applicantsList[index].applyStatus = "ACC";
       let data = {};
       data.applicant_id = this.applicantsList[index].applicantId;
       data.project_id = this.applicantsList[index].projectId;
       data.apply_dept_id = this.applicantsList[index].applyDeptId;
-      data.apply_status =this.applicantsList[index].applyStatus;
-      console.log(data)
-      let r = await this.$post(
-            `/project/recruit/projectApplyAccept`,
-            data
-          );
+      data.apply_status = this.applicantsList[index].applyStatus;
+      console.log(data);
+      let r = await this.$post(`/project/recruit/projectApplyAccept`, data);
       console.log("승인결과");
       console.log(r);
       if (r.status === 200) {
-         this.projectIdSelect() /* refresh  */
+        this.projectIdSelect(); /* refresh  */
       }
     },
- 
+
     async reject(index) {
-      this.applicantsList[index].applyStatus = "REJ";      
+      this.applicantsList[index].applyStatus = "REJ";
       let data = {};
       data.applicant_id = this.applicantsList[index].applicantId;
       data.project_id = this.applicantsList[index].projectId;
-      data.apply_dept_id = this.applicantsList[index].applyDeptId ;
-      data.apply_status =this.applicantsList[index].applyStatus;
-      console.log(data)
-      let r = await this.$post(
-            `/project/recruit/projectApplyReject`,
-            data
-          );
-      console.log("거절결과");
+      data.apply_dept_id = this.applicantsList[index].applyDeptId;
+      data.apply_status = this.applicantsList[index].applyStatus;
+      let r = await this.$post(`/project/recruit/projectApplyReject`, data);
+      console.log("거절 선택result");
       console.log(r);
       if (r.status === 200) {
-      this.$router.go();/* refresh  */
+        this.projectIdSelect(); /* refresh  */
       }
     },
     transIndex(index) {
@@ -771,48 +768,53 @@ export default {
     modalOff() {
       this.modalStatus = false;
     },
+    /*managePageInit  페이지 최초 실행 시  동작하는 로직  */
     async managePageInit() {
+      console.log("=========SESSION USERID ==========");
+      console.log(this.sessionUserId);
       // 팀STATUS 필드 셀렉박스용
       this.teamStatusList = await this.$get(
-        `/common/getTeamStatusListForTeamManage`
+        `/common/getTeamStatusListForTeamManage/`
       );
- 
+
       // 내 SESSIONID기준으로  팀 리스트끌고오기
       this.initUrl = `/manage/getTeamListForManage/`;
       this.initUrl += this.sessionUserId;
-      console.log(this.initUrl)
-      console.log("=====")
-      console.log("=====")
-      console.log("=====")
-      console.log(this.projectInfoParams)
       let temp = await this.$get(this.initUrl, {});
-      // 가져온 리스트 첫번째 값으로 팀정보 다끌고오기
+      console.log(temp == null);
+      console.log(temp == {});
       console.log(typeof temp);
+      console.log("=========initUrl 팀 리스트끌고오기 ==========");
+      console.log(this.initUrl);
+      console.log("=========가져온결과 temp==========");
+      console.log(temp);
+
+      // 내연관 팀들 배열 중에서
+      // 첫번째 값(DEFAULT) 으로 팀정보 다끌고오기위한 처리
       this.projectList = [];
-      if(typeof temp == "object"){
-        console.log("trueeeeeeeeeeeeee")
-        this.projectList.push(temp)
+      try {
+        if (temp.length == 1) {
+          this.projectList = temp;
+        } else {
+          temp.forEach((element) => {
+            this.projectList.push(element);
+          });
+        }
+
+        this.selectedProjectId = this.projectList[0].projectId;
+        this.selectedStatus = this.projectList[0].statusName;
+        this.projectInfoParams.project_id = this.selectedProjectId;
+        this.projectInfoParams.sessionUserId = this.sessionUserId;
+        this.projectIdSelect(); /* 팀개요 정보 다가져옴. */
+      } catch (e) {
+        this.exitTeamManage(e);
       }
-
-      console.log("1")
-      console.log(this.projectList )
-      this.selectedProjectId = this.projectList.projectId;
-      this.selectedStatus = this.projectList.statusName;
-      console.log("2")
-      console.log(this.selectedProjectId )
-      this.projectInfoParams.project_id = this.selectedProjectId;
-      // this.selectedStatus
-      console.log("3")
-      console.log(this.selectedStatus )
-      this.projectIdSelect(); /* 팀개요 정보 다가져옴. */
-
-      
     },
     filterApplicant() {
       let temp = [];
       for (let i = 0; i < this.applicants.length; i++) {
         if (this.applicants[i].applyStatus == "NEW") {
-           temp.push(this.applicants[i]);
+          temp.push(this.applicants[i]);
         }
       }
       this.applicantsList = temp;
@@ -831,16 +833,16 @@ export default {
     filterFinishMemberRating() {
       this.FinishMemberRating = [];
 
-      console.log(this.teamMembers.length)
+      console.log(this.teamMembers.length);
       for (let i = 0; i < this.teamMembers.length; i++) {
-      console.log("============================")
-        console.log(this.teamMembers[i].rating)
-        if(this.teamMembers[i].rating.rated != ""){
-        if (this.teamMembers[i].rating.rated == "no") {
-          this.FinishMemberRating.push(this.teamMembers[i]);
-        }
-        }else{
-          this.FinishMemberRating.push([])
+        console.log("============================");
+        console.log(this.teamMembers[i].rating);
+        if (this.teamMembers[i].rating.rated != "") {
+          if (this.teamMembers[i].rating.rated == "no") {
+            this.FinishMemberRating.push(this.teamMembers[i]);
+          }
+        } else {
+          this.FinishMemberRating.push([]);
         }
       }
     },
@@ -888,78 +890,94 @@ export default {
 
     // 선택 하는 순간에 해당 project 정보 teamTotalInfo 끌어옴
     async projectIdSelect() {
-      console.log("selected >> this.selectedProjectId")
-      console.log(this.selectedProjectId)
+      console.log(this.selectedProjectId);
       this.projectInfoParams.project_id = this.selectedProjectId;
       // teamTotalInfo .
-      console.log(this.projectInfoParams)
-      console.log(this.projectInfoParams.project_id )
+      console.log(this.projectInfoParams);
+      console.log(this.projectInfoParams.project_id);
       this.teamTotalInfo = await this.$post(
         // TODO: axios.defaults.baseURL로 변경
         `/manage/getProjectInfo`,
         this.projectInfoParams
       );
-      console.log("---------------------------------------")
-      console.log("---------------------------------------")
-      console.log("---------------------------------------")
-      console.log(this.teamTotalInfo)
-
+      /*TODO 데이터 가져온 이후 처리 - 필드 별 메서드화 진행TRY */
       this.teamStatus = this.teamTotalInfo.data.basicInfo.statusCode;
+      this.changeStatusName();
       // 팀모임 URL
       this.urlTitle = this.teamTotalInfo.data.basicInfo.meetingUrlTitle;
       this.urlAddress = this.teamTotalInfo.data.basicInfo.meetingUrl;
       //보증금
-      this.deposit = this.teamTotalInfo.data.basicInfo.warranty;
+      if (this.teamTotalInfo.data.basicInfo.warranty == -1) {
+        this.deposit = 0;
+      } else {
+        this.deposit = this.teamTotalInfo.data.basicInfo.warranty;
+      }
 
       //지원자정보 (배열)
       this.applicants = this.teamTotalInfo.data.applicants;
       for (let q = 0; q < this.applicants.length; q++) {
-        if(this.applicants[q].likeStackCode != null){
-        let str = this.applicants[q].likeStackCode.slice(
-          0,
-          this.applicants[q].likeStackCode.length - 1
-        );
-        console.log("--------------------------")
-        console.log(str)
-        this.applicants[q].likeStackCode = str.split(",");
-        }else{
-        this.applicants[q].likeStackCode = [];
+        if (this.applicants[q].likeStackCode != null) {
+          let str = this.applicants[q].likeStackCode.slice(
+            0,
+            this.applicants[q].likeStackCode.length - 1
+          );
+          console.log("--------------------------");
+          console.log(str);
+          this.applicants[q].likeStackCode = str.split(",");
+        } else {
+          this.applicants[q].likeStackCode = [];
         }
       }
       this.filterApplicant();
       //멤버정보 (배열)
-      let array =[];
-      if(typeof this.teamTotalInfo.data.members == "object"){
-        for (let index = 0; index < this.teamTotalInfo.data.members.length; index++) {
+      let array = [];
+      if (typeof this.teamTotalInfo.data.members == "object") {
+        for (
+          let index = 0;
+          index < this.teamTotalInfo.data.members.length;
+          index++
+        ) {
           const element = this.teamTotalInfo.data.members[index];
-          
-        array.push(this.teamTotalInfo.data.members[index])
+
+          array.push(this.teamTotalInfo.data.members[index]);
         }
         this.teamMembers = array;
       }
-      this.teamMembers =  this.teamTotalInfo.data.members;
+      this.teamMembers = this.teamTotalInfo.data.members;
 
       for (let q = 0; q < this.teamMembers.length; q++) {
-        let str ="";
-        if(this.teamMembers[q].likeStackCode != null){
+        let str = "";
+        if (this.teamMembers[q].likeStackCode != null) {
           str = this.teamMembers[q].likeStackCode.slice(
-          0,
-          this.teamMembers[q].likeStackCode.length - 1
-        );
-        }else{
+            0,
+            this.teamMembers[q].likeStackCode.length - 1
+          );
+        } else {
           str = "";
         }
         this.teamMembers[q].likeStackCode = str.split(",");
       }
       // this.filterFinishMemberRating();
       this.mentoring = this.teamTotalInfo.data.mentorings;
-       this.filterFinishMentoring();
+      this.filterFinishMentoring();
     }
+  },
+  /*팀개요화면에서 튕겨나가기 */
+  exitTeamManage(e) {
+    console.log("exitTeamManage 실행");
+    console.log(e);
+    alert("자신에게 해당되는 프로젝트가 없습니다. 메인 화면으로 이동합니다. ");
+    // TODO : ROUTER PUSH  to main(?)
   }
 };
 </script>
 <style src="@vueform/multiselect/themes/default.css"></style>
 <style scoped>
+.tab-title {
+  font-size: 20px;
+  font-weight: bold;
+  width: 150px;
+}
 .ProjectSelect {
   border: 1px solid #d1d5db;
   border-radius: 4px;
@@ -999,6 +1017,9 @@ div.title {
   font-size: 30px;
   margin-top: 10px;
 }
+.applicantAccount {
+  height: 90px;
+}
 section.container {
   margin-bottom: 10px;
 }
@@ -1012,33 +1033,29 @@ div.register {
 .teamUrl > span {
   margin: 10px;
 }
-.url > span {
-  margin: 0px 20px;
+span.url.showurl {
+  width: 300px;
+  margin: 0px 10px;
 }
 .url {
-  display: inline-block;
-  width: 40%;
+  width: 300px;
+  margin: 0px;
 }
 .url > span:first-child {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 14px;
 }
 .TeamStatusSelect {
   width: 300px;
-  margin: 0px 20px;
+  margin: 0px;
 }
-.datepicker {
-  width: 400px;
-}
+
 .TeamStatus > button {
-  margin: 0px 20px;
 }
 .deposit {
   width: 300px;
-  margin: 0px 80px;
+  margin: 0px;
 }
 .teamMember {
-  margin-left: 14px;
 }
 div.applicantList {
   max-width: 1000px;
@@ -1143,7 +1160,7 @@ button.btn.btn-primary {
   margin-right: 5px;
 }
 .userSocialUrl {
-  height: 200px;
+  height: 150px;
 }
 .userSocialUrl > a {
   display: block;
@@ -1153,9 +1170,17 @@ p.form-control {
   display: inline-block;
   margin-right: 5px;
 }
+.applicantPage {
+  width: 1300px;
+  height: 650px;
+}
+.emptyApplicant {
+  width: 700px;
+  height: 400px;
+}
 .row.applicantList.bg {
   background-color: gainsboro;
-  width: 2000px;
+  width: 1300px;
   height: 650px;
   padding: 10px;
 }

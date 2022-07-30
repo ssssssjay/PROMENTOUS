@@ -2,7 +2,6 @@
   <div>
     <section class="project_list">
       <div class="card" v-for="(project, i) in projects" :key="i">
-        <!-- TODO: 밑의 goToDetail안의 인자는 API 연결이후 project.project_id로 변경해야할 듯 -->
         <section
           class="card-body"
           :class="project.status_code === '모집중' ? '' : 'fin'"
@@ -33,7 +32,7 @@
             </span>
           </div>
           <div class="d-flex align-items-center border-bottom mb-2">
-            <!-- 이미지 데이터 연결 필요 + img태그 v-bind:src로 변경해야함  -->
+            <!-- TODO : 프사 로딩 오류시에는?  -->
             <span class="image me-1"
               ><img v-bind:src="project.user_image" alt="프사"
             /></span>
@@ -48,7 +47,6 @@
             </div>
           </div>
           <div class="bottom">
-            <!-- 모집현황 데이터 연결 필요 -->
             <span
               >모집현황{{ project.acceptedCnt }} /
               {{ project.totalPeople }}</span

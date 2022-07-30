@@ -1,5 +1,28 @@
 <template>
   <div class="container mt-5">
+    <!-- {{ this.projectLeader }}
+    <hr />
+    {{ this.currentMemberList }}
+    <hr />
+    {{ this.currentMemberList }}
+
+    <hr />
+
+    <hr />
+    {{ partIndex }} // {{ memberIndex }}
+    <hr />
+    {{ memberValue }}
+    <hr />
+    {{ leaderCheck }}
+    <hr /> -->
+
+    <ProfileModal
+      ref="modal"
+      :leaderStack="this.leaderStack"
+      :leaderDept="this.leaderDept"
+      :leaderData="this.projectLeader"
+      :memberData="this.memberValue"
+      :leaderCheck="this.leaderCheck" />
     <div class="row">
       <!-- 페이지 좌측 -->
       <div class="col-lg-9 pe-xl-1-9 mb-1-9 mb-lg-0">
@@ -122,10 +145,10 @@
               <span class="pro_font_bold">리더 정보</span>
             </div>
             <div class="row">
-              <div class="col">
+              <div class="col pe-1">
                 <img
-                  style="width: 90px"
-                  src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                  style="width: 90px; border-radius: 8%"
+                  v-bind:src="projectLeader.user_image"
                   alt="리더 정보 사진" />
               </div>
               <div class="col">
@@ -134,6 +157,7 @@
                   class="fs-4 pro_ellipsis">
                   {{ projectLeader.user_nickname }}
                 </p>
+                <!-- TODO: 별점 연결 -->
                 <p><i class="bi bi-star-fill pro_star_color"></i> 4.5/5 (23)</p>
               </div>
             </div>
@@ -155,7 +179,10 @@
               </div>
             </div>
             <div class="text-end mt-3">
-              <button type="button" class="btn btn-sm me-2 pro_button">
+              <button
+                type="button"
+                class="btn btn-sm me-2 pro_button"
+                @click="[leaderModal(), handleClick()]">
                 상세보기
               </button>
             </div>
@@ -212,16 +239,30 @@
             <ul class="list-unstyled ps-0">
               <li
                 class="row pe-0"
-                v-for="(members, part) in currentMemberList"
+                v-for="(members, part, index) in currentMemberList"
                 :key="part">
                 <div class="col-6">
                   <p class="fs-6 text-muted mb-0">{{ part }}</p>
                 </div>
-                <p class="row ps-4" v-for="member in members" :key="member">
+                <p
+                  class="row ps-4"
+                  v-for="(member, index0) in members"
+                  :key="member">
                   <span class="col-7 pt-1">{{ member.user_nickname }}</span>
                   <span class="col-5 p-0">
                     <!-- TODO: 여기를 아이콘으로 바꾸는게 나을 것 같기도.. -->
-                    <button type="button" class="btn btn-sm me-1 pro_button">
+                    <button
+                      type="button"
+                      class="btn btn-sm me-1 pro_button"
+                      @click="
+                        [
+                          handleClick(),
+                          transPart(index),
+                          transIndex(index0),
+                          saveMemberValues(),
+                          memberModal()
+                        ]
+                      ">
                       상세정보
                     </button>
                   </span>
@@ -240,6 +281,8 @@ import CommentView from "@/components/CommentView.vue";
 import ReviewCarousel from "@/components/ReviewCarousel.vue";
 import WriteCommentView from "../components/WriteCommentView.vue";
 import CopyToClipboard from "../components/CopyToClipboard.vue";
+import ProfileModal from "../components/DetailPageProfileModal.vue";
+import { ref } from "vue";
 
 export default {
   name: "ProjectDetailView",
@@ -247,10 +290,18 @@ export default {
     CommentView,
     ReviewCarousel,
     WriteCommentView,
-    CopyToClipboard
+    CopyToClipboard,
+    ProfileModal
   },
+
   data() {
     return {
+      leaderCheck: true,
+      memberIndex: 0,
+      partIndex: 0,
+      memberValue: {},
+      leaderStack: [],
+      leaderDept: [],
       warrantyText: "",
       projectId: null,
       recruitStatus: "모집중",
@@ -288,7 +339,62 @@ export default {
     this.getCurrentMembers();
     this.checkApplyAble();
   },
+  setup() {
+    const modal = ref(null);
+    const result = ref("");
+    const handleClick = async () => {
+      const ok = await modal.value.show();
+      if (ok) {
+        result.value = "ok";
+      } else {
+        result.value = "cancel";
+      }
+    };
+    return {
+      modal,
+      result,
+      handleClick
+    };
+  },
   methods: {
+    memberModal() {
+      this.leaderCheck = false;
+    },
+    leaderModal() {
+      this.leaderCheck = true;
+    },
+    transIndex(value) {
+      this.memberIndex = value;
+    },
+    transPart(value) {
+      this.partIndex = value;
+    },
+    saveMemberValues() {
+      if (
+        Object.values(this.currentMemberList)[this.partIndex][
+          this.memberIndex
+        ] != null
+      ) {
+        this.memberValue = Object.values(this.currentMemberList)[
+          this.partIndex
+        ][this.memberIndex];
+      }
+    },
+    stackToArray() {
+      if (this.projectLeader.like_stack_code.length == 1) {
+        this.leaderStack.push(this.projectLeader.like_stack_code);
+      } else {
+        this.leaderStack = this.projectLeader.like_stack_code.split(",");
+      }
+    },
+    partToArray() {
+      if (this.projectLeader.like_dept_code.length == 1) {
+        this.leaderDept.push(this.projectLeader.like_dept_code);
+      } else {
+        this.leaderDept = this.projectLeader.like_dept_code.split(",");
+      }
+    },
+
     formatDate(datetime) {
       // TODO: 예외처리 코드 보완 필요
       if (!datetime) {
@@ -351,6 +457,16 @@ export default {
       this.projectLeader = await this.$get(
         `/project/recruit/${this.projectId}/leader`
       );
+
+      const reviewHistory = await this.$get(
+        `/project/review/history/${this.projectLeader.user_id}`
+      );
+
+      // 유저 상세모달을 위한 데이터
+      this.projectLeader.review = reviewHistory;
+      this.projectLeader.project = this.projectLeader.leaderHistory;
+      this.stackToArray();
+      this.partToArray();
     },
     // 모집 인원
     async getRecruitData() {
