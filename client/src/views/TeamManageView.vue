@@ -675,7 +675,7 @@ export default {
     확인하고픈 userId 처리가능합니다. */
     this.sessionUserId = this.user.user_id;
     //user from computed()
-    this.sessionUserId = 32;
+    // this.sessionUserId = 32;
   },
   beforeMount() {},
   mounted() {
