@@ -12,7 +12,6 @@
       <div class="container mt-5">
         <!-- 상단 -->
         <div class="top">
-          <p class="text-start text-muted">1999/11/13</p>
           <!-- {{ mentorData }} -->
           <p class="row">
             <span class="col-9 h2"
@@ -330,6 +329,7 @@ export default {
         mentorId: this.mentorUserId
       });
       this.mentorData = this.mentorData.data;
+      console.log(this.mentorData);
       /*멘토 기본정보들 front에 삽입 */
       this.title = this.mentorData.basicInfo[0].mentoring_title;
       this.mentor.nickname = this.mentorData.basicInfo[0].user_nickname;

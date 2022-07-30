@@ -52,6 +52,9 @@ export default {
       const stackList = await this.$get(
         `http://localhost:3000/common/stackList`
       );
+      console.log(stackList);
+      console.log(stackList);
+      console.log(stackList);
       for (let i = 0; i < stackList.length; i++) {
         // value, label
         // let data = new Stack(

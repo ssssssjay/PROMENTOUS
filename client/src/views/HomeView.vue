@@ -249,6 +249,7 @@ export default {
       this.mentors2 = response2;
     },
     goToMentorDetail(path) {
+      window.scrollTo(0, 0);
       this.$router.push({ path: path });
       /**/
     },

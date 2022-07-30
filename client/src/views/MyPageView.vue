@@ -196,7 +196,7 @@
                 type="button"
                 class="btn btn-dark btn-lg"
                 v-show="editStatus"
-                @click="[changeStatus1(), passData()]">
+                @click="[changeStatus1(), passData(), goToHome('/home')]">
                 {{ this.buttonStatus }}
               </button>
               <button
@@ -392,6 +392,10 @@ export default {
       this.stacks = response.like_stack_code;
       this.parts = response.like_dept_code;
       this.URL_LIST = response.url_list;
+    },
+    goToHome(path) {
+      window.scrollTo(0, 0);
+      this.$router.push({ path: path });
     }
   }
 };
