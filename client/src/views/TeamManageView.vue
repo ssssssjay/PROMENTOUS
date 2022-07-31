@@ -692,9 +692,9 @@ export default {
   created() {
     /* 로그인 한 계정 USERID 심어주는 부분! 여기에 3, 22,20 등을 넣어서
     확인하고픈 userId 처리가능합니다. */
-    // this.sessionUserId = this.user.user_id;
+    this.sessionUserId = this.user.user_id;
     //user from computed()
-    this.sessionUserId = 20;
+    // this.sessionUserId = 20;
   },
   beforeMount() {},
   mounted() {
