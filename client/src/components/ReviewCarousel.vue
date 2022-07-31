@@ -20,7 +20,7 @@
               aria-label="`Slide ${idx + 1}`"></button>
           </div>
           <!-- Wrapper for carousel items -->
-          <div class="carousel-inner text-center">
+          <div class="carousel-inner text-center ellipsis">
             <div
               class="carousel-item"
               v-for="review in reviewList"
@@ -192,5 +192,15 @@ h2::after {
 
 .pro_carousel_text ::v-deep * {
   font-size: 1rem;
+}
+
+.ellipsis {
+  width: 668px;
+  max-height: 15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 </style>
