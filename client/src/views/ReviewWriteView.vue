@@ -96,7 +96,7 @@
               <p class="form-control mb-1">
                 {{ URL_LIST[index].title }}
               </p>
-              <p class="form-control mb-1">
+              <p class="form-control mb-1" style="width: 500px">
                 {{ URL_LIST[index].address }}
               </p>
               <button
