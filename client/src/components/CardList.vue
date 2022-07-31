@@ -31,7 +31,7 @@
               + {{ project.stack_code.length - 3 }}
             </span>
           </div>
-          <div class="d-flex justify-content-end pb-3 mb-3 border-bottom">
+          <div class="d-flex justify-content-start pb-3 mb-3 border-bottom">
             <div class="acceptStatus">
               모집현황 :
               <strong
