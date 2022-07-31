@@ -4,11 +4,11 @@
       <ul class="pagination" id="nav">
         <!-- 전페이지 -->
         <!-- <li class="page-item disabled"> -->
-        <li class="page-item">
+        <!-- <li class="page-item">
           <a class="page-link" aria-label="Previous">
             <span aria-hidden="true" style="color: #0bc0eb">&laquo;</span>
           </a>
-        </li>
+        </li> -->
         <!-- 숫자들 -->
         <li class="page-item" v-for="(data, index) in page" :key="index">
           <button
@@ -19,11 +19,11 @@
           </button>
         </li>
         <!-- 다음페이지 -->
-        <li class="page-item">
+        <!-- <li class="page-item">
           <a class="page-link" aria-label="Next">
             <span aria-hidden="true" style="color: #0bc0eb">&raquo;</span>
           </a>
-        </li>
+        </li> -->
       </ul>
     </nav>
   </div>
