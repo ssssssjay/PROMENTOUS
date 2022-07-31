@@ -3,7 +3,9 @@
     <!-- leader정보 {{ this.projectLeader }}
     {{ leaderDept }}
     <hr />
-    멤버 정보{{ this.currentMemberList }}
+    멤버 정보{{ this.currentMemberList[1] }} 멤버 정보{{
+      this.currentMemberList[2]
+    }}
 
     <hr />
 
@@ -382,6 +384,7 @@ export default {
       this.partIndex = value;
     },
     saveTeamDept() {
+      this.TeamDept = [];
       if (
         Object.values(this.currentMemberList)[this.partIndex][this.memberIndex]
           .like_dept_code[0] == null

@@ -129,7 +129,6 @@
                   {{ URL_LIST[index].url_title }}
                 </a>
               </div>
-
               <div class="col partTo" v-show="editStatus">
                 <input
                   type="text"
@@ -315,9 +314,10 @@ export default {
     addUrl() {
       if (this.URL.url_title !== "" && this.URL.url_address !== "") {
         let obj0 = {
-          ["title"]: this.URL.url_title,
-          ["address"]: this.URL.url_address
+          ["url_title"]: this.URL.url_title,
+          ["url_address"]: this.URL.url_address
         };
+
         this.URL_LIST.push(obj0);
         this.URL.url_title = "";
         this.URL.url_address = "";

@@ -50,7 +50,11 @@
         <div class="row">
           <span class="col-2 h4 text-center"><strong>관심 스택</strong></span>
           <div class="col-8 h4 text-start">
+            <p class="emptyValue" v-if="memberData.likeDeptCode == null || []">
+              등록된 관심 스택이 없습니다
+            </p>
             <button
+              v-else
               class="btn m-1 btn-primary Stack"
               v-for="(stack, index) in memberData.likeStackCode"
               :key="index">
@@ -61,7 +65,11 @@
         <div class="row my-5">
           <span class="col-2 h4 text-center"><strong>관심 분야</strong></span>
           <div class="col-8 h4 text-start">
+            <p class="emptyValue" v-if="memberData.likeDeptCode == null">
+              등록된 관심 분야가 없습니다
+            </p>
             <button
+              v-else
               class="btn m-1 btn-primary Stack"
               v-for="(Dept, index) in memberData.likeDeptCode"
               :key="index">

@@ -180,7 +180,11 @@
               입력해주세요.
             </p></label
           >
-          <input type="text" class="form-control" v-model="MEETING_URL" />
+          <input
+            type="text"
+            class="form-control"
+            v-model="MEETING_URL"
+            placeholder="ex)www.naver.com" />
         </div>
         <div class="row mb-5">
           <label class="col-sm-10 col-form-label"
@@ -200,8 +204,8 @@
             <input
               type="text"
               class="form-control"
-              style="width: 300px"
-              placeholder="링크 주소"
+              style="width: 500px"
+              placeholder="링크 주소 ex) www.naver.com"
               v-model="URL.url_address" />
             <button type="button" class="btn btn-secondary" @click="addUrl()">
               추가
