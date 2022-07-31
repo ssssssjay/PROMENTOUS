@@ -243,7 +243,7 @@
       <!-- 활동 기록d -->
       <div class="log mt-5">
         <div class="row">
-          <div class="col-2 h4 text-center">
+          <div class="col-2 h5 text-center">
             <strong>진행한 프로젝트</strong>
           </div>
           <div class="col text-start px-4 h5">
@@ -267,7 +267,7 @@
           </div>
         </div>
         <div class="row mt-5">
-          <div class="col-2 h4 text-center">
+          <div class="col-2 h5 text-center">
             <strong>작성한 후기글</strong>
           </div>
           <div class="col text-start px-4 h5">
@@ -317,6 +317,7 @@
 <script>
 import Modal from "@/components/BaseModal2.vue";
 import { ref } from "vue";
+
 export default {
   name: "UserProfileModal2",
   components: { Modal },
@@ -358,9 +359,16 @@ export default {
   setup() {
     const baseModal = ref(null);
     const resolvePromise = ref(null);
-
+    let scrollPosition = 0;
+    const body = document.querySelector("body");
     const show = () => {
       baseModal.value.open();
+      scrollPosition = window.pageYOffset;
+      body.style.overflow = "hidden";
+      body.style.position = "fixed";
+      body.style.top = `-${scrollPosition}px`;
+      body.style.width = "100%";
+      body.style.overflowY = "scroll";
       return new Promise((resolve) => {
         resolvePromise.value = resolve;
       });
@@ -372,6 +380,11 @@ export default {
     };
 
     const cancel = () => {
+      body.style.removeProperty("overflow");
+      body.style.removeProperty("position");
+      body.style.removeProperty("top");
+      body.style.removeProperty("width");
+      window.scrollTo(0, scrollPosition);
       baseModal.value.close();
       resolvePromise.value(false);
     };
