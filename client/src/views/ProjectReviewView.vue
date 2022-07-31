@@ -37,7 +37,7 @@
               class="thumbnail"
               alt="후기썸네일이미지" />
             <div class="card-body">
-              <h4 class="card-title">{{ review.title }}</h4>
+              <h4 class="card-title-ellipsis">{{ review.title }}</h4>
               <p class="card-text ellipsis" v-html="review.desc"></p>
               <div class="mb-4">
                 <div v-if="review.stack_code.length <= 3">
@@ -200,6 +200,7 @@ export default {
   font-weight: 700;
 }
 .card-text ::v-deep * {
+  color: black !important;
   font-size: 1rem;
   line-height: 1.8rem;
   margin: 0;
@@ -238,6 +239,14 @@ export default {
   color: white;
   background-color: #1379d2;
   box-sizing: border-box;
+}
+.card-title-ellipsis {
+  width: 358px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 .ellipsis {
   width: 368px;
