@@ -33,39 +33,53 @@
           <div class="d-flex">
             <!-- TODO : DB 상에 이미지 경로가 이상하여 전부 깨져서 우선은 로컬이미지로 렌더링 -->
             <img
-              style="width: 15rem"
               :src="review.thumbnail_image"
-              class="card-img-top thumbnail"
+              class="thumbnail"
               alt="후기썸네일이미지" />
             <div class="card-body">
-              <h5 class="card-title">{{ review.title }}</h5>
+              <h4 class="card-title">{{ review.title }}</h4>
               <p class="card-text ellipsis" v-html="review.desc"></p>
-              <div class="mb-3">
-                <i class="bi bi-eye me-1"></i>
-                <span class="me-1">{{ review.viewCount }}</span>
-                <!-- TODO : 아래의 기능은 구현여부 결정 -->
-                <!-- <i class="bi bi-bookmark me-2"></i> -->
-                <!-- <span class="me-1">{{ review.bookmarkCount }}</span> -->
-                <!-- <i class="bi bi-chat-right-text me-2"></i> -->
-                <!-- <span class="me-1">{{ review.commentCount }}</span> -->
-                <!-- <i class="bi bi-heart me-2"></i> -->
-                <!-- <span>{{ review.likeCount }}</span> -->
-              </div>
-              <div class="mb-3">
-                <div
-                  v-for="(stack, i) in review.stack_code"
-                  :key="i"
-                  class="stack-icon me-1">
-                  {{ stack }}
+              <div class="mb-4">
+                <div v-if="review.stack_code.length <= 3">
+                  <div
+                    class="stack-icon me-1"
+                    v-for="(stack, i) in review.stack_code"
+                    :key="i">
+                    {{ stack }}
+                  </div>
                 </div>
+                <span v-else>
+                  <div class="stack-icon me-1">{{ review.stack_code[0] }}</div>
+                  <div class="stack-icon me-1">{{ review.stack_code[1] }}</div>
+                  <div class="stack-icon me-1">{{ review.stack_code[2] }}</div>
+                </span>
+                <span v-show="review.stack_code.length > 3">
+                  + {{ review.stack_code.length - 3 }}
+                </span>
               </div>
-              <!-- <a
-                class="btn btn-sm btn-outline-dark"
-                :href="review.distributeURL"
-                target="_blank"
-                >모집 공고 보러가기</a
-              > -->
-              <a class="btn btn-sm btn-outline-dark">모집 공고 보러가기</a>
+              <div class="d-flex align-items-center justify-content-between">
+                <!-- TODO : 프사 로딩 오류시에는?  -->
+                <div class="d-flex align-items-center">
+                  <div>
+                    <span class="image me-2">
+                      <img v-bind:src="review.user_image" alt="프사" />
+                    </span>
+                    <span class="mb-1">{{ review.user_nickname }}</span>
+                  </div>
+                  <div class="ms-4">
+                    <i class="bi bi-eye me-2"></i>
+                    <span> {{ review.viewCount }}</span>
+                    <!-- TODO : 아래의 기능은 구현여부 결정 -->
+                    <!-- <i class="bi bi-bookmark me-2"></i> -->
+                    <!-- <span class="me-1">{{ review.bookmarkCount }}</span> -->
+                    <!-- <i class="bi bi-chat-right-text me-2"></i> -->
+                    <!-- <span class="me-1">{{ review.commentCount }}</span> -->
+                    <!-- <i class="bi bi-heart me-2"></i> -->
+                    <!-- <span>{{ review.likeCount }}</span> -->
+                  </div>
+                </div>
+                <a class="btn btn-sm btn-outline-dark">모집 공고 보러가기</a>
+              </div>
             </div>
           </div>
         </div>
@@ -182,9 +196,15 @@ export default {
     rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
     rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
-.card-text {
-  font-size: 1rem !important;
+.card-title {
+  font-weight: 700;
 }
+.card-text ::v-deep * {
+  font-size: 1rem;
+  line-height: 1.8rem;
+  height: 3rem;
+}
+
 .btn_write {
   border: 1px solid #363636;
   transition: 0.2s;
@@ -202,8 +222,12 @@ export default {
   border-bottom: 1px solid #838383;
 }
 .thumbnail {
-  width: 100%;
-  /* height: auto; */
+  width: 240px;
+  height: 238px;
+  /* object-fit: cover; */
+  object-fit: contain;
+  /* background-color: #d7d7d7; */
+  border-right: 1px solid #dddddd;
 }
 .stack-icon {
   font-size: 14px;
@@ -216,7 +240,7 @@ export default {
   box-sizing: border-box;
 }
 .ellipsis {
-  width: 360px;
+  width: 368px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -227,5 +251,11 @@ export default {
   display: flex;
   justify-content: center;
   padding-top: 30px;
+}
+.image > img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-bottom: 4px;
 }
 </style>
