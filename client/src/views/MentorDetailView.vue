@@ -43,14 +43,16 @@
                 신청 상태 전환
               </button>
             </span>
-            <span class="col-3 text-end"
-              ><button class="btn btn-outline-primary mx-4">링크복사</button
-              ><button
+            <span class="col-3 text-end mt-2">
+              <copy-to-clipboard :pageUrl="pageUrl" />
+              <!-- <button class="btn btn-outline-primary mx-4">링크복사</button> -->
+              <!-- <button
                 class="btn btn-outline-primary"
                 @click="changeStatus"
                 v-show="infoStatus">
                 수정하기</button
-              ><button
+              > -->
+              <button
                 class="btn btn-primary"
                 @click="changeStatus"
                 v-show="editStatus">
@@ -204,8 +206,9 @@
 </template>
 
 <script>
+import CopyToClipboard from "../components/CopyToClipboard.vue";
 export default {
-  components: {},
+  components: { CopyToClipboard },
 
   data() {
     return {
