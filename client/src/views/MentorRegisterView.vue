@@ -2,9 +2,9 @@
   <div class="container">
     <div>
       <h2 class="text-start mt-5"><strong>멘토 등록 신청</strong></h2>
-      저장용데이터{{ saveParam }}
+      <!-- 저장용데이터{{ saveParam }}
       <hr />
-      링크 {{ linkList }}
+      링크 {{ linkList }} -->
     </div>
 
     <!-- 작성폼 -->
@@ -235,11 +235,10 @@ export default {
           `/mentor/registerMentorInfo`,
           this.saveParam
         );
-        // if (r.status === 200) {
-        //   //성공 후 다시 멘토리스트 화면으로 돌아가기
-        //   this.$router.push("/mentolist");
-        // }
-        console.log(this.r);
+        if (r.status === 200) {
+          //성공 후 다시 멘토리스트 화면으로 돌아가기
+          this.$router.push("/mentolist");
+        }
       } else {
         alert("n");
       }

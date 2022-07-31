@@ -23,11 +23,11 @@
 
       <div
         class="d-flex pt-5 mb-4 align-items-start justify-content-between section_second">
-        <RecruitSortLayout />
+        <!-- <RecruitSortLayout />
         <div class="d-flex">
           <PartSearchLayout @send-value="sendValue" />
           <SearchAll @search-keyword="SearchKeyword" />
-        </div>
+        </div> -->
       </div>
       <div class="row mt-n4">
         <div
@@ -84,15 +84,15 @@
 </template>
 <script>
 import PaginationLayout from "@/components/layouts/PaginationLayout.vue";
-import PartSearchLayout from "@/components/layouts/PartSearchLayout.vue";
-import SearchAll from "@/components/SearchAll.vue";
-import RecruitSortLayout from "@/components/layouts/RecruitSortLayout.vue";
+//import PartSearchLayout from "@/components/layouts/PartSearchLayout.vue";
+// import SearchAll from "@/components/SearchAll.vue";
+// import RecruitSortLayout from "@/components/layouts/RecruitSortLayout.vue";
 import RegisterbtnLayout from "../components/layouts/RegisterbtnLayout.vue";
 export default {
   components: {
-    PartSearchLayout,
-    SearchAll,
-    RecruitSortLayout,
+    // PartSearchLayout,
+    // SearchAll,
+    // RecruitSortLayout,
     RegisterbtnLayout,
     PaginationLayout
   },
