@@ -39,6 +39,7 @@
               :native="false"
               :options="USER_HISTORY"
               placeholder="정렬"
+              noOptionsText="완료한 프로젝트가 없습니다!"
               ref="recruitsort" />
           </div>
         </div>

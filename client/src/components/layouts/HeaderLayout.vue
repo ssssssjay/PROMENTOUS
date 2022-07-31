@@ -331,4 +331,13 @@ button.closeBtn {
     }
   }
 }
+
+.loginDropdown {
+  position: relative;
+}
+.login.dropdown-menu {
+  position: absolute;
+  bottom: -190px;
+  left: -170px;
+}
 </style>
