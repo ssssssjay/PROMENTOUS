@@ -24,12 +24,12 @@
                 style="width: 400px"
                 v-model="title"
                 v-show="editStatus" />
-              <button
+              <!-- <button
                 class="btn btn-outline-dark mx-4 px-4"
                 v-show="applyYes"
                 @click="goToApply('/mentoringapply')">
                 <strong>신청하기!</strong>
-              </button>
+              </button> -->
               <button
                 class="btn btn-outline-dark mx-4 px-4"
                 disabled
