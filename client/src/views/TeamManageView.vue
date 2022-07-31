@@ -8,8 +8,8 @@
     </section>
 
     <section class="container">
-      <!-- {{ this.teamTotalInfo.data }} -->
       <!-- <hr />
+
       applicants ////
       <div>{{ this.applicants }}</div>
       <hr />
@@ -119,7 +119,8 @@
           <div class="tab-title">팀모임 링크</div>
           <span
             class="url showurl form-control"
-            v-show="correctionMode === false">
+            v-show="correctionMode === false"
+            style="width: 500px">
             <span class="me-3">링크제목</span>
             <span>{{ urlTitle }}</span>
           </span>
@@ -135,7 +136,8 @@
           </span>
           <span
             class="url showurl form-control"
-            v-show="correctionMode === false">
+            v-show="correctionMode === false"
+            style="width: 500px">
             <span class="me-3">URL</span>
             <span>{{ urlAddress }}</span>
           </span>
@@ -206,10 +208,25 @@
         <div class="row p-2 mb-5 bd-highlight">
           <div class="tab-title">모집글 링크</div>
           <span class="col url text-start">
-            <a target="_blank" :href="this.recruitingUrl">모집글 링크로 </a>
+            <router-link
+              target="_blank"
+              :to="this.path"
+              style="text-decoration: none; color: #1379d2"
+              ><strong @click="goToProjectDetail(this.selectedProjectId)">
+                모집글 링크로
+              </strong></router-link
+            >
           </span>
         </div>
 
+        <!-- <router-link
+          target="_blank"
+          :to="this.path"
+          style="text-decoration: none; color: #1379d2"
+          ><strong @click="goToProjectDetail(this.selectedProjectId)">
+            모집글 링크로
+          </strong></router-link
+        > -->
         <!-- ---------------------------------------------------------------------------------------------- -->
         <!-- 지원자관리  -->
 
@@ -525,6 +542,7 @@ export default {
   },
   data() {
     return {
+      path: "",
       //db작업 x 변수
       teamStatusName: "",
       memberIndex: 0,
@@ -674,9 +692,9 @@ export default {
   created() {
     /* 로그인 한 계정 USERID 심어주는 부분! 여기에 3, 22,20 등을 넣어서
     확인하고픈 userId 처리가능합니다. */
-    this.sessionUserId = this.user.user_id;
+    // this.sessionUserId = this.user.user_id;
     //user from computed()
-    // this.sessionUserId = 32;
+    this.sessionUserId = 20;
   },
   beforeMount() {},
   mounted() {
@@ -685,6 +703,14 @@ export default {
   },
   unmounted() {},
   methods: {
+    goToProjectDetail(id) {
+      window.scrollTo(0, 0);
+      this.path = `/project/recruit/${id}`;
+    },
+    goToReviewDetail(id) {
+      window.scrollTo(0, 0);
+      this.path = `/project/review/${id}`;
+    },
     changeStatusName() {
       if (this.teamStatus == "REC") {
         this.teamStatusName = "모집중";
@@ -921,6 +947,7 @@ export default {
         this.projectInfoParams
       );
       /*TODO 데이터 가져온 이후 처리 - 필드 별 메서드화 진행TRY */
+
       this.teamStatus = this.teamTotalInfo.data.basicInfo.statusCode;
       this.changeStatusName();
       // 팀모임 URL
