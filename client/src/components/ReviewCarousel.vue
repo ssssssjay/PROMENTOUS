@@ -20,7 +20,7 @@
               aria-label="`Slide ${idx + 1}`"></button>
           </div>
           <!-- Wrapper for carousel items -->
-          <div class="carousel-inner">
+          <div class="carousel-inner text-center">
             <div
               class="carousel-item"
               v-for="review in reviewList"
