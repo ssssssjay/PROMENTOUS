@@ -202,7 +202,7 @@ export default {
 .card-text ::v-deep * {
   font-size: 1rem;
   line-height: 1.8rem;
-  height: 3rem;
+  margin: 0;
 }
 
 .btn_write {
@@ -241,6 +241,7 @@ export default {
 }
 .ellipsis {
   width: 368px;
+  height: 4rem;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
