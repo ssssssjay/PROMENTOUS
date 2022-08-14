@@ -12,7 +12,7 @@
     </button>
     <button class="btn3" style="background-color: #75d473">멘토 상세보기</button
     ><button class="btn3" style="background-color: #40ab3d">
-      멘토 상세보기
+      멘토 상세보기zzzzzz
     </button>
   </div>
 </template>
